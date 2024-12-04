@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airline Reservation System", "Airline Reservation System\Airline Reservation System.csproj", "{A2DF5226-F607-46E8-B7FD-642909D2B99B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airline Reservation System", "Airline Reservation System\Airline Reservation System.csproj", "{A2DF5226-F607-46E8-B7FD-642909D2B99B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
