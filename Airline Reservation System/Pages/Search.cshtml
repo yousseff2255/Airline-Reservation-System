@@ -1,0 +1,46 @@
+﻿@page
+@model SearchModel
+@{
+    ViewData["Title"] = "Book a Flight";
+}
+
+<section class="booking-section">
+    <h1>Book a Flight</h1>
+    <p>Search for Emirates flights and book online. See our routes and schedules, and discover more about the experience you can look forward to on board.</p>
+
+    <form class="booking-form" method="post">
+        <div class="form-group">
+            <label for="departure">Departure Airport</label>
+            <input type="text" id="departure" name="departure" placeholder="Cairo (CAI)" required />
+        </div>
+        <div class="form-group">
+            <label for="arrival">Arrival Airport</label>
+            <input type="text" id="arrival" name="arrival" placeholder="Enter destination" required />
+        </div>
+        <div class="form-group">
+            <label for="depart-date">Departing</label>
+            <input type="date" id="depart-date" name="depart-date" required />
+        </div>
+        <div class="form-group">
+            <label for="return-date">Returning</label>
+            <input type="date" id="return-date" name="return-date" />
+        </div>
+        <div class="form-group">
+            <label for="passengers">Passengers</label>
+            <select id="passengers" name="passengers" required>
+                <option>1 Adult</option>
+                <option>2 Adults</option>
+                <option>3 Adults</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="class">Class</label>
+            <select id="class" name="class" required>
+                <option>Economy Class</option>
+                <option>Business Class</option>
+                <option>First Class</option>
+            </select>
+        </div>
+        <button type="submit" class="search-btn">Search Flights</button>
+    </form>
+</section>

@@ -1,0 +1,155 @@
+﻿@page
+@model Airline_Reservation_System.Pages.Index1Model
+@{
+	ViewData["Title"] = "Login page";
+}
+
+<style>
+    /* Add rounded corners to input fields */
+    .rounded-input {
+        border-radius: 10px; /* Adjust value for more or less rounding */
+        border: 1px solid #ccc;
+        padding: 10px;
+        width: 100%;
+        font-size: 14px;
+        outline: none;
+        box-shadow: none;
+        transition: box-shadow 0.3s;
+    }
+
+        .rounded-input:focus {
+            box-shadow: 0 0 5px rgba(74, 69, 246, 0.5); /* Add a light glow on focus */
+            border-color: #4A45F6;
+        }
+
+    .btn-primary {
+        border-radius: 10px; /* Round the button as well for consistency */
+    }
+</style>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Register - CakeAdmin Bootstrap 5 Demo</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="https://cakeadmin.com/pf/favicon.png">
+
+    <!-- Bootstrap icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Main style file -->
+    <link rel="stylesheet" href="https://cakeadmin.com/pf/bootstrap/css/app.css" type="text/css">
+</head>
+<body class="auth">
+
+    <!-- begin::preloader-->
+    <div class="preloader" style="display: none;">
+        <div class="preloader-icon"></div>
+    </div>
+    <!-- end::preloader -->
+
+
+    <div class="form-wrapper">
+        <div class="container">
+            <div class="card">
+                <div class="row g-0">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col-md-10 offset-md-1">
+                                <div class="ltf-block-logo d-block d-lg-none text-center text-lg-start">
+                                    <img width="60" src="https://cakeadmin.com/pf/logo.svg" alt="logo">
+                                </div>
+                                <div class="my-5 text-center text-lg-start">
+                                    <h1 class="display-8">Create Account</h1>
+                                    <p class="text-muted">You can create a free account now</p>
+                                </div>
+<form class="form-grid">
+    <div class="row">
+        <!-- Left Column -->
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" class="rounded-input" placeholder="First name" required>
+            </div>
+            <div class="mb-3">
+                <label for="nationalId">National ID</label>
+                <input type="text" id="nationalId" class="rounded-input" placeholder="National ID" required>
+            </div>
+            <div class="mb-3">
+                <label for="passportNumber">Passport Number</label>
+                <input type="text" id="passportNumber" class="rounded-input" placeholder="Passport Number" required>
+            </div>
+            <div class="mb-3">
+                <label for="birthdate">Birthdate</label>
+                <input type="date" id="birthdate" class="rounded-input" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="password">Password</label>
+                <input type="password" id="password" class="rounded-input" placeholder="Password" required>
+            </div>
+            <div class="mb-3">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" class="rounded-input" placeholder="Password" required>
+            </div>
+        </div>
+        <!-- Right Column -->
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" class="rounded-input" placeholder="Last Name" required>
+            </div>
+            <div class="mb-3">
+                <label for="nationality">Nationality</label>
+                <input type="text" id="nationality" class="rounded-input" placeholder="Nationality" required>
+            </div>
+            <div class="mb-3">
+                <label for="phoneNumber">Phone Number</label>
+                <input type="text" id="phoneNumber" class="rounded-input" placeholder="Phone Number" required>
+            </div>
+            <div class="mb-3">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" class="rounded-input" placeholder="email@example.com" required>
+            </div>
+            <div class="mb-3">
+                <label>Gender</label>
+                <div>
+                    <input type="radio" id="male" name="gender" value="Male" required>
+                    <label for="male">Male</label>
+                    <input type="radio" id="female" name="gender" value="Female" required>
+                    <label for="female">Female</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center text-lg-start">
+        <button class="btn btn-primary">Sign Up</button>
+    </div>
+</form>
+
+
+
+                                <p class="text-center text-lg-start">
+                                    Don't have an account? <a href="#">Sign In</a>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- JQuery -->
+    <script src="https://cakeadmin.com/pf/bootstrap/libs/jquery-3.7.1.min.js"></script>
+
+    <!-- Main Javascript file -->
+    <script src="https://cakeadmin.com/pf/bootstrap/js/app.js"></script>
+
+
+</body>
+</html>
