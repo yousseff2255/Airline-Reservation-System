@@ -1,0 +1,202 @@
+﻿@page
+@model Airline_Reservation_System.Pages.Admin.flightDetails1Model
+@{
+}
+
+<div class="container">
+    <div class="content ">
+
+    <div class="mb-4">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">
+                        <i class="bi bi-globe2 small me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Order Detail</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8 col-md-12">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="mb-5 d-flex align-items-center justify-content-between">
+                        <span>Flight No : <a href="#">#5355619</a></span>
+                        <span class="badge bg-success">Completed</span>
+                    </div>
+                    <div class="row mb-5 g-4">
+                        <div class="col-md-3 col-sm-6">
+                            <p class="fw-bold">Depature Date</p>
+                            16/06/2021 at 04:23 PM
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <p class="fw-bold">Aircraft</p>
+                            Airbus
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <p class="fw-bold">From</p>
+                            cairo
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <p class="fw-bold">To</p>
+                            Paris
+                        </div>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-6 col-sm-12">
+                            <div class="card">
+                                <div class="card-body d-flex flex-column gap-3">
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="mb-0">Flight Crew</h5>
+                                        <a href="#">Edit</a>
+                                    </div>
+                                    <div>Name: John Smith</div>
+                                    <div>Role: Pilot</div>
+                                    <div>Name: Jane Doe</div>
+                                    <div>
+                                        Role: Co-Pilot
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <div class="card">
+                                <div class="card-body d-flex flex-column gap-3">
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="mb-0">Cabin Crew</h5>
+                                        <a href="#">Edit</a>
+                                    </div>
+                                    <div>Name: Sarah Brown</div>
+                                    <div>Role: Flight Attendant</div>
+                                    <div>Name: Michael Lee</div>
+                                    <div>
+                                        Role: Flight Attendant
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card widget">
+                <h5 class="card-header">Passanger</h5>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-custom mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Photo</th>
+                                    <th>Name</th>
+                                    <th>seat number</th>
+                                    <th>class</th>
+                                    <th>status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <a href="#">
+                                            <img src="../images/products/3.jpg" class="rounded" width="60" alt="...">
+                                        </a>
+                                    </td>
+                                    <td>John Doe</td>
+                                    <td>1</td>
+                                    <td>Econonmy</td>
+                                    <td>Checked In
+                                    <td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a href="#">
+                                            <img src="../images/products/3.jpg" class="rounded" width="60" alt="...">
+                                        </a>
+                                    </td>
+                                    <td>John Doe</td>
+                                    <td>1</td>
+                                    <td>Econonmy</td>
+                                    <td>Checked In
+                                    <td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a href="#">
+                                            <img src="../images/products/3.jpg" class="rounded" width="60" alt="...">
+                                        </a>
+                                    </td>
+                                    <td>John Doe</td>
+                                    <td>1</td>
+                                    <td>Econonmy</td>
+                                    <td>Checked In
+                                    <td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-12 mt-4 mt-lg-0">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h6 class="card-title mb-4">Prices</h6>
+                    <div class="row justify-content-center mb-3">
+                        <div class="col-4 text-end">Economy :</div>
+                        <div class="col-4">$520,96</div>
+                    </div>
+                    <div class="row justify-content-center mb-3">
+                        <div class="col-4 text-end">vip :</div>
+                        <div class="col-4">$1.520,96</div>
+                    </div>
+                    <div class="row justify-content-center mb-3">
+                        <div class="col-4 text-end">First class :</div>
+                        <div class="col-4">$1.273,77</div>
+                    </div>
+
+                </div>
+            </div>
+            @*  <div class="card">
+            <div class="card-body">
+            <h6 class="card-title mb-4">Invoice</h6>
+            <div class="row justify-content-center mb-3">
+            <div class="col-6 text-end">Invoice No :</div>
+            <div class="col-6">
+            <a href="#">#5355619</a>
+            </div>
+            </div>
+            <div class="row justify-content-center mb-3">
+            <div class="col-6 text-end">Seller GST :</div>
+            <div class="col-6">12HY87072641Z0</div>
+            </div>
+            <div class="row justify-content-center mb-3">
+            <div class="col-6 text-end">Purchase GST :</div>
+            <div class="col-6">22HG9838964Z1</div>
+            </div>
+            <div class="text-center mt-4">
+            <button class="btn btn-outline-primary">Download PDF</button>
+            </div>
+            </div>
+            </div> *@
+        </div>
+    </div>
+
+</div>
+
+</div>
+
+
+
+<!-- ./ layout-wrapper -->
+<!-- JQuery -->
+<script src="../libs/jquery-3.7.1.min.js"></script>
+
+<!-- Nicescroll -->
+<script src="../libs/nicescroll.js"></script>
+
+<!-- Examples -->
+<script src="../js/examples/orders.js"></script>
+
+<!-- Main Javascript file -->
+<script src="../js/app.js"></script>

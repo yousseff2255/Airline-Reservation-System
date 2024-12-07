@@ -1,0 +1,256 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #222;
+    padding: 10px 50px;
+    max-width: 1200px;
+    Limit the navbar width margin: 0 auto;
+    Center the navbar
+}
+
+.navbar .logo img {
+    max-height: 50px;
+    Limit the logo height
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+    .nav-links li {
+        display: inline;
+    }
+
+    .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-size: 16px;
+    }
+
+.booking-section {
+    text-align: center;
+    margin: 50px auto;
+    max-width: 800px;
+    background: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.booking-form .form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.booking-form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.booking-form input,
+.booking-form select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-btn {
+    background-color: #e60000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.search-btn:hover {
+    background-color: #d30000;
+}
+
+
+/* Add rounded corners to input fields */
+.rounded-input {
+    border-radius: 10px; /* Adjust value for more or less rounding */
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 100%;
+    font-size: 14px;
+    outline: none;
+    box-shadow: none;
+    transition: box-shadow 0.3s;
+}
+
+.rounded-input:focus {
+    box-shadow: 0 0 5px rgba(74, 69, 246, 0.5); /* Add a light glow on focus */
+    border-color: #4A45F6;
+}
+
+.btn-primary {
+    border-radius: 10px; /* Round the button as well for consistency */
+}
+
+
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333333;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+label {
+    font-weight: bold;
+    color: #555555;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #007bff;
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+
+/*body {
+    background-color: #f8f9fa;*/ /* Light background */
+    /*color: #212529;
+    font-family: Arial, sans-serif;
+}*/
+
+/*.table-wrapper {
+    margin: 50px auto;
+    width: 90%;
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    text-align: center;*/
+   /* margin-bottom: 20px;*/
+/*}
+
+.header h1 {
+    font-size: 24px;
+    font-weight: bold;*/
+   /* margin-bottom: 10px;*/
+/*}
+
+.header p {
+    color: #6c757d;
+}
+
+.search-sort-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    padding: 8px 15px;
+    width: 250px;
+}
+
+.sort-dropdown select {
+    border-radius: 10px;
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+}
+
+.table {
+    margin: 0 auto;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 10px;
+    text-align: left;
+}
+
+.table th {
+    background-color: #4A45F6;
+    color: white;
+    text-transform: uppercase;
+}
+
+.table tbody tr {
+    border-bottom: 1px solid #ddd;
+}
+
+.table tbody tr:last-child {
+    border-bottom: none;
+}*/
+
+/*.btn {
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-size: 14px;
+}*/
+
+/*.pagination {
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.pagination .page-link {
+    border-radius: 10px;
+    padding: 8px 12px;
+}
+
+.pagination .active .page-link {
+    background-color: #4A45F6;
+    border-color: #4A45F6;
+}*/
+   
+
