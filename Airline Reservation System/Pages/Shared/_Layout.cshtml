@@ -23,7 +23,8 @@
     <!-- Icomoon Icon Fonts-->
     <link rel="stylesheet" href="css/icomoon.css"> 
     <!-- Themify Icons-->
-    <link rel="stylesheet" href="css/themify-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/themify-icons/0.2.0/css/themify-icons.css">
+
   
 
     <!-- Magnific Popup -->
@@ -33,7 +34,7 @@
     <link rel="stylesheet" href="css/bootstrap-datepicker.min.css">
 
     <!-- Owl Carousel  -->
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css"> 
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
 
     <!-- Theme style  -->
@@ -47,59 +48,62 @@
     <link rel="stylesheet" href="~/css/app.css" />
 
 </head>
-<body>
-    <header>
-        <div class="m-2">
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+<body >
+  @*   <header>
+        <div class="m-7">
+            <nav class="  navbar navbar-expand-sm navbar-toggleable-sm navbar-dark mx-5 p-4 border-bottom  box-shadow mb-3 bg-purple" style="font-size:larger;border-radius:15px; " >
            
-                <a class="navbar-brand" asp-area="" asp-page="/Index">Airline_Reservation_System</a>
+                <a class="navbar-brand" asp-area="" asp-page="/Index">ExoSky</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                    <ul class="navbar-nav flex-grow-1 ">
+                        <li class="nav-item" >
+                            <a class="nav-link text-light" asp-area="" asp-page="/Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/SignUp">Signup</a>
+                            <a class="nav-link text-light" asp-area="" asp-page="/SignUp">Signup</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Signin">Sign in</a>
+                            <a class="nav-link text-light" asp-area="" asp-page="/Signin">Sign in</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Profile">Profile</a>
+                            <a class="nav-link text-light" asp-area="" asp-page="/Profile">Profile</a>
                         </li>
                            <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/staff/flights">flights</a>
+                            <a class="nav-link text-light" asp-area="" asp-page="/staff/flights">flights</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/staff/flightdetails">Flight Details</a>
+                            <a class="nav-link text-light" asp-area="" asp-page="/staff/flightdetails">Flight Details</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/admin/Dashboard">DDashboard</a>
+                            <a class="nav-link text-light" asp-area="" asp-page="/admin/Dashboard">DDashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Admin/createflight">Create Flight</a>
+                            <a class="nav-link text-light" asp-area="" asp-page="/Admin/createflight">Create Flight</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/search">Search</a>
+                            <a class="nav-link text-light" asp-area="" asp-page="/search">Search</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/reservation managment">Res_managemt</a>
+                            <a class="nav-link text-light" asp-area="" asp-page="/reservation managment">Res_managemt</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/reservation">Reservation</a>
+                            <a class="nav-link text-light" asp-area="" asp-page="/reservation">Reservation</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-page="/admin/flightdetails1">flightdetails</a>
                         </li>
                     </ul>
                 </div>
           
              </nav>
         </div>
-    </header>
-   
-        <main role="main" class="pb-3">
+    </header> *@
+
+    <main role="main" class="pb-3" >
             @RenderBody()
         </main>
    
