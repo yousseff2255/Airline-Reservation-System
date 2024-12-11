@@ -3,79 +3,106 @@
 @{
 }
 
-<div class="text-center" style="max-width: 500px; margin: 100px auto; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-    <h2 style="margin-bottom: 20px;">Add Flight</h2>
-    <form>
-        <div class="form-group mb-3">
-            <label for="id">Flight ID</label>
-            <input type="text" class="form-control mb-2" id="id"  required>
+<div>
+    <!-- Background image container -->
+    <div style="background-image: url('/images/Home_Background.PNG?v=1');
+               position: absolute;
+               padding: 20px;
+               width: 100vw;
+               height: 100vh;
+               background-size: cover;
+               background-position: center;
+               background-repeat: no-repeat;">
+      
+        
+        <div class="text-center d-flex flex-column"
+             style="max-width: 500px;
+            min-width:60vw;
+            
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-height: 90vh; 
+            ">
+            <h2 style="margin-bottom: 20px;width:100%">Add Flight</h2>
+            <form>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <div class="form-group flex-fill me-2">
+                        <label for="aircraft">Aircraft Model</label>
+                        <select class="form-control mb-2" id="aircraft" required>
+                            <option value="" disabled selected>Select Aircraft</option>
+                            <option value="1">Boieng 772</option>
+                            <option value="2">Airbus 220</option>
+                            <option value="3">Boeing 1221</option>
+                        </select>
+                    </div>
+                    <div class="form-group flex-fill">
+                        <label for="status">Status</label>
+                        <select class="form-control mb-2" id="status" required>
+                            <option value="" disabled selected>Select Status</option>
+                            <option value="1">On Ground</option>
+                            <option value="2">Delayed</option>
+                            <option value="3">Departed</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Two inputs in one row -->
+                <div class="d-flex justify-content-between mb-3">
+                    <div class="form-group  me-2" style="width:50%">
+                        <label for="toairport">Destination Airport</label>
+                        <select class="form-control mb-2" id="toairport" required>
+                            <option value="" disabled selected>Select Airport</option>
+                            <option value="1">Cairo Airport</option>
+                            <option value="2">Luxor Airport</option>
+                            <option value="3">Paris Airport</option>
+                        </select>
+                    </div>
+                    <div class="form-group flex-fill">
+                        <label for="fromairport">Leaving Airport</label>
+                        <select class="form-control mb-2" id="fromairport" required>
+                            <option value="" disabled selected>Select Airport</option>
+                            <option value="1">Cairo Airport</option>
+                            <option value="2">Luxor Airport</option>
+                            <option value="3">Paris Airport</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Another row for two inputs -->
+                <div class="d-flex justify-content-between mb-3">
+                    <div class="form-group mb-3 " style="width:50%">
+                        <label for="arriving_date">Arriving Date & Time</label>
+                        <input type="datetime-local" class="form-control mb-2" id="arriving_date" required>
+                    </div>
+                    <div class="form-group " style="width:50%">
+                        <label for="leaving_date">Leaving Date & Time</label>
+                        <input type="datetime-local" class="form-control mb-2" id="leaving_date" required>
+                    </div>
+                </div>
+                <div class="form-group " style="width:50%">
+                    <label for="gate">Gate</label>
+                    <select class="form-control mb-2" id="gate" required>
+                        <option value="" disabled selected>Select Gate</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+            
+                <button type="submit" class="btn" style="background-color: #12cad6; color: white;">Create</button>
+            </form>
         </div>
 
 
-        <div class="form-group mb-3">
-            <label for="status">Status</label>
-            <select class="form-control mb-2" id="status" required>
-                <option value="" disabled selected>Select Status</option>
-                <option value="departed">Departed</option>
-                <option value="delayed">Delayed</option>
-                <option value="onground">On Ground</option>
 
-            </select>
-        </div>
+    </div>
 
-
-    
-
-        <div class="form-group mb-3">
-            <label for="aircraft">Aircraft ID</label>
-            <select class="form-control mb-2" id="aircraft" required>
-                <option value="" disabled selected>Select Aircraft</option>
-                <option value="1">Boieng 772</option>
-                <option value="2">Airbus 220</option>
-                <option value="3">Boeing 1221</option>
-
-            </select>
-        </div>
-
-        <div class="form-group mb-3">
-            <label for="fromairport">Leaving Airport</label>
-            <select class="form-control mb-2" id="fromairport" required>
-                <option value="" disabled selected>Select AirPort</option>
-                <option value="1">Cairo Airport</option>
-                <option value="2">Luxor Airport</option>
-                <option value="3">Paris Airport</option>
-
-            </select>
-        </div>
-
-        <div class="form-group mb-3">
-            <label for="toairport">Destination Airport</label>
-            <select class="form-control mb-2" id="toairport" required>
-                <option value="" disabled selected>Select AirPort</option>
-                <option value="1">Cairo Airport</option>
-                <option value="2">Luxor Airport</option>
-                <option value="3">Paris Airport</option>
-
-            </select>
-        </div>
-
-        <div class="form-group mb-3">
-            <label for="leaving_date">Choose Leaving Date and Time</label>
-            <input type="datetime-local" class="form-control mb-2" id="leaving_date"  required>
-        </div>
-
-
-        <div class="form-group mb-3">
-            <label for="arriving_date">Choose arriving Date and Time</label>
-            <input type="datetime-local" class="form-control mb-2" id="arriving_date" required>
-        </div>
-
-
-
-
-
-
-        <button type="submit" class="btn" style="background-color: #12cad6; color: white;">Create</button>
-    </form>
+    <!-- Centered form container -->
+ 
 </div>
+
+
+
 
