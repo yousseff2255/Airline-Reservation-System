@@ -1,7 +1,10 @@
+using Airline_Reservation_System.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddSingleton<DB>();
 
 var app = builder.Build();
 

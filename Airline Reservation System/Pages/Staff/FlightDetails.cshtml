@@ -11,10 +11,8 @@
         <div class="col-md-3 mb-3">
             <select class="form-select">
                 <option>Select Flight</option>
-                <option value="N">MK 7302</option>
-                <option value="C">AM 221</option>
-                <option value="C">km 34</option>
-                <option value="C">rb 2212</option>
+               
+                
 
             </select>
         </div>
@@ -168,237 +166,48 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        @{
+                            for(int i = 0; i < @Model.dt.Rows.Count; i++)
+                            {
+                                <tr>
 
-                            <td style="display:flex; justify-content:center;">
-                                <div class="avatar avatar-info ">
-                                    <span class="avatar-text rounded-circle">A</span>
-                                </div>
-                            </td>
-                            <td>Mohamed Ahmed</td>
-                            <td>40</td>
-                            <td>011111113</td>
-                            <td>Example@gmail.com</td>
-                            <td>Economic</td>
-                            <td>
-                                <button class="btn btn-success">
-                                    Chekced In
-                                </button>
-                            </td>
-                            <td class="text-end">
-                                <div class="d-flex">
-                                    <div class="dropdown ms-auto">
-                                        <a href="#" data-bs-toggle="dropdown"
-                                           class="btn btn-floating"
-                                           aria-haspopup="true" aria-expanded="false">
-                                            <i class="bi bi-three-dots"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a href="#" class="dropdown-item">Show Profile</a>
-                                            <a href="#" class="dropdown-item">Check In</a>
+                                    <td style="display:flex; justify-content:center;">
+                                        <div class="avatar avatar-info ">
+                                            <span class="avatar-text rounded-circle">A</span>
                                         </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
+                                    </td>
+                                    <td>@Model.dt.Rows[i][0]</td>
+                                    <td>@Model.dt.Rows[i][1]</td>
+                                    <td>@Model.dt.Rows[i][2]</td>
+                                    <td>@Model.dt.Rows[i][3]</td>
+                                    <td>@Model.dt.Rows[i][4]</td>
+                                  
+                                    <td>
+                                        <button class="btn btn-success">
+                                            @Model.dt.Rows[i][5]
+                                        </button>
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="d-flex">
+                                            <div class="dropdown ms-auto">
+                                                <a href="#" data-bs-toggle="dropdown"
+                                                   class="btn btn-floating"
+                                                   aria-haspopup="true" aria-expanded="false">
+                                                    <i class="bi bi-three-dots"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <a href="#" class="dropdown-item">Show Profile</a>
+                                                    <a href="#" class="dropdown-item">Check In</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
 
-                            <td style="display:flex; justify-content:center;">
-                                <div class="avatar avatar-info ">
-                                    <span class="avatar-text rounded-circle">A</span>
-                                </div>
-                            </td>
-                            <td>Mohamed Ahmed</td>
-                            <td>40</td>
-                            <td>011111113</td>
-                            <td>Example@gmail.com</td>
-                            <td>Economic</td>
-                            <td>
-                                <button class="btn btn-success">
-                                    Chekced In
-                                </button>
-                            </td>
-                            <td class="text-end">
-                                <div class="d-flex">
-                                    <div class="dropdown ms-auto">
-                                        <a href="#" data-bs-toggle="dropdown"
-                                           class="btn btn-floating"
-                                           aria-haspopup="true" aria-expanded="false">
-                                            <i class="bi bi-three-dots"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a href="#" class="dropdown-item">Show Profile</a>
-                                            <a href="#" class="dropdown-item">Check In</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-
-                            <td style="display:flex; justify-content:center;">
-                                <div class="avatar avatar-info ">
-                                    <span class="avatar-text rounded-circle">A</span>
-                                </div>
-                            </td>
-                            <td>Mohamed Ahmed</td>
-                            <td>40</td>
-                            <td>011111113</td>
-                            <td>Example@gmail.com</td>
-                            <td>Economic</td>
-                            <td>
-                                <button class="btn btn-success">
-                                    Chekced In
-                                </button>
-                            </td>
-                            <td class="text-end">
-                                <div class="d-flex">
-                                    <div class="dropdown ms-auto">
-                                        <a href="#" data-bs-toggle="dropdown"
-                                           class="btn btn-floating"
-                                           aria-haspopup="true" aria-expanded="false">
-                                            <i class="bi bi-three-dots"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a href="#" class="dropdown-item">Show Profile</a>
-                                            <a href="#" class="dropdown-item">Check In</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-
-                            <td style="display:flex; justify-content:center;">
-                                <div class="avatar avatar-info ">
-                                    <span class="avatar-text rounded-circle">A</span>
-                                </div>
-                            </td>
-                            <td>Mohamed Ahmed</td>
-                            <td>40</td>
-                            <td>011111113</td>
-                            <td>Example@gmail.com</td>
-                            <td>Economic</td>
-                            <td>
-                                <button class="btn btn-success">
-                                    Chekced In
-                                </button>
-                            </td>
-                            <td class="text-end">
-                                <div class="d-flex">
-                                    <div class="dropdown ms-auto">
-                                        <a href="#" data-bs-toggle="dropdown"
-                                           class="btn btn-floating"
-                                           aria-haspopup="true" aria-expanded="false">
-                                            <i class="bi bi-three-dots"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a href="#" class="dropdown-item">Show Profile</a>
-                                            <a href="#" class="dropdown-item">Check In</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-
-                            <td style="display:flex; justify-content:center;">
-                                <div class="avatar avatar-info ">
-                                    <span class="avatar-text rounded-circle">A</span>
-                                </div>
-                            </td>
-                            <td>Mohamed Ahmed</td>
-                            <td>40</td>
-                            <td>011111113</td>
-                            <td>Example@gmail.com</td>
-                            <td>Economic</td>
-                            <td>
-                                <button class="btn btn-success">
-                                    Chekced In
-                                </button>
-                            </td>
-                            <td class="text-end">
-                                <div class="d-flex">
-                                    <div class="dropdown ms-auto">
-                                        <a href="#" data-bs-toggle="dropdown"
-                                           class="btn btn-floating"
-                                           aria-haspopup="true" aria-expanded="false">
-                                            <i class="bi bi-three-dots"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a href="#" class="dropdown-item">Show Profile</a>
-                                            <a href="#" class="dropdown-item">Check In</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-
-                            <td style="display:flex; justify-content:center;">
-                                <div class="avatar avatar-info ">
-                                    <span class="avatar-text rounded-circle">A</span>
-                                </div>
-                            </td>
-                            <td>Mohamed Ahmed</td>
-                            <td>40</td>
-                            <td>011111113</td>
-                            <td>Example@gmail.com</td>
-                            <td>Economic</td>
-                            <td>
-                                <button class="btn btn-success">
-                                    Chekced In
-                                </button>
-                            </td>
-                            <td class="text-end">
-                                <div class="d-flex">
-                                    <div class="dropdown ms-auto">
-                                        <a href="#" data-bs-toggle="dropdown"
-                                           class="btn btn-floating"
-                                           aria-haspopup="true" aria-expanded="false">
-                                            <i class="bi bi-three-dots"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a href="#" class="dropdown-item">Show Profile</a>
-                                            <a href="#" class="dropdown-item">Check In</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-
-                            <td style="display:flex; justify-content:center;">
-                                <div class="avatar avatar-info ">
-                                    <span class="avatar-text rounded-circle">A</span>
-                                </div>
-                            </td>
-                            <td>Mohamed Ahmed</td>
-                            <td>40</td>
-                            <td>011111113</td>
-                            <td>Example@gmail.com</td>
-                            <td>Economic</td>
-                            <td>
-                                <button class="btn btn-success">
-                                    Chekced In
-                                </button>
-                            </td>
-                            <td class="text-end">
-                                <div class="d-flex">
-                                    <div class="dropdown ms-auto">
-                                        <a href="#" data-bs-toggle="dropdown"
-                                           class="btn btn-floating"
-                                           aria-haspopup="true" aria-expanded="false">
-                                            <i class="bi bi-three-dots"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a href="#" class="dropdown-item">Show Profile</a>
-                                            <a href="#" class="dropdown-item">Check In</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
+                        }
+                       
+                      
 
 
 

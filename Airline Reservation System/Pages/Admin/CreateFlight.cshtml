@@ -6,10 +6,7 @@
 <div class="text-center" style="max-width: 500px; margin: 100px auto; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
     <h2 style="margin-bottom: 20px;">Add Flight</h2>
     <form>
-        <div class="form-group mb-3">
-            <label for="id">Flight ID</label>
-            <input type="text" class="form-control mb-2" id="id"  required>
-        </div>
+      
 
 
         <div class="form-group mb-3">
@@ -29,10 +26,16 @@
         <div class="form-group mb-3">
             <label for="aircraft">Aircraft ID</label>
             <select class="form-control mb-2" id="aircraft" required>
-                <option value="" disabled selected>Select Aircraft</option>
-                <option value="1">Boieng 772</option>
-                <option value="2">Airbus 220</option>
-                <option value="3">Boeing 1221</option>
+                <option value="" disabled selected>Select Aircraft Model</option>
+                @{
+                    for(int i = 0; i< @Model.models.Count; i++)
+                    {
+                        <option value="1">@Model.models[i]</option>
+                    }
+                   
+                }
+              
+               
 
             </select>
         </div>
@@ -41,9 +44,14 @@
             <label for="fromairport">Leaving Airport</label>
             <select class="form-control mb-2" id="fromairport" required>
                 <option value="" disabled selected>Select AirPort</option>
-                <option value="1">Cairo Airport</option>
-                <option value="2">Luxor Airport</option>
-                <option value="3">Paris Airport</option>
+                @{
+                    for (int i = 0; i < @Model.airports.Count; i++)
+                    {
+                        <option value="1">@Model.airports[i]</option>
+                    }
+
+                }
+              
 
             </select>
         </div>
@@ -52,9 +60,28 @@
             <label for="toairport">Destination Airport</label>
             <select class="form-control mb-2" id="toairport" required>
                 <option value="" disabled selected>Select AirPort</option>
-                <option value="1">Cairo Airport</option>
-                <option value="2">Luxor Airport</option>
-                <option value="3">Paris Airport</option>
+                @{
+                    for (int i = 0; i < @Model.airports.Count; i++)
+                    {
+                        <option value="1">@Model.airports[i]</option>
+                    }
+
+                }
+
+            </select>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="gate">Leaving Gate</label>
+            <select class="form-control mb-2" id="gate" required>
+                <option value="" disabled selected>Select Leaving Gate</option>
+                @{
+                    for (int i = 1; i < 11; i++)
+                    {
+                        <option value="1">@i</option>
+                    }
+
+                }
 
             </select>
         </div>
