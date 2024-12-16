@@ -289,7 +289,70 @@ namespace Airline_Reservation_System.Models
             }
             return n;
         }
+        public Flight GetFlightDetails(int flight_id)
+        {
+            Flight f = new Flight();
+            string Query = $"select * from flights where flight_id = {flight_id}";
+            SqlCommand cmd = new SqlCommand(Query, connection);
+            try { 
+                connection.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read()) {
+                    reader[""].ToString();
+                }
 
+
+            }
+            catch(Exception e) { 
+                Console.WriteLine(e.Message);
+            }
+            finally {
+                connection.Close();
+            }
+
+            return f;
+
+        }
+
+        public bool AddFlight(Flight f)
+        {
+            bool b = true;
+            string proc = "AddFlight";
+            SqlCommand cmd = new SqlCommand(proc, connection);
+            cmd.CommandType = CommandType.StoredProcedure;
+            try
+            {
+                connection.Open();
+                cmd.Parameters.Add(new SqlParameter("@DeptDate", f.LeavDate));
+                cmd.Parameters.Add(new SqlParameter("@ArrDate", f.ArrDate));
+                cmd.Parameters.Add(new SqlParameter("@status", f.Status));
+                cmd.Parameters.Add(new SqlParameter("@ToAirport", f.ToAirport));
+                cmd.Parameters.Add(new SqlParameter("@FromAirport", f.FromAirport));
+                cmd.Parameters.Add(new SqlParameter("@AircraftModel", f.AircraftModel));
+                cmd.Parameters.Add(new SqlParameter("@gate", f.gate));
+                cmd.ExecuteNonQuery(); 
+                
+
+
+            }
+            catch (SqlException ex )
+            {
+                if (ex.Number == 50000) 
+                {
+                    Console.WriteLine("No available aircraft found for the given model.");
+                    b= false;
+                }
+            }
+            finally
+            {
+                connection.Close();
+             
+
+            }
+            return b;
+
+
+        }
 
 
 

@@ -11,6 +11,13 @@
         <div class="col-md-3 mb-3">
             <select class="form-select">
                 <option>Select Flight</option>
+                @{
+                    for(int i =0; i < Model.flights.Count; i++)
+                    {
+                        <option>@Model.flights[i]</option>
+                        
+                    }
+                }
                
                 
 
@@ -55,7 +62,7 @@
                         </div>
                         <div class="d-flex flex-row">
                             <div class="fs-3 fw-bold text-dark">
-                                115
+                                @Model.num_passengers
                             </div>
                         </div>
                     </div>
@@ -73,7 +80,7 @@
                         </div>
                         <div class="d-flex flex-row">
                             <div class="fs-3 fw-bold text-dark">
-                                100
+                                @Model.CheckedIn
                             </div>
                         </div>
                     </div>
@@ -89,7 +96,7 @@
                         </div>
                         <div class="d-flex flex-row">
                             <div class="fs-3 fw-bold text-dark">
-                                120
+                               @Model.capacity
                             </div>
                         </div>
                     </div>

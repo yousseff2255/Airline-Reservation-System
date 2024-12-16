@@ -3,106 +3,123 @@
 @{
 }
 
-<div class="text-center" style="max-width: 500px; margin: 100px auto; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-    <h2 style="margin-bottom: 20px;">Add Flight</h2>
-    <form>
-      
+<div class="gtco-cover" style="background-image: url('/images/Create Flight.jpeg?v=1');position:relative;padding: 20px;margin-left: -50vw; margin-right: -50vw;left: 50%; right: 50%;width: 100vw;">
+    <div style="    z-index: 1;
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.5);"></div>
+    <div class="text-center" style="max-width: 500px; margin: 100px auto; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); position:relative;z-index:10;">
+        <h2 style="margin-bottom: 20px;">Add Flight</h2>
+        <form method="post">
 
 
-        <div class="form-group mb-3">
-            <label for="status">Status</label>
-            <select class="form-control mb-2" id="status" required>
-                <option value="" disabled selected>Select Status</option>
-                <option value="departed">Departed</option>
-                <option value="delayed">Delayed</option>
-                <option value="onground">On Ground</option>
 
-            </select>
-        </div>
+            <div class="form-group mb-3">
+                <label for="status">Status</label>
+                <select class="form-control mb-2" asp-for="@Model.flight.Status" id="status" required>
+                    <option value="" disabled selected>Select Status</option>
+                    <option value="departed">Departed</option>
+                    <option value="delayed">Delayed</option>
+                    <option value="onground">On Ground</option>
+
+                </select>
+            </div>
 
 
-    
 
-        <div class="form-group mb-3">
-            <label for="aircraft">Aircraft ID</label>
-            <select class="form-control mb-2" id="aircraft" required>
-                <option value="" disabled selected>Select Aircraft Model</option>
-                @{
-                    for(int i = 0; i< @Model.models.Count; i++)
-                    {
-                        <option value="1">@Model.models[i]</option>
-                    }
-                   
-                }
-              
-               
 
-            </select>
-        </div>
+            <div class="form-group mb-3">
+                <label for="aircraft">Aircraft Model</label>
+                <select class="form-control mb-2" id="aircraft" asp-for="@Model.flight.AircraftModel" required>
+                    <option value="" disabled selected>Select Aircraft Model</option>
+                    @{
+                        for (int i = 0; i < @Model.models.Count; i++)
+                        {
+                            <option value="@Model.models[i]">@Model.models[i]</option>
+                        }
 
-        <div class="form-group mb-3">
-            <label for="fromairport">Leaving Airport</label>
-            <select class="form-control mb-2" id="fromairport" required>
-                <option value="" disabled selected>Select AirPort</option>
-                @{
-                    for (int i = 0; i < @Model.airports.Count; i++)
-                    {
-                        <option value="1">@Model.airports[i]</option>
                     }
 
-                }
-              
 
-            </select>
-        </div>
 
-        <div class="form-group mb-3">
-            <label for="toairport">Destination Airport</label>
-            <select class="form-control mb-2" id="toairport" required>
-                <option value="" disabled selected>Select AirPort</option>
-                @{
-                    for (int i = 0; i < @Model.airports.Count; i++)
-                    {
-                        <option value="1">@Model.airports[i]</option>
+                </select>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="fromairport">Leaving Airport</label>
+                <select class="form-control mb-2" id="fromairport" asp-for="@Model.flight.FromAirport" required>
+                    <option value="" disabled selected>Select AirPort</option>
+                    @{
+                        for (int i = 0; i < @Model.airports.Count; i++)
+                        {
+                            <option value="@Model.airports[i]">@Model.airports[i]</option>
+                        }
+
                     }
 
-                }
 
-            </select>
-        </div>
+                </select>
+            </div>
 
-        <div class="form-group mb-3">
-            <label for="gate">Leaving Gate</label>
-            <select class="form-control mb-2" id="gate" required>
-                <option value="" disabled selected>Select Leaving Gate</option>
-                @{
-                    for (int i = 1; i < 11; i++)
-                    {
-                        <option value="1">@i</option>
+            <div class="form-group mb-3">
+                <label for="toairport">Destination Airport</label>
+                <select class="form-control mb-2" id="toairport" asp-for="@Model.flight.ToAirport" required>
+                    <option value="" disabled selected>Select AirPort</option>
+                    @{
+                        for (int i = 0; i < @Model.airports.Count; i++)
+                        {
+                            <option value="@Model.airports[i]">@Model.airports[i]</option>
+                        }
+
                     }
 
+                </select>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="gate">Leaving Gate</label>
+                <select class="form-control mb-2" id="gate" asp-for="@Model.flight.gate" required>
+                    <option value="" disabled selected>Select Leaving Gate</option>
+                    @{
+                        for (int i = 1; i < 11; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
+
+                    }
+
+                </select>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="leaving_date">Choose Leaving Date and Time</label>
+                <input type="datetime-local" class="form-control mb-2" id="leaving_date" value="2024-12-20 00:00" asp-for="@Model.flight.LeavDate" required>
+            </div>
+
+
+            <div class="form-group mb-3">
+                <label for="arriving_date">Choose arriving Date and Time</label>
+                <input type="datetime-local" class="form-control mb-2"
+                       id="arriving_date"
+                       asp-for="@Model.flight.ArrDate"
+                       value="2024-12-20 00:00"
+                       required>
+            </div>
+            @{
+                if (!Model.b)
+                {
+                    <div style="color:red">No available aircraft found for the given model</div>
                 }
-
-            </select>
-        </div>
-
-        <div class="form-group mb-3">
-            <label for="leaving_date">Choose Leaving Date and Time</label>
-            <input type="datetime-local" class="form-control mb-2" id="leaving_date"  required>
-        </div>
-
-
-        <div class="form-group mb-3">
-            <label for="arriving_date">Choose arriving Date and Time</label>
-            <input type="datetime-local" class="form-control mb-2" id="arriving_date" required>
-        </div>
+            }
 
 
 
+            <button type="submit" class="btn" style="background-color: #12cad6; color: white;">Create</button>
+        </form>
+    </div>
 
-
-
-        <button type="submit" class="btn" style="background-color: #12cad6; color: white;">Create</button>
-    </form>
 </div>
 
