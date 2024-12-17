@@ -169,33 +169,29 @@
                             <form class="mb-3 mb-md-0">
                                 <div class="row g-3">
                                     <div class="col-md-3">
-                                        <select class="form-select">
-                                            <option>Select</option>
-                                            <option value="G">On Ground</option>
-                                            <option value="D">Delayed</option>
-                                            <option value="Dep">Departed</option>
+                                        <select class="form-select" id="statusFilter">
+                                            <option value="">All Flights</option>
+                                            <option value="On Ground">On Ground</option>
+                                            <option value="Delayed">Delayed</option>
+                                            <option value="Departed">Departed</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6">
                                         <div style="display: flex; align-items: stretch; width: 100%;">
-                                            <input type="text" class="form-control" placeholder="Search" style="height: auto; box-sizing: border-box; width:400px">
+                                            <input type="text" class="form-control" id="searchInput" placeholder="Search" style="height: auto; box-sizing: border-box; width:400px">
                                             <button class="btn btn-outline-light w-25 ms-2">
                                                 <i class="bi bi-search"></i>
                                             </button>
                                         </div>
                                     </div>
-
                                 </div>
                             </form>
                         </div>
-
                     </div>
                 </div>
             </div>
-
-            <!-- Table of flights -->
             <div class="table-responsive">
-                <table class="table table-custom table-lg mb-0" id="orders">
+                <table class="table table-custom table-lg mb-0" id="flightsTable">
                     <thead>
                         <tr>
                             <th>Flight Number</th>
@@ -203,50 +199,247 @@
                             <th>Destination</th>
                             <th>Departure Time</th>
                             <th>Current Status</th>
-                            <th></th>
                             <th class="text-end"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @{
-                            for (int i = 0; i < @Model.dt.Rows.Count; i++)
-                            {
-                                <tr>
-                                    <td>@Model.dt.Rows[i][0]</td>
-                                    <td>@Model.dt.Rows[i][1]</td>
-                                    <td>@Model.dt.Rows[i][3] </td>
-                                    <td>@Model.dt.Rows[i][2]</td>
-                                    <td>
-                                        <button class="btn btn-success">
-                                            @Model.dt.Rows[i][4]
-                                        </button>
-                                    </td>
-
-                                    <td class="text-end">
-                                        <div class="d-flex">
-                                            <div class="dropdown ms-auto">
-                                                <a href="#" data-bs-toggle="dropdown"
-                                                   class="btn btn-floating"
-                                                   aria-haspopup="true" aria-expanded="false">
-                                                    <i class="bi bi-three-dots"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a href="#" class="dropdown-item">Show</a>
-                                                    <a href="#" class="dropdown-item">Edit</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-
+                        @for (int i = 0; i < @Model.dt.Rows.Count; i++)
+                        {
+                            <tr data-status="@Model.dt.Rows[i][4]">
+                                <td>@Model.dt.Rows[i][0]</td>
+                                <td>@Model.dt.Rows[i][1]</td>
+                                <td>@Model.dt.Rows[i][3]</td>
+                                <td>@Model.dt.Rows[i][2]</td>
+                                <td>
+                                    @if (@Model.dt.Rows[i][4].ToString() == "Departed")
+                                    {
+                                        <button class="btn btn-success">Departed</button>
+                                    }
+                                    else if (@Model.dt.Rows[i][4].ToString() == "Delayed")
+                                    {
+                                        <button class="btn btn-danger">Delayed</button>
+                                    }
+                                    else if (@Model.dt.Rows[i][4].ToString() == "On Ground")
+                                    {
+                                        <button class="btn btn-primary">On Ground</button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-primary">@Model.dt.Rows[i][4]</button>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <button class="btn btn-outline-light edit-btn"
+                                            data-flight="@Model.dt.Rows[i][0]"
+                                            data-bs-toggle="modal" data-bs-target="#editModal">
+                                        Edit
+                                    </button>
+                                </td>
+                            </tr>
                         }
-
-
-
                     </tbody>
                 </table>
             </div>
+            <form method="post">
+                @Html.AntiForgeryToken()
+            </form>
+
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <!-- Modal -->
+            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editModalLabel">Update Flight Status</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Options to choose from -->
+                            <div class="list-group">
+                                <button class="list-group-item list-group-item-action status-btn" data-status="Delayed">Delayed</button>
+                                <button class="list-group-item list-group-item-action status-btn" data-status="Departed">Departed</button>
+                                <button class="list-group-item list-group-item-action status-btn" data-status="On Ground">On Ground</button>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="confirmUpdateBtn">Confirm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        
+
+         <script>
+                $(document).ready(function () {
+                    let selectedFlightNumber;
+                    let selectedStatus;
+
+                    // When 'Edit' button is clicked, store the flight number
+                    $(document).on('click', '.edit-btn', function () {
+                        // Reset previous selections
+                        selectedFlightNumber = $(this).data('flight');
+                        selectedStatus = null;
+
+                        console.log('Edit button clicked');
+                        console.log('Selected Flight Number:', selectedFlightNumber);
+
+                        // Reset status button styling
+                        $('.status-btn').removeClass('active');
+                    });
+
+                    // When a status button is clicked, store the status
+                    $(document).on('click', '.status-btn', function () {
+                        selectedStatus = $(this).data('status');
+
+                        console.log('Status button clicked');
+                        console.log('Selected Status:', selectedStatus);
+
+                        // Remove active class from all status buttons
+                        $('.status-btn').removeClass('active');
+                        // Add active class to the clicked button
+                        $(this).addClass('active');
+                    });
+
+                    // Confirm button sends AJAX to the backend
+                    $(document).on('click', '#confirmUpdateBtn', function () {
+                        console.log('Confirm Update button clicked');
+                        console.log('Selected Flight Number:', selectedFlightNumber);
+                        console.log('Selected Status:', selectedStatus);
+
+                        // Validate selections
+                        if (!selectedFlightNumber) {
+                            alert("Please select a flight to update.");
+                            return;
+                        }
+
+                        if (!selectedStatus) {
+                            alert("Please select a status.");
+                            return;
+                        }
+
+                        // Prepare AJAX request
+                        $.ajax({
+                            url: '@Url.Page("", "UpdateFlightStatus")',
+                            type: 'POST',
+                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                            data: {
+                                flightNumber: selectedFlightNumber,
+                                status: selectedStatus,
+                                // Include anti-forgery token
+                                __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                            },
+                            beforeSend: function () {
+                                console.log('Sending AJAX request');
+                                console.log('Request Data:', {
+                                    flightNumber: selectedFlightNumber,
+                                    status: selectedStatus
+                                });
+                            },
+                            success: function (response) {
+                                console.log('AJAX Success:', response);
+
+                                if (response.success) {
+                                    alert("Flight status updated successfully!");
+                                    // Reload the page to reflect changes
+                                    location.reload();
+                                } else {
+                                    // Handle server-side validation or error
+                                    alert("Failed to update flight status: " + (response.message || "Unknown error"));
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                // Detailed error logging
+                                console.error('AJAX Error Details:');
+                                console.error('Status:', status);
+                                console.error('Error:', error);
+                                console.error('Response Text:', xhr.responseText);
+
+                                // More user-friendly error message
+                                alert("Error communicating with the server. Please try again.");
+                            }
+                        });
+                    });
+
+                    // Optional: Set up global AJAX headers (anti-forgery token)
+                    $.ajaxSetup({
+                        headers: {
+                            'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                        }
+                    });
+                });
+
+                $(document).ready(function () {
+                    // Status Filter
+                    $('#statusFilter').on('change', function () {
+                        filterFlights();
+                    });
+
+                    // Search Input
+                    $('#searchInput').on('keyup', function () {
+                        filterFlights();
+                    });
+
+                    function filterFlights() {
+                        const statusFilter = $('#statusFilter').val().toLowerCase();
+                        const searchTerm = $('#searchInput').val().toLowerCase();
+
+                        $('#flightsTable tbody tr').each(function () {
+                            const row = $(this);
+                            const status = row.data('status').toLowerCase();
+                            const rowText = row.text().toLowerCase();
+
+                            // Check status filter
+                            const statusMatch = statusFilter === '' || status === statusFilter.toLowerCase();
+
+                            // Check search input
+                            const searchMatch = searchTerm === '' ||
+                                rowText.includes(searchTerm);
+
+                            // Show or hide row based on filters
+                            if (statusMatch && searchMatch) {
+                                row.show();
+                            } else {
+                                row.hide();
+                            }
+                        });
+
+                        // Update row count or show message if no results
+                        updateResultsInfo();
+                    }
+
+                    function updateResultsInfo() {
+                        const visibleRows = $('#flightsTable tbody tr:visible').length;
+                        const totalRows = $('#flightsTable tbody tr').length;
+
+                        // Optional: Add a message or update a results counter
+                        if (visibleRows === 0) {
+                            // If no rows match, you could add a "No results" row
+                            $('#flightsTable tbody').append(
+                                '<tr class="no-results"><td colspan="6" class="text-center">No flights match your search criteria</td></tr>'
+                            );
+                        } else {
+                            // Remove any existing no results message
+                            $('.no-results').remove();
+                        }
+
+                        // Optional: You could add a results counter
+                        // $('#resultsCount').text(`Showing ${visibleRows} of ${totalRows} flights`);
+                    }
+                });
+         </script>
+
+
+             <!-- Add Bootstrap JS and CSS links if not already included -->
+           
+
+            <!-- JavaScript to handle modal and form submission -->
+          
+
+       
+
+
 
             <nav class="mt-4" aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">

@@ -354,6 +354,56 @@ namespace Airline_Reservation_System.Models
 
         }
 
+        public DataTable GetProfileInfo()
+        {
+            DataTable dt = new DataTable();
+            string proc = "Passengerprofile";
+            SqlCommand cmd = new SqlCommand(proc , connection);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add(new SqlParameter("@Username", "ahmed.ali@email.com"));
+
+            try
+            {
+                connection.Open(); // Ensure the connection is open
+
+                
+                SqlDataReader sdr =  cmd.ExecuteReader();
+                dt.Load(sdr);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message); // Debug any exceptions
+            }
+            finally
+            {
+                connection.Close(); // Always close the connection
+            }
+
+            return dt;
+        }
+
+        public void UpdateFlightStatus(int flight_id , string NewStatus)
+        {
+            string query = $"UPDATE flight set status = '{NewStatus}' where flight_id =  {flight_id} ";
+            SqlCommand cmd = new SqlCommand(query, connection);
+            try
+            {
+                connection.Open();
+                cmd.ExecuteNonQuery();
+                
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+
+            }
+            finally { 
+                connection.Close();
+            }
+        }
 
 
 

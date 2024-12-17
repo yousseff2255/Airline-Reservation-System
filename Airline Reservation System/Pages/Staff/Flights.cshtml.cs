@@ -30,5 +30,11 @@ namespace Airline_Reservation_System.Pages.Staff
 
 
         }
+        public IActionResult OnPostUpdateFlightStatus(int flightNumber, string status)
+        {
+            db.UpdateFlightStatus(flightNumber, status);
+            return new JsonResult(new { success = true });
+        }
+
     }
 }
