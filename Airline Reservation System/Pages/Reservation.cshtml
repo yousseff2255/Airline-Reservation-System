@@ -4,42 +4,281 @@
 }
 
 
+    <style>
+        .flight-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
 
-   
+            .flight-card:hover {
+                border-left: 4px solid #0d6efd;
+                background-color: #f8f9fa;
+            }
 
-<div class="container-md">
-        <h1>Flight Booking</h1>
-        <form>
-            <div>
-                <label for="departure">Departure:</label>
-                <input type="text" id="departure" name="departure" placeholder="Enter departure city" required>
+        .airline-logo {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .flight-duration {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+
+        .price-tag {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #198754;
+        }
+    </style>
+
+
+    <div class="container py-4">
+        <div class="row mb-4">
+            <div class="col">
+                <h3>Flight Search Results</h3>
+                <p class="text-muted">New York (JFK) → London (LHR) • Dec 20, 2024 • 1 passenger</p>
+            </div>
+        </div>
+        <!-- Filters Section -->
+        <div class="card mb-4 ">
+            <div class="card-body ">
+                <h5 class="card-title">Filter Results</h5>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="form-label">Price Range</label>
+                        <select class="form-select">
+                            <option>Any Price</option>
+                            <option>$0 - $1000</option>
+                            <option>$1001 - $2000</option>
+                            <option>$2001+</option>
+                        </select>
+                    </div>
+                   
+                    <div class="col-md-3">
+                        <label class="form-label">Departure Time</label>
+                        <select class="form-select">
+                            <option>Any Time</option>
+                            <option>Morning (6AM - 12PM)</option>
+                            <option>Afternoon (12PM - 6PM)</option>
+                            <option>Evening (6PM - 12AM)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Sort By</label>
+                        <select class="form-select">
+                            <option>Price: Low to High</option>
+                            <option>Price: High to Low</option>
+                            <option>Duration: Shortest</option>
+                            <option>Duration: Longest</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flight Cards Container -->
+        <div class="flight-results">
+
+            <!-- Flight Card 1 -->
+            <div class="card flight-card mb-3">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <!-- Airline Info -->
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <h6 class="mb-0">Flight Number</h6>
+                                    <small class="text-muted">BA-178</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Flight Times -->
+                        <div class="col-md-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="text-center">
+                                    <h5 class="mb-0">07:30</h5>
+                                    <small class="text-muted">JFK</small>
+                                </div>
+                                <div class="text-center mx-3">
+                                    <div class="flight-duration">7h 20m</div>
+                                    <div class="border-top"></div>
+                                    <small class="text-muted">Direct</small>
+                                </div>
+                                <div class="text-center">
+                                    <h5 class="mb-0">14:50</h5>
+                                    <small class="text-muted">LHR</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Class Selection -->
+                        <div class="col-md-3">
+                            <select class="form-select mb-2">
+                                <option value="economy">Economy </option>
+                                <option value="business">Business </option>
+                                <option value="first">First </option>
+                            </select>
+                 
+                        </div>
+
+                        <!-- Price & Book Button -->
+                        <div class="col-md-2 text-end">
+                            <div class="price-tag mb-2">$750</div>
+                            <button class="btn btn-primary w-100">Book</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div>
-                <label for="destination">Destination:</label>
-                <input type="text" id="destination" name="destination" placeholder="Enter destination city" required>
+            <!-- Flight Card 2 -->
+            <div class="card flight-card mb-3">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <h6 class="mb-0"> Flight Number</h6>
+                                    <small class="text-muted">AA-100</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="text-center">
+                                    <h5 class="mb-0">09:45</h5>
+                                    <small class="text-muted">JFK</small>
+                                </div>
+                                <div class="text-center mx-3">
+                                    <div class="flight-duration">7h 15m</div>
+                                    <div class="border-top"></div>
+                                    <small class="text-muted">Direct</small>
+                                </div>
+                                <div class="text-center">
+                                    <h5 class="mb-0">17:00</h5>
+                                    <small class="text-muted">LHR</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <select class="form-select mb-2">
+                                <option value="economy">Economy </option>
+                                <option value="business">Business </option>
+                                <option value="first">First </option>
+                            </select>
+                     
+                        </div>
+
+                        <div class="col-md-2 text-end">
+                            <div class="price-tag mb-2">$720</div>
+                            <button class="btn btn-primary w-100">Book</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div>
-                <label for="date">Travel Date:</label>
-                <input type="date" id="date" name="date" required>
+            <!-- Flight Card 2 -->
+            <div class="card flight-card mb-3">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <h6 class="mb-0">Flight Number</h6>
+                                    <small class="text-muted">AA-100</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="text-center">
+                                    <h5 class="mb-0">09:45</h5>
+                                    <small class="text-muted">JFK</small>
+                                </div>
+                                <div class="text-center mx-3">
+                                    <div class="flight-duration">7h 15m</div>
+                                    <div class="border-top"></div>
+                                    <small class="text-muted">Direct</small>
+                                </div>
+                                <div class="text-center">
+                                    <h5 class="mb-0">17:00</h5>
+                                    <small class="text-muted">LHR</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <select class="form-select mb-2">
+                                <option value="economy">Economy </option>
+                                <option value="business">Business </option>
+                                <option value="first">First </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2 text-end">
+                            <div class="price-tag mb-2">$720</div>
+                            <button class="btn btn-primary w-100">Book</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div>
-                <label for="class">Class:</label>
-                <select id="class" name="class" required>
-                    <option value="economy">Economy</option>
-                    <option value="business">Business</option>
-                    <option value="first">First Class</option>
-                </select>
-            </div>
+            <!-- Flight Card 2 -->
+            <div class="card flight-card mb-3">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <h6 class="mb-0">Flight Number</h6>
+                                    <small class="text-muted">AA-100</small>
+                                </div>
+                            </div>
+                        </div>
 
-            <div>
-                <label for="passengers">Number of Passengers:</label>
-                <input type="number" id="passengers" name="passengers" min="1" max="10" required>
-            </div>
+                        <div class="col-md-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="text-center">
+                                    <h5 class="mb-0">09:45</h5>
+                                    <small class="text-muted">JFK</small>
+                                </div>
+                                <div class="text-center mx-3">
+                                    <div class="flight-duration">7h 15m</div>
+                                    <div class="border-top"></div>
+                                    <small class="text-muted">Direct</small>
+                                </div>
+                                <div class="text-center">
+                                    <h5 class="mb-0">17:00</h5>
+                                    <small class="text-muted">LHR</small>
+                                </div>
+                            </div>
+                        </div>
 
-            <button type="submit">Book Flight</button>
-        </form>
+                        <div class="col-md-3">
+                            <select class="form-select mb-2">
+                                <option value="economy">Economy </option>
+                                <option value="business">Business </option>
+                                <option value="first">First </option>
+                            </select>
+                           
+                        </div>
+
+                        <div class="col-md-2 text-end">
+                            <div class="price-tag mb-2">$720</div>
+                            <button class="btn btn-primary w-100">Book</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      
     </div>
+
+
 
