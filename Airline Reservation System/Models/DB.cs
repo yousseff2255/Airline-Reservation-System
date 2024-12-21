@@ -46,7 +46,7 @@ namespace Airline_Reservation_System.Models
         public List<int> GetFlights()
         {
             List<int> flights = new List<int>();
-            string query = "SELECT flight_id FROM flights"; // Query to fetch the desired column
+            string query = "SELECT flight_id FROM flight"; // Query to fetch the desired column
             SqlCommand cmd = new SqlCommand(query, connection);
 
             try
@@ -269,7 +269,7 @@ namespace Airline_Reservation_System.Models
         {
             int n = 0;
 
-            string Query = "select EnoSeats + BnoSeats + FnoSeats as [Total number of seats] from AirCraft where AirCraft_ID = @id ";
+            string Query = "select EnoSeats + BnoSeats + FnoSeats as [Total number of seats] from AirCraft as a join flight as f on (a.aircraft_id = f.aircraft_id) where flight_id = @id ";
             SqlCommand cmd = new SqlCommand(Query, connection);
             cmd.Parameters.AddWithValue("@id", flight_id);
             try
@@ -292,13 +292,19 @@ namespace Airline_Reservation_System.Models
         public Flight GetFlightDetails(int flight_id)
         {
             Flight f = new Flight();
-            string Query = $"select * from flights where flight_id = {flight_id}";
-            SqlCommand cmd = new SqlCommand(Query, connection);
+            string proc = "GetFlightBasicInfo";
+
+            SqlCommand cmd = new SqlCommand(proc, connection);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@id", flight_id));
             try { 
                 connection.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read()) {
-                    reader[""].ToString();
+                    f.LeavDate = DateTime.Parse(reader["depart_datetime"].ToString());
+
+                    f.ToAirport = reader["Airport_name"].ToString();
+                    f.gate = (int)reader["gate"];
                 }
 
 
@@ -403,6 +409,30 @@ namespace Airline_Reservation_System.Models
             finally { 
                 connection.Close();
             }
+        }
+
+        public DataTable GetReviews() {
+            DataTable dt = new DataTable();
+            string proc = "GetReviews";
+            SqlCommand cmd = new SqlCommand(proc , connection);
+            cmd.CommandType  = CommandType.StoredProcedure;
+            try
+            {
+                connection.Open();
+                SqlDataReader sdr = cmd.ExecuteReader();
+                dt.Load(sdr);
+
+
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e);
+            }
+            finally {
+                connection.Close();
+            }
+            return dt;
         }
 
 

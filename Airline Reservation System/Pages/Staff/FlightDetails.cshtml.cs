@@ -7,6 +7,9 @@ namespace Airline_Reservation_System.Pages.Staff
 {
     public class FlightDetailsModel : PageModel
     {
+
+        static int S_flight_num { get; set; } = 23;
+        public int actual_flight_num { get; set; }
         public Flight f { get; set; }
         public DB db { get; set; }
         public int CheckedIn { get; set; }
@@ -15,6 +18,7 @@ namespace Airline_Reservation_System.Pages.Staff
         public List<int> flights { get; set; }
         public DataTable dt { get; set; }
 
+     
         public FlightDetailsModel(DB db)
         {
      
@@ -22,17 +26,36 @@ namespace Airline_Reservation_System.Pages.Staff
             dt = new DataTable();
             flights = new List<int>();
             f = new Flight();
+            actual_flight_num= S_flight_num;
         }
 
         public void OnGet()
         {
-            dt = db.StaffGetPassengers(1 ,23);
+
+            dt = db.StaffGetPassengers(1 , actual_flight_num);
             flights = db.GetFlights();
-            CheckedIn = db.GetCheckedInNumber(23);
-            capacity=db.GetAirplaneCapacity(5);
-            num_passengers = db.GetPassengersNumber(23);
-            f=db.GetFlightDetails(23);
+            CheckedIn = db.GetCheckedInNumber(actual_flight_num);
+            capacity=db.GetAirplaneCapacity(actual_flight_num);
+            num_passengers = db.GetPassengersNumber(actual_flight_num);
+            f=db.GetFlightDetails(actual_flight_num);
            
         }
+
+        public IActionResult OnPost(int selectedFlight)
+        {
+            S_flight_num = selectedFlight;
+
+            
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostCheckIn(string id)
+        {
+            
+
+
+            return RedirectToPage();
+        }
+
     }
 }

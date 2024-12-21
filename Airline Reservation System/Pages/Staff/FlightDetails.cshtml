@@ -3,26 +3,25 @@
 @{
 }
 
-
+@{
+    // Add this at the top of your Razor Page
+    @Html.AntiForgeryToken()
+}
 <div class="container-md">
     <!-- layout-wrapper -->
     <div class="layout-wrapper">
 
-        <div class="col-md-3 mb-3">
-            <select class="form-select">
-                <option>Select Flight</option>
-                @{
-                    for(int i =0; i < Model.flights.Count; i++)
+        <form method="post">
+            <div class="col-md-3 mb-3">
+                <select name="selectedFlight" class="form-select" onchange="this.form.submit()">
+                    <option value="">Select Flight</option>
+                    @foreach (var flight in Model.flights)
                     {
-                        <option>@Model.flights[i]</option>
-                        
+                        <option value="@flight">@flight</option>
                     }
-                }
-               
-                
-
-            </select>
-        </div>
+                </select>
+            </div>
+        </form>
 
 
 
@@ -42,10 +41,10 @@
                 <div class="card-body d-flex">
                     <div class="d-flex justify-content-between align-items-center mb-3 flex-column">
                         <div class="d-flex flex-column align-items-center">
-                            <p class="text-muted mb-1" style="font-size: medium;">Flight Number : MK 703</p>
-                            <p class="text-muted mb-1" style="font-size: medium;">Destination Airport : Cairo Airport</p>
-                            <p class="text-muted mb-1" style="font-size: medium;">Leaving Time : 9 PM</p>
-                            <p class="text-muted mb-1" style="font-size: medium;">Leaving Gate : 6</p>
+                            <p class="text-muted mb-1" style="font-size: medium;">Flight Number : @Model.actual_flight_num</p>
+                            <p class="text-muted mb-1" style="font-size: medium;">Destination Airport : @Model.f.ToAirport</p>
+                            <p class="text-muted mb-1" style="font-size: medium;">Leaving Time : @Model.f.LeavDate.TimeOfDay</p>
+                            <p class="text-muted mb-1" style="font-size: medium;">Leaving Gate : @Model.f.gate</p>
 
                         </div>
 
@@ -116,7 +115,7 @@
                 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="#">
+                            <a href="../">
                                 <i class="bi bi-globe2 small me-2"></i> Home Page
                             </a>
                         </li>
@@ -142,9 +141,9 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Search">
-                                            <button class="btn btn-outline-light" type="button">
+                                        <div style="display: flex; align-items: stretch; width: 100%;">
+                                            <input type="text" class="form-control" id="searchInput" placeholder="Search" style="height: auto; box-sizing: border-box; width:400px">
+                                            <button class="btn btn-outline-light w-25 ms-2">
                                                 <i class="bi bi-search"></i>
                                             </button>
                                         </div>
@@ -174,13 +173,12 @@
                     </thead>
                     <tbody>
                         @{
-                            for(int i = 0; i < @Model.dt.Rows.Count; i++)
+                            for (int i = 0; i < @Model.dt.Rows.Count; i++)
                             {
                                 <tr>
-
                                     <td style="display:flex; justify-content:center;">
-                                        <div class="avatar avatar-info ">
-                                            <span class="avatar-text rounded-circle">A</span>
+                                        <div class="avatar avatar-info m-4 ">
+                                            <span class="avatar-text rounded-circle">@Model.dt.Rows[i][0].ToString()[0]</span>
                                         </div>
                                     </td>
                                     <td>@Model.dt.Rows[i][0]</td>
@@ -188,7 +186,7 @@
                                     <td>@Model.dt.Rows[i][2]</td>
                                     <td>@Model.dt.Rows[i][3]</td>
                                     <td>@Model.dt.Rows[i][4]</td>
-                                  
+
                                     <td>
                                         <button class="btn btn-success">
                                             @Model.dt.Rows[i][5]
@@ -204,15 +202,21 @@
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <a href="#" class="dropdown-item">Show Profile</a>
-                                                    <a href="#" class="dropdown-item">Check In</a>
+                                                    @if (Model.dt.Rows[i][5].ToString() != "Checked In")
+                                                    {
+                                                        <form method="post" asp-page-handler="checkin" asp-route-id="@Model.dt.Rows[i][3]">
+                                                            <input type="hidden" name="userId" value="@Model.dt.Rows[i][0]" />
+                                                            <button type="submit" class="dropdown-item">Check In</button>
+                                                        </form>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
                             }
-
                         }
+
                        
                       
 
@@ -251,3 +255,5 @@
     </div>
     <!-- ./ layout-wrapper -->
 </div>
+
+

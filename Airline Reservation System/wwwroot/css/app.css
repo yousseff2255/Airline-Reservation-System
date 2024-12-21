@@ -20341,12 +20341,12 @@ a.avatar {
         }
 
     .avatar.avatar-primary .avatar-text {
-        background: #5149e5 !important;
+        background: #5149e5;
         color: #fff !important;
     }
 
     .avatar.avatar-secondary .avatar-text {
-        background: #9932e7 !important;
+        background: #9932e7 ;
         color: #fff !important;
     }
 
