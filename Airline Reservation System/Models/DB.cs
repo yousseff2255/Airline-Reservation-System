@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlTypes;
 using Microsoft.Data.SqlClient;
+using Tensorflow.Keras.Layers;
 
 namespace Airline_Reservation_System.Models
 {
@@ -435,9 +436,111 @@ namespace Airline_Reservation_System.Models
             return dt;
         }
 
+        #region Amr Functions
+
+        public void Book(int flight_id, int psngr_id, DateTime t, int AC_id, int seat_id)
+        {
+            string query = $"exec Book\r\n  @psngr_id = {psngr_id},\r\n  @seat_id = {seat_id},\r\n  @AC_id = {AC_id}, \r\n  @t = {t},\r\n  @flight_id = {flight_id};";
+            SqlCommand cmd = new SqlCommand(query, connection);
+
+            try
+            {
+                connection.Open();
+                cmd.ExecuteReader();
+
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err);
+            }
+            finally { connection.Close(); }
+        }
+
+
+        public DataTable Search(Flight f,string Class )
+        {
+            DataTable search = new DataTable();
+            string proc = "SEARCH";
+            
+            SqlCommand cmd = new SqlCommand(proc, connection);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@departure_airport", f.FromAirport));
+            cmd.Parameters.Add(new SqlParameter("@arr_airport", f.ToAirport));
+            cmd.Parameters.Add(new SqlParameter("@departure_time", f.LeavDate));
+            cmd.Parameters.Add(new SqlParameter("@class", Class));
+            cmd.Parameters.Add(new SqlParameter("@N", f.num_passengers));
+
+
+
+            try
+            {
+                connection.Open();
+                SqlDataReader sdr =  cmd.ExecuteReader();
+                search.Load(sdr);
+
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err);
+            }
+            finally { connection.Close(); }
+
+            return search;
+        }
+
+
+        public DataTable GetPastFlights(int psngr_id)
+        {
+            DataTable PastFlights = new DataTable();
+            string Query = $"GetPastFlights {psngr_id}";
+            SqlCommand cmd = new SqlCommand(Query, connection);
+
+            try
+            {
+                connection.Open();
+                PastFlights.Load(cmd.ExecuteReader());
+
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err);
+            }
+            finally { connection.Close(); }
+
+            return PastFlights;
+        }
+
+
+        public DataTable ReadTable(string TableName)
+        {
+            DataTable dataTable = new DataTable();
+            string Query = $"select * from {TableName}";
+            SqlCommand cmd = new SqlCommand(Query, connection);
+
+            try
+            {
+                connection.Open();
+                dataTable.Load(cmd.ExecuteReader());
+
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err);
+            }
+            finally { connection.Close(); }
+
+
+            return dataTable;
+        }
+
+
+
+
+
 
 
 
 
     }
-}
+} 
+#endregion
