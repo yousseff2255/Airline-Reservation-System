@@ -534,6 +534,29 @@ namespace Airline_Reservation_System.Models
         }
 
 
+        public void CheckIn(string email , int flight_id)
+        {
+          
+            string proc = "CheckIn";
+            SqlCommand cmd = new SqlCommand(proc, connection);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@email", email));
+            cmd.Parameters.Add(new SqlParameter("@flight", flight_id));
+            try
+            {
+                connection.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch(Exception err) 
+            {
+                Console.WriteLine (err);
+            }
+            finally { 
+                connection.Close();
+            }
+        }
+
+
 
 
 

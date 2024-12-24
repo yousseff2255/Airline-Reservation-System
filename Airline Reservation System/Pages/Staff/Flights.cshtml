@@ -10,15 +10,9 @@
 
         <h1 class="page-title">Flights</h1>
         <!-- header -->
-        <div class="header" style="height: 120px;justify-content:space-evenly;">
+        <div class="header" style="height: 120px;justify-content:space-evenly;position:relative;">
 
-            <!-- Logo -->
-            @* <div>
-            <img width="100" src="~/Qatar Airways.jpeg" alt="logo">
-            </div> *@
-
-
-            <!-- ./ Logo -->
+          
 
 
           
@@ -350,33 +344,41 @@
          </script>
 
 
-             <!-- Add Bootstrap JS and CSS links if not already included -->
-           
-
-            <!-- JavaScript to handle modal and form submission -->
+          
           
 
        
 
+         @{
+         
+           <nav class="mt-4" aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        <!-- Previous Button -->
+                    <li class="page-item @(Model.page == 1 ? "disabled" : "")">
+                        <a class="page-link" href="?PageNumber=@(Model.page - 1)" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+
+        <!-- Page Numbers -->
+       
+        @for (int i = 1; i <= 3; i++) {
+            <li class="page-item @(Model.page == i ? "active" : "")">
+                <a class="page-link" href="?PageNumber=@i">@i</a>
+            </li>
+        }
+
+        <!-- Next Button -->
+                        <li class="page-item @(Model.page == 3 ? "disabled" : "")">
+                            <a class="page-link" href="?PageNumber=@(Model.page + 1)" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+}
 
 
-            <nav class="mt-4" aria-label="Page navigation example">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
 
         </div>
         <!-- ./ Main content -->

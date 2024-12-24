@@ -26,7 +26,7 @@
 
 
         <!-- header -->
-        <div class="header d-flex " style="height: 140px;">
+        <div class="header d-flex " style="height: 140px; position:relative;">
 
             <!-- Logo -->
             @* <div>
@@ -204,7 +204,7 @@
                                                     <a href="#" class="dropdown-item">Show Profile</a>
                                                     @if (Model.dt.Rows[i][5].ToString() != "Checked In")
                                                     {
-                                                        <form method="post" asp-page-handler="checkin" asp-route-id="@Model.dt.Rows[i][3]">
+                                                        <form method="post" asp-page-handler="checkin" asp-route-email="@Model.dt.Rows[i][3]">
                                                             <input type="hidden" name="userId" value="@Model.dt.Rows[i][0]" />
                                                             <button type="submit" class="dropdown-item">Check In</button>
                                                         </form>
@@ -229,21 +229,30 @@
             <!-- See Rest passengers-->
             <nav class="mt-4" aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous">
+                    <!-- Previous Button -->
+                    <li class="page-item @(Model.page == 1 ? "disabled" : "")">
+                        <a class="page-link" href="?PageNumber=@(Model.page - 1)" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
+
+                    <!-- Page Numbers -->
+                    @for (int i = 1; i <= 3; i++) // Replace 3 with your total page count
+                    {
+                        <li class="page-item @(Model.page == i ? "active" : "")">
+                            <a class="page-link" href="?PageNumber=@i">@i</a>
+                        </li>
+                    }
+
+                    <!-- Next Button -->
+                    <li class="page-item @(Model.page == 3 ? "disabled" : "")">
+                        <a class="page-link" href="?PageNumber=@(Model.page + 1)" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
                 </ul>
             </nav>
+
 
 
 

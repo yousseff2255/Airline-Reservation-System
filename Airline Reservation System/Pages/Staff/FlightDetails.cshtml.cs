@@ -1,5 +1,6 @@
 using System.Data;
 using Airline_Reservation_System.Models;
+using Azure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -17,8 +18,11 @@ namespace Airline_Reservation_System.Pages.Staff
         public int capacity { get; set; }
         public List<int> flights { get; set; }
         public DataTable dt { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public int page { get; set; }
+  
 
-     
+
         public FlightDetailsModel(DB db)
         {
      
@@ -29,10 +33,12 @@ namespace Airline_Reservation_System.Pages.Staff
             actual_flight_num= S_flight_num;
         }
 
-        public void OnGet()
+        public void OnGet(int PageNumber)
         {
-
-            dt = db.StaffGetPassengers(1 , actual_flight_num);
+            page = PageNumber;
+            if (page==0) page = 1;
+            
+            dt = db.StaffGetPassengers(page, actual_flight_num);
             flights = db.GetFlights();
             CheckedIn = db.GetCheckedInNumber(actual_flight_num);
             capacity=db.GetAirplaneCapacity(actual_flight_num);
@@ -49,10 +55,10 @@ namespace Airline_Reservation_System.Pages.Staff
             return RedirectToPage();
         }
 
-        public IActionResult OnPostCheckIn(string id)
+        public IActionResult OnPostCheckIn(string email)
         {
-            
 
+            db.CheckIn(email, actual_flight_num);
 
             return RedirectToPage();
         }

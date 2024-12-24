@@ -11,7 +11,7 @@ namespace Airline_Reservation_System.Pages.Staff
         public int num_passengers { get; set; }
         public DB db { get; set; }
         public List<int> FlightIDs { get; set; }
-        public int page { get; set; } = 1;
+        public int page { get; set; }
         public DataTable dt { get; set; }
 
         public FlightsModel(DB db)
@@ -20,9 +20,10 @@ namespace Airline_Reservation_System.Pages.Staff
             dt = new DataTable();
             FlightIDs = new List<int>();
         }
-        public void OnGet()
+        public void OnGet(int PageNumber)
         {
-            dt = db.StaffGetFlights(page);
+            if (PageNumber == 0) PageNumber = 1;
+            dt = db.StaffGetFlights(PageNumber);
             FlightIDs = db.GetFlights();
             num_flights = db.GetFlightsNumber();
             num_passengers = db.GetPassengersNumber();
