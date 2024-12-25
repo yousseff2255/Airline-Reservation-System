@@ -1,15 +1,154 @@
 ﻿@page
 @model Airline_Reservation_System.Pages.Admin.DashboardModel
 @{
+    ViewData["name"] = "sidebar";
 }
 
 
 <script>
-    const seriesData = @Html.Raw(Json.Serialize(Model.SalesData));
+    
+    const channel = @Html.Raw(Json.Serialize(Model.status));
+    const Tickets = @Html.Raw(Json.Serialize(Model.Tickets));
+    const Flights = @Html.Raw(Json.Serialize(Model.Flights));
+    const flight_days = @Html.Raw(Json.Serialize(Model.flight_days));
+    
 </script>
 
 
-<div class="container-md">
+
+
+
+
+
+
+
+
+
+    <div class="header">
+        <div class="menu-toggle-btn">
+            <!-- Menu close button for mobile devices -->
+            <a href="#">
+                <i class="bi bi-list"></i>
+            </a>
+        </div>
+        <!-- Logo -->
+        <a href="./dashboard.html" class="logo">
+            <img width="100" src="../logo.png" alt="logo">
+        </a>
+        <!-- ./ Logo -->
+        <div class="page-title">Dashboard</div>
+        <form class="search-form">
+            <div class="input-group">
+                <button class="btn btn-outline-light" type="button" id="button-addon1">
+                    <i class="bi bi-search"></i>
+                </button>
+                <input type="text" class="form-control" placeholder="Search..." style="width: 1%;"
+                       aria-label="Example text with button addon" aria-describedby="button-addon1">
+                <a href="#" class="btn btn-outline-light close-header-search-bar">
+                    <i class="bi bi-x"></i>
+                </a>
+            </div>
+        </form>
+        <div class="header-bar ms-auto">
+            <ul class="navbar-nav justify-content-end">
+                <li class="nav-item">
+                    <a href="#" class="nav-link nav-link-notify" data-count="2" data-sidebar-target="#notifications">
+                        <i class="bi bi-bell icon-lg"></i>
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link nav-link-notify" data-count="3" data-bs-toggle="dropdown">
+                        <i class="bi bi-cart2 icon-lg"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
+                        <h6 class="m-0 px-4 py-3 border-bottom">Shopping Cart</h6>
+                        <div class="dropdown-menu-body">
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item d-flex align-items-center">
+                                    <a href="#" class="text-danger me-3" title="Remove">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                    <a href="#" class="me-3 flex-shrink-0 ">
+                                        <img src="../images/products/3.jpg" class="rounded" width="60"
+                                             alt="...">
+                                    </a>
+                                    <div>
+                                        <h6>Digital clock</h6>
+                                        <div>1 x $1.190,90</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item d-flex align-items-center">
+                                    <a href="#" class="text-danger me-3" title="Remove">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                    <a href="#" class="me-3 flex-shrink-0 ">
+                                        <img src="../images/products/4.jpg" class="rounded" width="60"
+                                             alt="...">
+                                    </a>
+                                    <div>
+                                        <h6>Toy Car</h6>
+                                        <div>1 x $139.58</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item d-flex align-items-center">
+                                    <a href="#" class="text-danger me-3" title="Remove">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                    <a href="#" class="me-3 flex-shrink-0 ">
+                                        <img src="../images/products/5.jpg" class="rounded" width="60"
+                                             alt="...">
+                                    </a>
+                                    <div>
+                                        <h6>Sunglasses</h6>
+                                        <div>2 x $50,90</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item d-flex align-items-center">
+                                    <a href="#" class="text-danger me-3" title="Remove">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                    <a href="#" class="me-3 flex-shrink-0 ">
+                                        <img src="../images/products/6.jpg" class="rounded" width="60"
+                                             alt="...">
+                                    </a>
+                                    <div>
+                                        <h6>Cake</h6>
+                                        <div>1 x $10,50</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h6 class="m-0 px-4 py-3 border-top small">
+                            Sub Total : <strong class="text-primary">$1.442,78</strong>
+                        </h6>
+                    </div>
+                </li>
+                <li class="nav-item ms-3">
+                    <button class="btn btn-primary btn-icon">
+                        <i class="bi bi-plus-circle"></i> Create Report
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <!-- Header mobile buttons -->
+        <div class="header-mobile-buttons">
+            <a href="#" class="search-bar-btn">
+                <i class="bi bi-search"></i>
+            </a>
+            <a href="#" class="actions-btn">
+                <i class="bi bi-three-dots"></i>
+            </a>
+        </div>
+        <!-- ./ Header mobile buttons -->
+    </div>
+    <!-- ./ header -->
+
     <div class="content ">
 
         <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -19,7 +158,7 @@
                         <h6 class="card-title">
                             Flights Chart
                             <a href="#" class="bi bi-question-circle ms-1 small" data-bs-toggle="tooltip"
-                               title="Daily orders and sales"></a>
+                               title="Annualy Flights and Tickets chart"></a>
                         </h6>
                         <div class="d-flex gap-3 align-items-center ms-auto">
                             <div class="dropdown">
@@ -37,34 +176,19 @@
                     <div class="card-body">
                         <div class="d-md-flex align-items-center mb-3">
                             <div class="d-flex align-items-center">
-                                <div class="display-7 me-3">
-                                    <i class="bi bi-bag-check me-2 text-success"></i>1052 tickets
+                                <div class="display-7 me-3" id="totalFlights">
+                                    <i class="bi bi-ticket me-2 text-success"></i>1052 tickets
                                 </div>
                                 <span class="text-success">
                                     <i class="bi bi-arrow-up me-1 small"></i>8.30%
                                 </span>
                             </div>
                             <div class="d-flex gap-4 align-items-center ms-auto mt-3 mt-lg-0">
-                                <select class="form-select">
-                                    <optgroup label="2020">
-                                        <option value="October">October</option>
-                                        <option value="November">November</option>
-                                        <option value="December">December</option>
-                                    </optgroup>
-                                    <optgroup label="2021">
-                                        <option value="January">January</option>
-                                        <option value="February">February</option>
-                                        <option value="March">March</option>
-                                        <option value="April">April</option>
-                                        <option value="May" selected>May</option>
-                                        <option value="June">June</option>
-                                        <option value="July">July</option>
-                                        <option value="August">August</option>
-                                        <option value="September">September</option>
-                                        <option value="October">October</option>
-                                        <option value="November">November</option>
-                                        <option value="December">December</option>
-                                    </optgroup>
+                                <select class="form-select" id="yearDropdown">
+                                        <option value="2024">2024</option>
+                                        <option value="2023">2023</option>
+                                        <option value="2022">2022</option>
+                                    
                                 </select>
                             </div>
                         </div>
@@ -86,9 +210,9 @@
                 <div class="card widget h-100">
                     <div class="card-header d-flex">
                         <h6 class="card-title">
-                            Channels
+                            Flight's Status
                             <a href="#" class="bi bi-question-circle ms-1 small" data-bs-toggle="tooltip"
-                               title="Channels where your products are sold"></a>
+                               title="Flight's Status in Specific Year'"></a>
                         </h6>
                         <div class="d-flex gap-3 align-items-center ms-auto">
                             <div class="dropdown">
@@ -107,33 +231,33 @@
                         <div id="sales-channels"></div>
                         <div class="row text-center mb-5 mt-4">
                             <div class="col-4">
-                                <div class="display-7">4%</div>
+                                <div class="display-7">@Model.status[1]</div>
                                 <div class="text-success my-2 small">
                                     <i class="bi bi-arrow-up me-1 small"></i>30.50%
                                 </div>
                                 <div class="d-flex align-items-center justify-content-center">
                                     <i class="bi bi-circle-fill text-orange me-2 small"></i>
-                                    <span class="text-muted">Travel agent</span>
+                                    <span class="text-muted">Delayed</span>
                                 </div>
                             </div>
                             <div class="col-4">
-                                <div class="display-7">30%</div>
+                                <div class="display-7">@Model.status[1]</div>
                                 <div class="text-danger my-2 small">
                                     <i class="bi bi-arrow-down me-1 small"></i>15.20%
                                 </div>
                                 <div class="d-flex align-items-center justify-content-center">
                                     <i class="bi bi-circle-fill text-cyan me-2 small"></i>
-                                    <span class="text-muted">Direct Website</span>
+                                    <span class="text-muted">Scheduled</span>
                                 </div>
                             </div>
                             <div class="col-4">
-                                <div class="display-7">22%</div>
+                                <div class="display-7">@Model.status[2]</div>
                                 <div class="text-success my-2 small">
                                     <i class="bi bi-arrow-up me-1 small"></i>1.80%
                                 </div>
                                 <div class="d-flex align-items-center justify-content-center">
                                     <i class="bi bi-circle-fill text-indigo me-2 small"></i>
-                                    <span class="text-muted">Email</span>
+                                    <span class="text-muted">Scheduled</span>
                                 </div>
                             </div>
                         </div>
@@ -150,7 +274,7 @@
                     <div class="card-body">
                         <div class="d-flex mb-3">
                             <div class="display-7">
-                                <i class="bi bi-basket"></i>
+                                <i class="bi bi-airplane"></i>
                             </div>
                             <div class="dropdown ms-auto">
                                 <a href="#" data-bs-toggle="dropdown" class="btn btn-sm" aria-haspopup="true"
@@ -163,7 +287,7 @@
                                 </div>
                             </div>
                         </div>
-                        <h4 class="mb-3">Orders</h4>
+                        <h4 class="mb-3">Flights</h4>
                         <div class="d-flex mb-3">
                             <div class="display-7">310</div>
                             <div class="ms-auto" id="total-orders"></div>
@@ -179,7 +303,7 @@
                     <div class="card-body">
                         <div class="d-flex mb-3">
                             <div class="display-7">
-                                <i class="bi bi-credit-card-2-front"></i>
+                                <i class="bi bi-ticket"></i>
                             </div>
                             <div class="dropdown ms-auto">
                                 <a href="#" data-bs-toggle="dropdown" class="btn btn-sm" aria-haspopup="true"
@@ -194,7 +318,7 @@
                         </div>
                         <h4 class="mb-3">Ticket Sold</h4>
                         <div class="d-flex mb-3">
-                            <div class="display-7">$3.759,00</div>
+                            <div class="display-7">$@Model.total_revenues</div>
                             <div class="ms-auto" id="total-sales"></div>
                         </div>
                         <div class="text-danger">
@@ -354,8 +478,8 @@
                 <div class="card h-100 bg-purple">
                     <div class="card-body text-center">
                         <div class="text-white-50">
-                            <div class="bi bi-box-seam display-6 mb-3"></div>
-                            <div class="display-8 mb-2">Tickets sold</div>
+                            <div class="bi bi-ticket display-6 mb-3"></div>
+                            <div class="display-8 mb-2">Total Tickets each day</div>
                             <h5>89 Sold</h5>
                         </div>
                         <div id="products-sold"></div>
@@ -417,14 +541,14 @@
                             <div class="card border-0">
                                 <div class="card-body text-center">
                                     <div class="display-5">
-                                        <i class="bi bi-truck text-secondary"></i>
+                                        <i class="bi bi-cash-stack text-secondary"></i>
                                     </div>
-                                    <h5 class="my-3">Delivered</h5>
-                                    <div class="text-muted">15 New Packages</div>
-                                    <div class="progress mt-3" style="height: 5px">
+                                    <h5 class="my-3">Revenue</h5>
+                                    <div class="text-muted">999 $ </div>
+                                    @* <div class="progress mt-3" style="height: 5px">
                                         <div class="progress-bar bg-secondary" role="progressbar" style="width: 25%"
                                              aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
+                                    </div> *@
                                 </div>
                             </div>
                         </div>
@@ -432,7 +556,7 @@
                             <div class="card border-0">
                                 <div class="card-body text-center">
                                     <div class="display-5">
-                                        <i class="bi bi-receipt text-warning"></i>
+                                        <i class="bi bi-airplane text-warning"></i>
                                     </div>
                                     <h5 class="my-3">Flights Departed</h5>
                                     <div class="text-muted">15 today</div>
@@ -462,9 +586,9 @@
                             <div class="card border-0">
                                 <div class="card-body text-center">
                                     <div class="display-5">
-                                        <i class="bi bi-cursor text-success"></i>
+                                        <i class="bi bi-people text-success"></i>
                                     </div>
-                                    <h5 class="my-3">Arrived</h5>
+                                    <h5 class="my-3">Passanger on board</h5>
                                     <div class="text-muted">34 today</div>
                                     <div class="progress mt-3" style="height: 5px">
                                         <div class="progress-bar bg-success" role="progressbar" style="width: 55%"
@@ -645,7 +769,9 @@
 
     </div>
     <!-- ./ content -->
-</div>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> <!-- Ensure jQuery is loaded -->
 
 
 
@@ -667,5 +793,10 @@
 <!-- Examples -->
 <script src="../js/examples/dashboard.js"></script>
 
+
 <!-- Main Javascript file -->
 <script src="../js/app.js"></script>
+
+<script src="~/my.js"> </script>
+
+

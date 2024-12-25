@@ -33,5 +33,9 @@ namespace Airline_Reservation_System.Pages
         {
             return RedirectToPage("/search");
         }
-    }
+		public IActionResult OnPost()
+		{
+			return RedirectToPage("/search");
+		}
+	}
 }

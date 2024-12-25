@@ -33,8 +33,12 @@ namespace Airline_Reservation_System.Pages.Staff
             actual_flight_num= S_flight_num;
         }
 
-        public void OnGet(int PageNumber)
+        public IActionResult OnGet(int PageNumber)
         {
+            if (HttpContext.Session.GetString("role") == "passanger" || string.IsNullOrEmpty(HttpContext.Session.GetString("role")))
+            {
+                return RedirectToPage("/Index");
+            }
             page = PageNumber;
             if (page==0) page = 1;
             
@@ -44,6 +48,7 @@ namespace Airline_Reservation_System.Pages.Staff
             capacity=db.GetAirplaneCapacity(actual_flight_num);
             num_passengers = db.GetPassengersNumber(actual_flight_num);
             f=db.GetFlightDetails(actual_flight_num);
+            return Page();
            
         }
 

@@ -1,7 +1,7 @@
 ﻿@page
-@model Airline_Reservation_System.Pages.Index1Model
+@model Airline_Reservation_System.Pages.SignUpModel
 @{
-ViewData["Title"] = "Login page";
+ViewData["Title"] = "Sign Up page";
 }
 
 
@@ -10,6 +10,36 @@ ViewData["Title"] = "Login page";
   
 
   
+<nav class="  navbar navbar-expand-sm navbar-toggleable-sm navbar-dark mx-5 p-4 border-bottom  box-shadow mb-3 bg-purple" style="font-size:larger;border-radius:15px; ">
+
+    <a class="navbar-brand" asp-area="" asp-page="/Index">ExoSky</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+        <ul class="navbar-nav flex-grow-1 ">
+            <li class="nav-item">
+                <a class="nav-link text-light" asp-area="" asp-page="/Index">Home</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link text-light" asp-area="" asp-page="/Profile">Profile</a>
+            </li>
+
+
+
+            <li class="nav-item">
+                <a class="nav-link text-light" asp-area="" asp-page="/search">Search</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-light" asp-area="" asp-page="/reservation managment">Your Flights</a>
+            </li>
+
+        </ul>
+    </div>
+
+</nav>
 
 
 <div class="form-wrapper">
@@ -23,69 +53,91 @@ ViewData["Title"] = "Login page";
                                 <h1 class="display-8">Create Account</h1>
                                 <p class="text-muted">You can create a free account now</p>
                             </div>
-                            <form class="form-grid">
-                            <div class="row">
-                            <!-- Left Column -->
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="firstName">First Name</label>
-                                        <input type="text" id="firstName" class="rounded-input" placeholder="First name" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="nationalId">National ID</label>
-                                        <input type="text" id="nationalId" class="rounded-input" placeholder="National ID" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="passportNumber">Passport Number</label>
-                                        <input type="text" id="passportNumber" class="rounded-input" placeholder="Passport Number" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="birthdate">Birthdate</label>
-                                        <input type="date" id="birthdate" class="rounded-input" required>
-                                    </div>
-            
-                                    <div class="mb-3">
-                                        <label for="password">Password</label>
-                                        <input type="password" id="password" class="rounded-input" placeholder="Password" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="confirmPassword">Confirm Password</label>
-                                        <input type="password" id="confirmPassword" class="rounded-input" placeholder="Password" required>
-                                    </div>
-                                </div>
-                            <!-- Right Column -->
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="lastName">Last Name</label>
-                                        <input type="text" id="lastName" class="rounded-input" placeholder="Last Name" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="nationality">Nationality</label>
-                                        <input type="text" id="nationality" class="rounded-input" placeholder="Nationality" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="phoneNumber">Phone Number</label>
-                                        <input type="text" id="phoneNumber" class="rounded-input" placeholder="Phone Number" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="email">Email Address</label>
-                                        <input type="email" id="email" class="rounded-input" placeholder="email@example.com" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label>Gender</label>
-                                        <div>
-                                            <input type="radio" id="male" name="gender" value="Male" required>
-                                            <label for="male">Male</label>
-                                            <input type="radio" id="female" name="gender" value="Female" required>
-                                            <label for="female">Female</label>
+                            @{
+                                <form class="form-grid" method="post">
+                                    <div class="row">
+                                        <!-- Left Column -->
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="firstName">First Name</label>
+                                                <input type="text" id="firstName" class="rounded-input" placeholder="First name" asp-for="@Model.p.fname" required>
+                                                <span class="text-danger" asp-validation-for="@Model.p.fname"></span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="nationalId">National ID</label>
+                                                <input type="text" id="nationalId" class="rounded-input" placeholder="National ID" asp-for="@Model.p.n_id" required>
+                                                <span class="text-danger" asp-validation-for="@Model.p.n_id"></span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="passportNumber">Passport Info</label>
+                                                <input type="text" id="passportNumber" class="rounded-input" placeholder="Passport Info" asp-for="@Model.p.passport_info" required>
+                                                <span class="text-danger" asp-validation-for="@Model.p.passport_info"></span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="birthdate">Birthdate</label>
+                                                <input type="date" id="birthdate" class="rounded-input" asp-for="@Model.p.Bdate" required>
+                                                <span class="text-danger" asp-validation-for="@Model.p.Bdate"></span>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="password">Password</label>
+                                                <input type="password" id="password" class="rounded-input" placeholder="Password" asp-for="@Model.p.password" required>
+                                                <span class="text-danger" asp-validation-for="@Model.p.password"></span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="confirmPassword">Confirm Password</label>
+                                                <input type="password" id="confirmPassword" class="rounded-input" placeholder="Password" asp-for="@Model.p.conf_password" required>
+                                                <span class="text-danger" asp-validation-for="@Model.p.conf_password"></span>
+                                            </div>
+                                        </div>
+                                        <!-- Right Column -->
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="lastName">Last Name</label>
+                                                <input type="text" id="lastName" class="rounded-input" placeholder="Last Name" asp-for="@Model.p.lname" required>
+                                                <span class="text-danger" asp-validation-for="@Model.p.lname"></span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="nationality">Nationality</label>
+                                                <input type="text" id="nationality" class="rounded-input" placeholder="Nationality" asp-for="@Model.p.nationality" required>
+                                                <span class="text-danger" asp-validation-for="@Model.p.nationality"></span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="phoneNumber">Phone Number</label>
+                                                <input type="text" id="phoneNumber" class="rounded-input" placeholder="Phone Number" asp-for="@Model.p.phone" required>
+                                                <span class="text-danger" asp-validation-for="@Model.p.phone"></span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="email">Email Address</label>
+                                                <input type="email" id="email" class="rounded-input" placeholder="email@example.com" asp-for="@Model.p.email" required>
+                                                <span class="text-danger" asp-validation-for="@Model.p.email"></span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="address">Address</label>
+                                                <input type="text" id="address" class="rounded-input" placeholder="Your address" asp-for="@Model.p.address" required>
+                                                <span class="text-danger" asp-validation-for="@Model.p.address"></span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label>Gender</label>
+                                                <div>
+                                                    <label for="male">Male</label>
+                                                    <input type="radio" id="male" name="Gender" value="M" asp-for="@Model.gender" required>
+                                                    <label for="female">Female</label>
+                                                    <input type="radio" id="female" name="Gender" value="F" asp-for="@Model.gender" required>
+                                                </div>
+                                                <span class="text-danger" asp-validation-for="@Model.p.gender"></span>
+                                            </div>
+
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                                <div class="text-center text-lg-start">
-                            <button class="btn btn-primary">Sign Up</button>
-                            </div>
-                            </form>
+                                    <div class="text-center text-lg-start">
+                                        <button class="btn btn-primary">Sign Up</button>
+                                    </div>
+                                </form>
+                            }
+                           
+                            
+                          
 
 
 

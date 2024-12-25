@@ -1,12 +1,11 @@
 ﻿@page
 @model Airline_Reservation_System.Pages.Staff.FlightsModel
 @{
+    ViewData["name"] = "sidebar";
 }
 
 
-<div class="container-md">
-    <!-- layout-wrapper -->
-    <div class="layout-wrapper">
+
 
         <h1 class="page-title">Flights</h1>
         <!-- header -->
@@ -84,7 +83,7 @@
                                     <div class="col-md-3">
                                         <select class="form-select" id="statusFilter">
                                             <option value="">All Flights</option>
-                                            <option value="On Ground">On Ground</option>
+                                    <option value="Scheduled">Scheduled</option>
                                             <option value="Delayed">Delayed</option>
                                             <option value="Departed">Departed</option>
                                         </select>
@@ -124,21 +123,21 @@
                                 <td>@Model.dt.Rows[i][3]</td>
                                 <td>@Model.dt.Rows[i][2]</td>
                                 <td>
-                                    @if (@Model.dt.Rows[i][4].ToString() == "Departed")
+                                    @if (@Model.dt.Rows[i][4].ToString().ToLower() == "departed")
                                     {
                                         <button class="btn btn-success">Departed</button>
                                     }
-                                    else if (@Model.dt.Rows[i][4].ToString() == "Delayed")
+                            else if (@Model.dt.Rows[i][4].ToString().ToLower() == "delayed")
                                     {
                                         <button class="btn btn-danger">Delayed</button>
                                     }
-                                    else if (@Model.dt.Rows[i][4].ToString() == "On Ground")
+                            else if (@Model.dt.Rows[i][4].ToString().ToLower() == "scheduled")
                                     {
-                                        <button class="btn btn-primary">On Ground</button>
+                                <button class="btn btn-primary">Scheduled</button>
                                     }
                                     else
                                     {
-                                        <button class="btn btn-primary">@Model.dt.Rows[i][4]</button>
+                                        <button class="btn btn-warning">@Model.dt.Rows[i][4]</button>
                                     }
                                 </td>
                                 <td class="text-end">
@@ -171,7 +170,7 @@
                             <div class="list-group">
                                 <button class="list-group-item list-group-item-action status-btn" data-status="Delayed">Delayed</button>
                                 <button class="list-group-item list-group-item-action status-btn" data-status="Departed">Departed</button>
-                                <button class="list-group-item list-group-item-action status-btn" data-status="On Ground">On Ground</button>
+                        <button class="list-group-item list-group-item-action status-btn" data-status="Scheduled">Scheduled</button>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -362,8 +361,8 @@
 
         <!-- Page Numbers -->
        
-        @for (int i = 1; i <= 3; i++) {
-            <li class="page-item @(Model.page == i ? "active" : "")">
+        @for (int i = 1; i <= 5; i++) {
+            <li class="page-item @(Model.page == i ? "active":"")" >
                 <a class="page-link" href="?PageNumber=@i">@i</a>
             </li>
         }
@@ -385,6 +384,6 @@
 
 
 
-    </div>
+   
     <!-- ./ layout-wrapper -->
-</div>
+

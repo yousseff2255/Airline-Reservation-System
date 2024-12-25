@@ -13,7 +13,8 @@ namespace Airline_Reservation_System.Pages.Admin
         [BindProperty]
         public Flight flight { get; set; }
         [BindProperty]
-        public bool b { get; set; } = true;
+        static bool b { get; set; } = true;
+        public bool bb { get; set; } = true;
         public CreateFlightModel(DB db)
         {
             airports = new List<string>();
@@ -23,15 +24,25 @@ namespace Airline_Reservation_System.Pages.Admin
            
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            if (HttpContext.Session.GetString("role") == "passanger" || string.IsNullOrEmpty(HttpContext.Session.GetString("role")))
+            {
+                return RedirectToPage("/Index");
+            }
+            bb = b;
             airports = db.GetAirports();
             models = db.GetModels();
+            return Page();
            
         }
 
         public IActionResult OnPost() {
+            
             b = db.AddFlight(flight);
+           
+            if(b==true)
+                return RedirectToPage("Dashboard");
             return RedirectToPage();
         }
     }

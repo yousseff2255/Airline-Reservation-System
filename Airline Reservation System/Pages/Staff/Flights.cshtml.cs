@@ -20,15 +20,20 @@ namespace Airline_Reservation_System.Pages.Staff
             dt = new DataTable();
             FlightIDs = new List<int>();
         }
-        public void OnGet(int PageNumber)
+        public IActionResult OnGet(int PageNumber)
         {
+            if (HttpContext.Session.GetString("role") == "passanger" || string.IsNullOrEmpty(HttpContext.Session.GetString("role")))
+            {
+                return RedirectToPage("/Index");
+            }
+            page = PageNumber;
             if (PageNumber == 0) PageNumber = 1;
             dt = db.StaffGetFlights(PageNumber);
             FlightIDs = db.GetFlights();
             num_flights = db.GetFlightsNumber();
             num_passengers = db.GetPassengersNumber();
 
-
+            return Page();
 
         }
         public IActionResult OnPostUpdateFlightStatus(int flightNumber, string status)

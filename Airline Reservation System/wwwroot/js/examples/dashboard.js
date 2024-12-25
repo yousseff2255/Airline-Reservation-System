@@ -53,7 +53,7 @@ $(function () {
         if ($('#total-sales').length) {
             const options = {
                 series: [{
-                    data: seriesData
+                    data: Tickets
                 }],
                 chart: {
                     type: 'line',
@@ -101,7 +101,7 @@ $(function () {
         if ($('#total-orders').length) {
             const options = {
                 series: [{
-                    data: seriesData
+                    data: Flights
                 }],
                 chart: {
                     type: 'line',
@@ -198,12 +198,12 @@ $(function () {
             const options = {
                 series: [
                     {
-                        name: "Sales",
-                        data: seriesData
+                        name: "Ticket Sold",
+                        data: Tickets
                     },
                     {
-                        name: 'Orders',
-                        data: seriesData
+                        name: 'Flight Depatures',
+                        data: Flights
                     }
                 ],
                 theme: {
@@ -238,9 +238,10 @@ $(function () {
                     }
                 },
                 xaxis: {
-                    categories: ['01 May', '02 May', '03 May', '04 May', '05 May', '06 May', '07 May', '08 May', '09 May', '10 May', '11 May', '12 May'],
+                    categories: ['Jan', 'Feb', 'Mars', 'April', 'May', 'June', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                 },
                 tooltip: {
+
                     y: [
                         {
                             title: {
@@ -274,7 +275,7 @@ $(function () {
         }
     }
 
-    salesChart();
+   
 
     function salesChannels() {
         if ($('#sales-channels').length) {
@@ -296,8 +297,8 @@ $(function () {
                     width: 0
                 },
                 colors: [colors.orange, colors.cyan, colors.indigo],
-                series: [48, 30, 22],
-                labels: ['Social Media', 'Google', 'Email'],
+                series: channel,
+                labels: ['Delayed', 'Scheduled', 'Scheduled'],
                 legend: {
                     show: false
                 }
@@ -307,7 +308,7 @@ $(function () {
         }
     }
 
-    salesChannels();
+   
 
     function productsSold() {
         if ($('#products-sold').length) {
@@ -340,7 +341,7 @@ $(function () {
                 dataLabels: {
                     enabled: true,
                     formatter: function (val) {
-                        return "$" + val;
+                        return val;
                     },
                     offsetY: -20,
                     style: {
@@ -382,7 +383,7 @@ $(function () {
         }
     }
 
-    productsSold();
+   
 
     if ($('.summary-cards').length) {
         $('.summary-cards').slick({
@@ -397,3 +398,5 @@ $(function () {
     }
 
 });
+
+

@@ -6,21 +6,29 @@
 <!-- Section: Design Block -->
 <section class="text-center" style="min-height: 100vh; display: flex; justify-content: center; align-items: center;background-image: url('https://mdbootstrap.com/img/new/textures/full/171.jpg');">
     <div class="text-center" style="width: 500px; margin: 100px auto; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        @if (@Model.buttonPressed is true)
+        {
+
+            <div class="alert alert-danger ">@Model.ValidationMessage</div>
+
+        }
         <h2 style="margin-bottom: 20px;">Sign in</h2>
-        <form>
+        <form method="post">
             <div class="form-group mb-3">
-                <label for="id">Email</label>
-                <input type="text" class="form-control mb-2" id="id" required>
+                <label asp-for="@Model.Email">Email</label>
+                <input type="text" asp-for="@Model.Email" class="form-control mb-2" id="id" required>
             </div>
 
             <div class="form-group mb-3">
-                <label for="password">Password</label>
-                <input type="text" class="form-control mb-2" id="password" required>
+                <label asp-for="@Model.Password">Password</label>
+                <input type="text" asp-for="@Model.Password" class="form-control mb-2" id="password" required>
             </div>
             <div>
-                Already have an account? <span style="color:blue"> <a>Signup </a></span>
+                Already have an account? <span style="color:blue"> <a href="SignUp">Signup </a></span>
             </div>
+
             <button type="submit" class="btn" style="background-color:blueviolet; color: white;">Sign in</button>
+
         </form>
     </div>
 </section>

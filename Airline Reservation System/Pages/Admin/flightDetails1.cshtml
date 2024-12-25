@@ -1,9 +1,25 @@
 ﻿@page
-@model Airline_Reservation_System.Pages.Admin.flightDetails1Model
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model Airline_Reservation_System.Pages.Admin.FlightDetails1Model
 @{
+    ViewData["name"] = "sidebar";
 }
 
-<div class="container-md">
+<script>
+    const getcrew = @Html.Raw(Json.Serialize(Model.getc));
+    
+</script>
+
+<form method="post">
+    @Html.AntiForgeryToken()  <!-- This generates the CSRF token -->
+    <!-- Your form fields go here -->
+</form>
+
+
+
+
+<div class="container-sm">
     <div class="content ">
 
     <div class="mb-4">
@@ -51,17 +67,34 @@
                                 <div class="card-body d-flex flex-column gap-3">
                                     <div class="d-flex justify-content-between">
                                         <h5 class="mb-0">Flight Crew</h5>
-                                        <a href="#">Edit</a>
+                                           
+                                        @* <a href="#" id="">Edit</a>
+                                            <a href="#" id="" style="display:none">save</a> *@
+                                            
                                     </div>
-                                    <div>Name: John Smith</div>
-                                    <div>Role: Pilot</div>
+                                        @{
+                                            for (int i = 0; i < Model.crew.Rows.Count; i++)
+                                            {
+                                                    <div class="editable">
+                                                        Name: @Model.crew.Rows[i][0] @Model.crew.Rows[i][1]
+                                                    </div>
+                                                    <div>
+                                                        Role: @Model.crew.Rows[i][2]
+                                                    </div>
+                                            }
+                                        }
+                                        @* <div class="editable">Name: John Smith</div> *@
+                                    @* <div>Role: Pilot</div>
                                     <div>Name: Jane Doe</div>
                                     <div>
                                         Role: Co-Pilot
-                                    </div>
+                                    </div> *@
                                 </div>
                             </div>
                         </div>
+                            
+
+
                         <div class="col-md-6 col-sm-12">
                             <div class="card">
                                 <div class="card-body d-flex flex-column gap-3">
@@ -84,7 +117,7 @@
             <div class="card widget">
                 <h5 class="card-header">Passanger</h5>
                 <div class="card-body">
-                    <div class="table-responsive">
+                    <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
                         <table class="table table-custom mb-0">
                             <thead>
                                 <tr>
@@ -157,35 +190,176 @@
 
                 </div>
             </div>
-            @*  <div class="card">
+
+             @* <div class="card">
             <div class="card-body">
-            <h6 class="card-title mb-4">Invoice</h6>
-            <div class="row justify-content-center mb-3">
-            <div class="col-6 text-end">Invoice No :</div>
-            <div class="col-6">
-            <a href="#">#5355619</a>
-            </div>
-            </div>
-            <div class="row justify-content-center mb-3">
-            <div class="col-6 text-end">Seller GST :</div>
-            <div class="col-6">12HY87072641Z0</div>
-            </div>
-            <div class="row justify-content-center mb-3">
-            <div class="col-6 text-end">Purchase GST :</div>
-            <div class="col-6">22HG9838964Z1</div>
-            </div>
-            <div class="text-center mt-4">
-            <button class="btn btn-outline-primary">Download PDF</button>
-            </div>
+                        <div class="card-body">
+                            <div id="sales-channels"></div>
+                            <div class="row text-center mt-4">
+                                <div class="col-4">
+                                    <div class="display-7">4%</div>
+                                    <div class="text-success my-2 small">
+                                        <i class="bi bi-arrow-up me-1 small"></i>30.50%
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-circle-fill text-orange me-2 small"></i>
+                                        <span class="text-muted">Travel agent</span>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="display-7">30%</div>
+                                    <div class="text-danger my-2 small">
+                                        <i class="bi bi-arrow-down me-1 small"></i>15.20%
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-circle-fill text-cyan me-2 small"></i>
+                                        <span class="text-muted">Direct Website</span>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="display-7">22%</div>
+                                    <div class="text-success my-2 small">
+                                        <i class="bi bi-arrow-up me-1 small"></i>1.80%
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-circle-fill text-indigo me-2 small"></i>
+                                        <span class="text-muted">Email</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
             </div>
             </div> *@
+                <button class="btn btn-primary col-4 mt-3" id="editLink"  >Edit</button>
+                <button class="btn btn-primary col-4 mt-3" id="saveLink" ">Save</button>
         </div>
+           
     </div>
-
+    
 </div>
 
 </div>
 
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Dropdown options for editing fields (will be populated by backend data)
+    let dropdownOptions = {
+        Name: [], // Placeholder for crew names fetched dynamically
+    };
+
+    // Function to fetch data from the backend when "Edit" is clicked
+    function enableEditing() {
+        const editableFields = document.querySelectorAll(".editable");
+
+        // Fetch crew names dynamically via GET request
+        $.ajax({
+            url: '/Admin/FlightDetails1?handler=Crew', // Razor Page handler URL for GET
+            type: 'GET',
+            dataType : 'json',
+            success: function (response) {
+                
+                console.log(response);
+                // Assuming crew names come as a JSON array from the backend
+                dropdownOptions.Name = response.crewNames;
+
+                editableFields.forEach(function (field) {
+                    const text = field.textContent.trim(); // Get current content
+                    const [label, value] = text.split(":").map((part) => part.trim()); // Split into label and value
+                    let options = dropdownOptions[label]; // Get predefined options based on label
+
+                    if (options) {
+                        // Move the current value to the first position in the options array
+                        options = [value, ...options.filter((option) => option !== value)];
+
+                        // Build a dropdown <select> element
+                        const selectElement = document.createElement("select");
+                        options.forEach((option) => {
+                            const optionElement = document.createElement("option");
+                            optionElement.value = option;
+                            optionElement.textContent = option;
+
+                            // Preserve the current value as selected
+                            if (option === value) {
+                                optionElement.selected = true;
+                            }
+
+                            selectElement.appendChild(optionElement);
+                        });
+
+                        // Replace the field's content with the dropdown
+                        field.innerHTML = `${label}: `;
+                        field.appendChild(selectElement);
+                    }
+                });
+
+                // Toggle visibility of Edit and Save links
+                document.getElementById("editLink").style.display = "none";
+                document.getElementById("saveLink").style.display = "inline-block";
+            },
+            error: function (error) {
+                console.error("Error fetching crew data:", error);
+                alert("An error occurred while fetching data.");
+            },
+        });
+    }
+
+    // Function to save changes (turns dropdowns back into static text and sends data to the backend)
+    function saveChanges() {
+        const editableFields = document.querySelectorAll(".editable");
+
+        // Prepare data to send to the backend
+        const requestData = {};
+        editableFields.forEach(function (field) {
+            const label = field.textContent.split(":")[0].trim(); // Extract label
+            const selectElement = field.querySelector("select");
+            if (selectElement) {
+                const selectedValue = selectElement.value; // Get selected value
+                field.textContent = `${label}: ${selectedValue}`; // Replace with static text
+
+                // Add the selected value to the request data
+                requestData[label.toLowerCase()] = selectedValue;
+            }
+        });
+
+        // Get the CSRF token from the hidden input field
+        const token = $('input[name="__RequestVerificationToken"]').val();
+
+        // Send the data to the backend via POST request
+        $.ajax({
+            url: '/Admin/FlightDetails1?handler=Fun', // Razor Page handler URL for POST
+            type: 'POST',
+            headers: {
+                'RequestVerificationToken': token, // Include CSRF token in the request header
+            },
+            contentType: 'application/json', // Send data as JSON
+            data: JSON.stringify(requestData), // Send the data as JSON
+            success: function (response) {
+                alert("Changes saved successfully: " + response.result);
+            },
+            error: function (error) {
+                console.error("Error saving data:", error);
+                alert("An error occurred while saving.");
+            },
+        });
+
+        // Toggle visibility of Save and Edit links
+        document.getElementById("editLink").style.display = "inline-block";
+        document.getElementById("saveLink").style.display = "none";
+    }
+
+    // Attach click events to Edit and Save links
+    document.getElementById("editLink").addEventListener("click", function (event) {
+        event.preventDefault();
+        enableEditing();
+    });
+
+    document.getElementById("saveLink").addEventListener("click", function (event) {
+        event.preventDefault();
+        saveChanges();
+    });
+</script>
 
 
 <!-- ./ layout-wrapper -->
@@ -195,8 +369,16 @@
 <!-- Nicescroll -->
 <script src="../libs/nicescroll.js"></script>
 
+<!-- Apex chart -->
+<script src="../libs/charts/apex/apexcharts.min.js"></script>
+
+<!-- Slick -->
+<script src="../libs/slick/slick.min.js"></script>
+
 <!-- Examples -->
-<script src="../js/examples/orders.js"></script>
+<script src="../js/examples/dashboard.js"></script>
 
 <!-- Main Javascript file -->
 <script src="../js/app.js"></script>
+
+<script src="~/my.js"> </script>

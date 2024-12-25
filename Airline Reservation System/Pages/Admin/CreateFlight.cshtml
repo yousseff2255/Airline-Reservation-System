@@ -1,16 +1,17 @@
 ﻿@page
 @model Airline_Reservation_System.Pages.Admin.CreateFlightModel
 @{
+    ViewData["name"] = "sidebar";
 }
 
-<div class="gtco-cover" style="background-image: url('/images/Create Flight.jpeg?v=1');position:relative;padding: 20px;margin-left: -50vw; margin-right: -50vw;left: 50%; right: 50%;width: 100vw;">
+<@* div class="gtco-cover" style="background-image: url('/images/Create Flight.jpeg?v=1');position:relative;padding: 20px;margin-left: -50vw; margin-right: -50vw;left: 50%; right: 50%;width: 100vw;">
     <div style="    z-index: 1;
     position: absolute;
     bottom: 0;
     top: 0;
     left: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0.5);"></div>
+    background: rgba(0, 0, 0, 0.5);"></div> *@
     <div class="text-center" style="max-width: 500px; margin: 100px auto; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); position:relative;z-index:10;">
         <h2 style="margin-bottom: 20px;">Add Flight</h2>
         <form method="post">
@@ -23,7 +24,7 @@
                     <option value="" disabled selected>Select Status</option>
                     <option value="departed">Departed</option>
                     <option value="delayed">Delayed</option>
-                    <option value="onground">On Ground</option>
+                    <option value="scheduled">Scheduled</option>
 
                 </select>
             </div>
@@ -109,7 +110,7 @@
                        required>
             </div>
             @{
-                if (!Model.b)
+                if (!Model.bb)
                 {
                     <div style="color:red">No available aircraft found for the given model</div>
                 }

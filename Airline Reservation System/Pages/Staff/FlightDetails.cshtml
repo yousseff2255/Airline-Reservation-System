@@ -1,15 +1,16 @@
 ﻿@page
 @model Airline_Reservation_System.Pages.Staff.FlightDetailsModel
 @{
+    ViewData["name"] = "sidebar";
 }
 
 @{
     // Add this at the top of your Razor Page
     @Html.AntiForgeryToken()
 }
-<div class="container-md">
+
     <!-- layout-wrapper -->
-    <div class="layout-wrapper">
+
 
         <form method="post">
             <div class="col-md-3 mb-3">
@@ -25,87 +26,49 @@
 
 
 
-        <!-- header -->
-        <div class="header d-flex " style="height: 140px; position:relative;">
+<!-- Header -->
+<div class="header d-flex flex-wrap justify-content-between align-items-center p-3" style="height: auto; background-color: #f8f9fa; border-radius: 10px;">
 
-            <!-- Logo -->
-            @* <div>
-            <img width="100" src="~/Qatar Airways.jpeg" alt="logo">
-            </div> *@
-
-
-            <!-- ./ Logo -->
-
-
-            <div class="card h-100 ms-5">
-                <div class="card-body d-flex">
-                    <div class="d-flex justify-content-between align-items-center mb-3 flex-column">
-                        <div class="d-flex flex-column align-items-center">
-                            <p class="text-muted mb-1" style="font-size: medium;">Flight Number : @Model.actual_flight_num</p>
-                            <p class="text-muted mb-1" style="font-size: medium;">Destination Airport : @Model.f.ToAirport</p>
-                            <p class="text-muted mb-1" style="font-size: medium;">Leaving Time : @Model.f.LeavDate.TimeOfDay</p>
-                            <p class="text-muted mb-1" style="font-size: medium;">Leaving Gate : @Model.f.gate</p>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="card h-100 ms-5">
-                <div class="card-body d-flex">
-                    <div class="d-flex justify-content-between align-items-center mb-3 flex-column">
-                        <div class="d-flex align-items-center">
-                            <p class="text-muted mb-1" style="font-size: medium;">Number of Passengers</p>
-                            <i class="bi bi-people-fill ms-3 fs-2 text-primary"></i>
-                        </div>
-                        <div class="d-flex flex-row">
-                            <div class="fs-3 fw-bold text-dark">
-                                @Model.num_passengers
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="card h-100 ms-auto">
-                <div class="card-body d-flex">
-                    <div class="d-flex justify-content-between align-items-center mb-3 flex-column">
-                        <div class="d-flex align-items-center">
-                            <p class="text-muted mb-1" style="font-size: medium;">Checked In</p>
-                            <i class="bi bi-person-check-fill ms-3 fs-2 text-primary"></i>
-                        </div>
-                        <div class="d-flex flex-row">
-                            <div class="fs-3 fw-bold text-dark">
-                                @Model.CheckedIn
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card h-100 ms-auto">
-                <div class="card-body d-flex">
-                    <div class="d-flex justify-content-between align-items-center mb-3 flex-column">
-                        <div class="d-flex align-items-center">
-                            <p class="text-muted mb-1" style="font-size: medium;">Airplane Capacity </p>
-                            <i class="bi bi-database-fill ms-3 fs-2 text-primary"></i>
-                        </div>
-                        <div class="d-flex flex-row">
-                            <div class="fs-3 fw-bold text-dark">
-                               @Model.capacity
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-
+    <!-- Flight Details Card -->
+    <div class="card p-3 mx-2 shadow-sm" style="min-width: 300px;">
+        <div class="card-body">
+            <h6 class="text-muted mb-3">Flight Information</h6>
+            <p class="mb-1"><strong>Flight Number:</strong> @Model.actual_flight_num</p>
+            <p class="mb-1"><strong>Destination:</strong> @Model.f.ToAirport</p>
+            <p class="mb-1"><strong>Leaving Time:</strong> @Model.f.LeavDate.TimeOfDay</p>
+            <p class="mb-1"><strong>Leaving Gate:</strong> @Model.f.gate</p>
         </div>
+    </div>
+
+    <!-- Passengers Card -->
+    <div class="card p-3 mx-2 shadow-sm text-center" style="min-width: 200px;">
+        <div class="card-body">
+            <i class="bi bi-people-fill fs-2 text-primary mb-2"></i>
+            <h6 class="text-muted">Number of Passengers</h6>
+            <p class="fs-3 fw-bold text-dark">@Model.num_passengers</p>
+        </div>
+    </div>
+
+    <!-- Checked-In Card -->
+    <div class="card p-3 mx-2 shadow-sm text-center" style="min-width: 200px;">
+        <div class="card-body">
+            <i class="bi bi-person-check-fill fs-2 text-primary mb-2"></i>
+            <h6 class="text-muted">Checked In</h6>
+            <p class="fs-3 fw-bold text-dark">@Model.CheckedIn</p>
+        </div>
+    </div>
+
+    <!-- Airplane Capacity Card -->
+    <div class="card p-3 mx-2 shadow-sm text-center" style="min-width: 200px;">
+        <div class="card-body">
+            <i class="bi bi-database-fill fs-2 text-primary mb-2"></i>
+            <h6 class="text-muted">Airplane Capacity</h6>
+            <p class="fs-3 fw-bold text-dark">@Model.capacity</p>
+        </div>
+    </div>
+
+</div>
+
         <!-- ./ header -->
         <!-- Main content -->
         <div class="content ">
@@ -183,7 +146,7 @@
                                     </td>
                                     <td>@Model.dt.Rows[i][0]</td>
                                     <td>@Model.dt.Rows[i][1]</td>
-                                    <td>@Model.dt.Rows[i][2]</td>
+                                    <td>20+@Model.dt.Rows[i][2]</td>
                                     <td>@Model.dt.Rows[i][3]</td>
                                     <td>@Model.dt.Rows[i][4]</td>
 
@@ -237,7 +200,7 @@
                     </li>
 
                     <!-- Page Numbers -->
-                    @for (int i = 1; i <= 3; i++) // Replace 3 with your total page count
+                    @for (int i = 1; i <= 3; i++) 
                     {
                         <li class="page-item @(Model.page == i ? "active" : "")">
                             <a class="page-link" href="?PageNumber=@i">@i</a>
@@ -261,8 +224,7 @@
 
 
 
-    </div>
+ 
     <!-- ./ layout-wrapper -->
-</div>
 
 
