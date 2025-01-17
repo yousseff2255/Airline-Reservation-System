@@ -28,6 +28,43 @@ $(function () {
         chartBorderColor: $('body').hasClass('dark') ? '#444444' : '#ededed',
     };
 
+
+    let chart;
+    function salesChannels() {
+        if ($('#sales-channels').length) {
+            const options = {
+                chart: {
+                    height: 250,
+                    type: 'donut',
+                    offsetY: 0
+                },
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '40%',
+                        }
+                    }
+                },
+                stroke: {
+                    show: false,
+                    width: 0
+                },
+                colors: [colors.orange, colors.cyan, colors.indigo],
+                series: channel,
+                labels: labels,
+                legend: {
+                    show: false
+                }
+            }
+
+            chart = new ApexCharts(document.querySelector('#sales-channels'), options);
+            chart.render()
+        }
+    }
+    salesChannels();
+
+
+
     let Chart;
     function salesChart(Tickets, Flights) {
         if ($('#sales-chart').length) {
@@ -129,39 +166,7 @@ $(function () {
     }
     salesChart(Tickets, Flights);
 
-    let chart;
-    function salesChannels() {
-        if ($('#sales-channels').length) {
-            const options = {
-                chart: {
-                    height: 250,
-                    type: 'donut',
-                    offsetY: 0
-                },
-                plotOptions: {
-                    pie: {
-                        donut: {
-                            size: '40%',
-                        }
-                    }
-                },
-                stroke: {
-                    show: false,
-                    width: 0
-                },
-                colors: [colors.orange, colors.cyan, colors.indigo],
-                series: channel,
-                labels: ['Delayed', 'Departed', 'Scheduled'],
-                legend: {
-                    show: false
-                }
-            }
 
-            chart = new ApexCharts(document.querySelector('#sales-channels'), options);
-            chart.render()
-        }
-    }
-    salesChannels();
 
     let flight_chart;
     function productsSold() {
@@ -173,7 +178,7 @@ $(function () {
                 }],
                 chart: {
                     type: 'bar',
-                    height: 180,
+                    height: 380,
                     foreColor: 'rgba(255,255,255,55%)',
                     toolbar: {
                         show: false
@@ -205,7 +210,7 @@ $(function () {
                 },
                 xaxis: {
                     show: false,
-                    categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Fri", "Sun"],
+                    categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
                     axisBorder: {
                         show: false
                     },
@@ -275,7 +280,7 @@ $(function () {
                             }
                         ]);
 
-                        chart.updateSeries([0, 0, 0]);
+                        chart.updateSeries(response.don);
 
                         flight_chart.updateSeries([
                             {
@@ -283,7 +288,12 @@ $(function () {
                                 data: response.day
                             }
                         ])
-                        $('#totalFlights').html(`<i class="bi bi-ticket me-2 text-success"></i> ${response.total} tickets`);
+                        $('#totalTickets').html(`<i class="bi bi-ticket me-2 text-success"></i> ${response.total_tickets} tickets`);
+                        $('#totalFlights').text(`${response.total_flights}`);
+                        $('#FinishedStatus').html(` <div class="display-7"> ${response.don[1]} </div> `)
+                        $('#DelayedStatus').html(` <div class="display-7"> ${response.don[0]} </div> `)
+                        $('#ScheduledStatus').html(` <div class="display-7"> ${response.don[2]} </div> `)
+
                     },
                     error: function (xhr, status, error) {
                         // On failure, log and alert the user about the error
@@ -301,6 +311,7 @@ $(function () {
             });
 
     });
+   
     
 
 })

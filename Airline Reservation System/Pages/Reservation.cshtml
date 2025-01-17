@@ -1,6 +1,9 @@
 ﻿@page
 @model Airline_Reservation_System.Pages.ReservationModel
 @{
+    ViewData["Title"] = "Reservation";
+    ViewData["name"] = "navbar";
+    ViewData["Logged"] = Convert.ToString(HttpContext.Session.GetString("email"));
 }
 
 
@@ -35,15 +38,15 @@
 </style>
 
 
-<div class="container py-4">
+<div class="container py-4  " style="block-size:50vw;">
     <div class="row mb-4">
         <div class="col">
             <h3>Flight Search Results</h3>
-            <p class="text-muted">@Model.flight.FromAirport (JFK) → @Model.flight (LHR) • @Model.flight.LeavDate • @Model.flight.num_passengers passenger</p>
+            <p class="text-muted">@Model.flight.FromAirport  → @Model.flight.ToAirport  • @Model.flight.LeavDate.Date • @Model.num_pass passenger</p>
         </div>
     </div>
     <!-- Filters Section -->
-    <div class="card mb-4 ">
+ @*    <div class="card mb-4 ">
         <div class="card-body ">
             <h5 class="card-title">Filter Results</h5>
             <div class="row">
@@ -77,205 +80,75 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> *@
 
     <!-- Flight Cards Container -->
     <div class="flight-results">
 
         <!-- Flight Card 1 -->
-        <div class="card flight-card mb-3">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <!-- Airline Info -->
-                    <div class="col-md-3">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <h6 class="mb-0">Flight Number</h6>
-                                <small class="text-muted">BA-178</small>
+        @for (int i = 0; i < Model.flights.Count; i++)
+        {
+            <div class="card flight-card mb-3">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <!-- Airline Info -->
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center">
+                                <div class="text-center">
+                                    <h6 class="mb-0">Flight Number</h6>
+                                    <small class="text-muted">@Model.flights[i].flight_id</small>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Flight Times -->
-                    <div class="col-md-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="text-center">
-                                <h5 class="mb-0">07:30</h5>
-                                <small class="text-muted">JFK</small>
-                            </div>
-                            <div class="text-center mx-3">
-                                <div class="flight-duration">7h 20m</div>
-                                <div class="border-top"></div>
-                                <small class="text-muted">Direct</small>
-                            </div>
-                            <div class="text-center">
-                                <h5 class="mb-0">14:50</h5>
-                                <small class="text-muted">LHR</small>
+                        <!-- Flight Times -->
+                        <div class="col-md-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="text-center">
+                                    <h5 class="mb-0"> @Model.flights[i].LeavDate.TimeOfDay</h5>
+                                    <small class="text-muted">JFK</small>
+                                </div>
+                                <div class="text-center">
+                                    <h5 class="mb-0">Duration</h5>
+                                    <small class="text-muted">@Model.flights[i].Duration Hours</small>
+                                </div>
+                                <div class="text-center">
+                                    <h5 class="mb-0">@Model.flights[i].ArrDate.TimeOfDay</h5>
+                                    <small class="text-muted">LHR</small>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Class Selection -->
-                    <div class="col-md-3">
-                        <select class="form-select mb-2">
-                            <option value="economy">Economy </option>
-                            <option value="business">Business </option>
-                            <option value="first">First </option>
-                        </select>
+                        <!-- Class Selection -->
+                        <div class="col-md-3">
+                            <div class=" align-items-center">
+                                <div class="text-center">
+                                    <h6 class="mb-0">Destination</h6>
+                                    <small class="text-muted">@Model.flights[i].ToAirport</small>
+                                </div>
+                            </div>
+                        </div>
 
-                    </div>
-
-                    <!-- Price & Book Button -->
-                    <div class="col-md-2 text-end">
-                        <div class="price-tag mb-2">$750</div>
-                        <button class="btn btn-primary w-100">Book</button>
+                        <!-- Price & Book Button -->
+                        <div class="col-md-2 text-center">
+                            <div class="price-tag mb-2">
+                                @Model.price $
+                            </div>
+                            <form method="post">
+                                <input type="hidden" asp-for="@Model.num_available_seats" />
+                                <input type="hidden" asp-for="@Model.num_pass" />
+                                <input type="hidden" asp-for="@Model.price" />
+                                <input type="hidden" asp-for="@Model.Class" />
+                            
+                                <button class="btn btn-primary w-100" asp-route-f_id="@Model.flights[i].flight_id">Book</button>
+                            </form>
+                           
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        }
 
-        <!-- Flight Card 2 -->
-        <div class="card flight-card mb-3">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-md-3">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <h6 class="mb-0"> Flight Number</h6>
-                                <small class="text-muted">AA-100</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="text-center">
-                                <h5 class="mb-0">09:45</h5>
-                                <small class="text-muted">JFK</small>
-                            </div>
-                            <div class="text-center mx-3">
-                                <div class="flight-duration">7h 15m</div>
-                                <div class="border-top"></div>
-                                <small class="text-muted">Direct</small>
-                            </div>
-                            <div class="text-center">
-                                <h5 class="mb-0">17:00</h5>
-                                <small class="text-muted">LHR</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <select class="form-select mb-2">
-                            <option value="economy">Economy </option>
-                            <option value="business">Business </option>
-                            <option value="first">First </option>
-                        </select>
-
-                    </div>
-
-                    <div class="col-md-2 text-end">
-                        <div class="price-tag mb-2">$720</div>
-                        <button class="btn btn-primary w-100">Book</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Flight Card 2 -->
-        <div class="card flight-card mb-3">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-md-3">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <h6 class="mb-0">Flight Number</h6>
-                                <small class="text-muted">AA-100</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="text-center">
-                                <h5 class="mb-0">09:45</h5>
-                                <small class="text-muted">JFK</small>
-                            </div>
-                            <div class="text-center mx-3">
-                                <div class="flight-duration">7h 15m</div>
-                                <div class="border-top"></div>
-                                <small class="text-muted">Direct</small>
-                            </div>
-                            <div class="text-center">
-                                <h5 class="mb-0">17:00</h5>
-                                <small class="text-muted">LHR</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <select class="form-select mb-2">
-                            <option value="economy">Economy </option>
-                            <option value="business">Business </option>
-                            <option value="first">First </option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-2 text-end">
-                        <div class="price-tag mb-2">$720</div>
-                        <button class="btn btn-primary w-100">Book</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Flight Card 2 -->
-        <div class="card flight-card mb-3">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-md-3">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <h6 class="mb-0">Flight Number</h6>
-                                <small class="text-muted">AA-100</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="text-center">
-                                <h5 class="mb-0">09:45</h5>
-                                <small class="text-muted">JFK</small>
-                            </div>
-                            <div class="text-center mx-3">
-                                <div class="flight-duration">7h 15m</div>
-                                <div class="border-top"></div>
-                                <small class="text-muted">Direct</small>
-                            </div>
-                            <div class="text-center">
-                                <h5 class="mb-0">17:00</h5>
-                                <small class="text-muted">LHR</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <select class="form-select mb-2">
-                            <option value="economy">Economy </option>
-                            <option value="business">Business </option>
-                            <option value="first">First </option>
-                        </select>
-
-                    </div>
-
-                    <div class="col-md-2 text-end">
-                        <div class="price-tag mb-2">$720</div>
-                        <button class="btn btn-primary w-100">Book</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
 

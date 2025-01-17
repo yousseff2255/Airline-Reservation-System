@@ -2,6 +2,10 @@
 @model Airline_Reservation_System.Pages.Staff.FlightDetailsModel
 @{
     ViewData["name"] = "sidebar";
+    ViewData["Title"] = "Flight Details";
+    ViewData["Nav"] = HttpContext.Session.GetString("role").ToString();
+    ViewData["Logged"] = Convert.ToString(HttpContext.Session.GetString("email"));
+    ViewData["Active"] = "details";
 }
 
 @{
@@ -50,13 +54,13 @@
     </div>
 
     <!-- Checked-In Card -->
-    <div class="card p-3 mx-2 shadow-sm text-center" style="min-width: 200px;">
+@*     <div class="card p-3 mx-2 shadow-sm text-center" style="min-width: 200px;">
         <div class="card-body">
             <i class="bi bi-person-check-fill fs-2 text-primary mb-2"></i>
             <h6 class="text-muted">Checked In</h6>
             <p class="fs-3 fw-bold text-dark">@Model.CheckedIn</p>
         </div>
-    </div>
+    </div> *@
 
     <!-- Airplane Capacity Card -->
     <div class="card p-3 mx-2 shadow-sm text-center" style="min-width: 200px;">
@@ -103,14 +107,14 @@
 
                                         </select>
                                     </div>
-                                    <div class="col-md-6">
+                                  @*   <div class="col-md-6">
                                         <div style="display: flex; align-items: stretch; width: 100%;">
                                             <input type="text" class="form-control" id="searchInput" placeholder="Search" style="height: auto; box-sizing: border-box; width:400px">
                                             <button class="btn btn-outline-light w-25 ms-2">
                                                 <i class="bi bi-search"></i>
                                             </button>
                                         </div>
-                                    </div>
+                                    </div> *@
                                 </div>
                             </form>
                         </div>
@@ -146,7 +150,7 @@
                                     </td>
                                     <td>@Model.dt.Rows[i][0]</td>
                                     <td>@Model.dt.Rows[i][1]</td>
-                                    <td>20+@Model.dt.Rows[i][2]</td>
+                                    <td>@Model.dt.Rows[i][2]</td>
                                     <td>@Model.dt.Rows[i][3]</td>
                                     <td>@Model.dt.Rows[i][4]</td>
 

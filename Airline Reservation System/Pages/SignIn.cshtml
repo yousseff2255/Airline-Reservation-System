@@ -1,7 +1,11 @@
 ﻿@page
 @model DatabaseProject.Pages.SignInModel
 @{
+    ViewData["Title"] = "Sign In";
+    ViewData["name"] = "navbar";
+    ViewData["Logged"] = Convert.ToString(HttpContext.Session.GetString("email"));
 }
+<link rel="stylesheet" href="/css/site.css">
 
 <!-- Section: Design Block -->
 <section class="text-center" style="min-height: 100vh; display: flex; justify-content: center; align-items: center;background-image: url('https://mdbootstrap.com/img/new/textures/full/171.jpg');">
@@ -21,7 +25,7 @@
 
             <div class="form-group mb-3">
                 <label asp-for="@Model.Password">Password</label>
-                <input type="text" asp-for="@Model.Password" class="form-control mb-2" id="password" required>
+                <input type="password" asp-for="@Model.Password" class="form-control mb-2" id="password" required>
             </div>
             <div>
                 Already have an account? <span style="color:blue"> <a href="SignUp">Signup </a></span>

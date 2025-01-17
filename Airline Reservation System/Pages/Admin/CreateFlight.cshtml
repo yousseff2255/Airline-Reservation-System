@@ -2,6 +2,9 @@
 @model Airline_Reservation_System.Pages.Admin.CreateFlightModel
 @{
     ViewData["name"] = "sidebar";
+    ViewData["Title"] = "Create Flight";
+    ViewData["Nav"] = HttpContext.Session.GetString("role").ToString();
+    ViewData["Logged"] = Convert.ToString(HttpContext.Session.GetString("email"));
 }
 
 <@* div class="gtco-cover" style="background-image: url('/images/Create Flight.jpeg?v=1');position:relative;padding: 20px;margin-left: -50vw; margin-right: -50vw;left: 50%; right: 50%;width: 100vw;">
@@ -18,23 +21,23 @@
 
 
 
-            <div class="form-group mb-3">
+        @*     <div class="form-group mb-3">
                 <label for="status">Status</label>
                 <select class="form-control mb-2" asp-for="@Model.flight.Status" id="status" required>
                     <option value="" disabled selected>Select Status</option>
-                    <option value="departed">Departed</option>
+                    <option value="Finished">Finished</option>
                     <option value="delayed">Delayed</option>
                     <option value="scheduled">Scheduled</option>
 
                 </select>
-            </div>
+            </div> *@
 
 
 
 
             <div class="form-group mb-3">
                 <label for="aircraft">Aircraft Model</label>
-                <select class="form-control mb-2" id="aircraft" asp-for="@Model.flight.AircraftModel" required>
+                <select class="form-control mb-2 airport" id="aircraft" asp-for="@Model.flight.AircraftModel" required>
                     <option value="" disabled selected>Select Aircraft Model</option>
                     @{
                         for (int i = 0; i < @Model.models.Count; i++)
@@ -51,12 +54,12 @@
 
             <div class="form-group mb-3">
                 <label for="fromairport">Leaving Airport</label>
-                <select class="form-control mb-2" id="fromairport" asp-for="@Model.flight.FromAirport" required>
+                <select class="form-control mb-2 airport" id="fromairport" asp-for="@Model.flight.FromAirport" required>
                     <option value="" disabled selected>Select AirPort</option>
                     @{
-                        for (int i = 0; i < @Model.airports.Count; i++)
+                        for (int i = 0; i < @Model.airports.Rows.Count; i++)
                         {
-                            <option value="@Model.airports[i]">@Model.airports[i]</option>
+                                    <option value="@Model.airports.Rows[i][0]">@Model.airports.Rows[i][0].ToString().Replace("International", "").Replace("Airport", "") (@Model.airports.Rows[i][1])</option>
                         }
 
                     }
@@ -66,19 +69,18 @@
             </div>
 
             <div class="form-group mb-3">
-                <label for="toairport">Destination Airport</label>
-                <select class="form-control mb-2" id="toairport" asp-for="@Model.flight.ToAirport" required>
-                    <option value="" disabled selected>Select AirPort</option>
-                    @{
-                        for (int i = 0; i < @Model.airports.Count; i++)
-                        {
-                            <option value="@Model.airports[i]">@Model.airports[i]</option>
-                        }
-
+    <label for="toairport">Destination Airport</label>
+    <select class="form-control mb-2 airport" id="toairport" asp-for="@Model.flight.ToAirport" required>
+        <option value="" disabled selected>Select Airport</option>
+                @{
+                    for (int i = 0; i < @Model.airports.Rows.Count; i++)
+                    {
+                                            <option value="@Model.airports.Rows[i][0]">@Model.airports.Rows[i][0].ToString().Replace("International", "").Replace("Airport", "") ( @Model.airports.Rows[i][1] )</option>
                     }
+                }
+    </select>
+</div>
 
-                </select>
-            </div>
 
             <div class="form-group mb-3">
                 <label for="gate">Leaving Gate</label>
@@ -97,8 +99,10 @@
 
             <div class="form-group mb-3">
                 <label for="leaving_date">Choose Leaving Date and Time</label>
-                <input type="datetime-local" class="form-control mb-2" id="leaving_date" value="2024-12-20 00:00" asp-for="@Model.flight.LeavDate" required>
+                <input type="datetime-local" class="form-control mb-2" id="leaving_date" value="2024-12-31 00:00" asp-for="@Model.flight.LeavDate" required>
             </div>
+
+
 
 
             <div class="form-group mb-3">
@@ -106,7 +110,7 @@
                 <input type="datetime-local" class="form-control mb-2"
                        id="arriving_date"
                        asp-for="@Model.flight.ArrDate"
-                       value="2024-12-20 00:00"
+                       value="2024-12-31 00:00"
                        required>
             </div>
             @{
@@ -123,4 +127,19 @@
     </div>
 
 </div>
+
+<!-- Include jQuery and Select2 CSS/JS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
+<script>
+$(document).ready(function () {
+    $('.airport').select2({
+        placeholder: 'Select',
+        allowClear: true
+    });
+});
+</script>
 

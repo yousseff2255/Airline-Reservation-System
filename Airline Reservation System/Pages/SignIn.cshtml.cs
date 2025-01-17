@@ -23,8 +23,13 @@ namespace DatabaseProject.Pages
 
         
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("email")))
+            {
+                return RedirectToPage("Index");
+            }
+            return Page();
 
         }
         public IActionResult OnPost()
@@ -46,12 +51,17 @@ namespace DatabaseProject.Pages
                 HttpContext.Session.SetString("password", Password);
 
                 HttpContext.Session.SetString("role", role);
-                if (role == "admin" || role=="staff")
+                if (role == "admin")
                 {
                     return RedirectToPage("/admin/dashboard");
                 }
+                else if(role == "staff")
+                {
+					return RedirectToPage("/staff/flights");
+				}
 
-                return RedirectToPage("/Profile");
+
+				return RedirectToPage("/Profile");
 
             }
             else
@@ -61,6 +71,13 @@ namespace DatabaseProject.Pages
             }
 
 
+        }
+        public IActionResult OnPostLogOut()
+        {
+            HttpContext.Session.Remove("email");
+            HttpContext.Session.Remove("role");
+            HttpContext.Session.Remove("password");
+            return RedirectToPage("index");
         }
 
 

@@ -1,0 +1,215 @@
+﻿@page
+@model Airline_Reservation_System.Pages.PaymentModel
+@{
+    ViewData["Title"] = "Payment";
+    ViewData["name"] = "navbar";
+    ViewData["Logged"] = Convert.ToString(HttpContext.Session.GetString("email"));
+}
+
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .card-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .card-subtitle {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .total-row {
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .payment-method {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: border-color 0.3s;
+        }
+
+            .payment-method:hover {
+                border-color: #007bff;
+            }
+
+            .payment-method input[type="radio"] {
+                margin-right: 10px;
+            }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 5px;
+                color: #333;
+            }
+
+            .form-group input {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
+
+        .card-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .button {
+            background: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+            .button:hover {
+                background: #0056b3;
+            }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+
+
+    <div class="container">
+        <!-- Order Summary -->
+        <div class="card">
+            <h2 class="card-title">Booking Summary</h2>
+            <p class="card-subtitle">Review your booking details</p>
+
+            <div class="summary-row">
+                <span>Flight Ticket (Round Trip)</span>
+                <span>$@Model.Booking_price</span>
+            </div>
+            <div class="summary-row">
+                <span>Taxes & Fees</span>
+                <span>$@Model.taxes</span>
+            </div>
+            <div class="summary-row total-row">
+                <span>Total</span>
+                <span>$@Model.Total_price</span>
+            </div>
+        </div>
+
+        <!-- Payment Methods -->
+        <div class="card">
+            <h2 class="card-title">Payment Method</h2>
+            <p class="card-subtitle">Select your preferred payment method</p>
+
+            
+            <h2>Credit/Debit Card </h2>
+               
+            
+
+
+            <!-- Credit Card Form -->
+        <form id="payment-form" method="post">
+                <div id="credit-card-form">
+                    <div class="form-group">
+                        <label for="card-number">Card Number</label>
+                        <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="16" >
+                    </div>
+
+                    <div class="card-details">
+                        <div class="form-group">
+                            <label for="expiry">Expiry Date</label>
+                        <input type="text" id="expiry" placeholder="MM/YY" >
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                        <input type="text" id="cvv" placeholder="123" maxlength="3" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Cardholder Name</label>
+                    <input type="text" id="name" placeholder="Youssef Othman" >
+                    </div>
+                </div>
+            <input type="hidden" asp-for="@Model.pass_id" />
+            <input type="hidden" asp-for="@Model.fligt_id" />
+            <input type="hidden" asp-for="@Model.num_seats" />
+              <input type="hidden" asp-for="@Model._class" />
+            <input type="hidden" asp-for="@Model.Total_price" />
+                <button type="submit" class="button">Pay $@Model.Total_price</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Simple form handling
+        // document.getElementById('payment-form').addEventListener('submit', function(e) {
+        //     e.preventDefault();
+        //     alert('Payment processed successfully!');
+        // });
+
+        // Handle payment method changes
+        document.querySelectorAll('input[name="payment"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const creditCardForm = document.getElementById('credit-card-form');
+                if (this.value === 'credit-card') {
+                    creditCardForm.classList.remove('hidden');
+                } else {
+                    creditCardForm.classList.add('hidden');
+                    if (this.value === 'digital-wallet') {
+                        alert('You will be redirected to your digital wallet provider.');
+                    } else if (this.value === 'bank-transfer') {
+                        alert('Bank transfer details will be sent to your email.');
+                    }
+                }
+            });
+        });
+    </script>
+

@@ -1,0 +1,43 @@
+﻿@page
+@model Airline_Reservation_System.Pages.Admin.CreateUser
+@{
+    ViewData["name"] = "sidebar";
+    ViewData["Title"] = "Create User";
+    ViewData["Nav"] = HttpContext.Session.GetString("role").ToString();
+    ViewData["Logged"] = Convert.ToString(HttpContext.Session.GetString("email"));
+}
+
+<div style="max-width: 500px; margin: 0 auto; background: #ffffff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+    <h2 style="text-align: center; margin-bottom: 20px; font-weight: bold; color: #333;">Create User</h2>
+
+    <form method="post">
+        <!-- Role Dropdown -->
+        <div style="margin-bottom: 15px;">
+            <label for="Role" style="font-weight: bold; display: block; margin-bottom: 5px;">Role:</label>
+            <select id="Role" name="Role" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <option value="Admin">Admin</option>
+                <option value="Staff">Staff</option>
+            </select>
+        </div>
+
+        <!-- Username Field -->
+        <div style="margin-bottom: 15px;">
+            <label for="Username" style="font-weight: bold; display: block; margin-bottom: 5px;">Username:</label>
+            <input type="text" id="Username" name="Username" placeholder="Enter username"
+                   style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+        </div>
+
+        <!-- Password Field -->
+        <div style="margin-bottom: 15px;">
+            <label for="Password" style="font-weight: bold; display: block; margin-bottom: 5px;">Password:</label>
+            <input type="password" id="Password" name="Password" placeholder="Enter password"
+                   style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit"
+                style="width: 100%; background-color: #4CAF50; color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer;">
+            Submit
+        </button>
+    </form>
+</div>

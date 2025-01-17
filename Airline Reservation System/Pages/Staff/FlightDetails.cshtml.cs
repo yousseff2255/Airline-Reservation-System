@@ -35,20 +35,26 @@ namespace Airline_Reservation_System.Pages.Staff
 
         public IActionResult OnGet(int PageNumber)
         {
-            if (HttpContext.Session.GetString("role") == "passanger" || string.IsNullOrEmpty(HttpContext.Session.GetString("role")))
+            if (HttpContext.Session.GetString("role").ToLower() == "staff" || HttpContext.Session.GetString("role").ToLower() == "admin")
             {
-                return RedirectToPage("/Index");
+
+                page = PageNumber;
+                if (page == 0) page = 1;
+
+                dt = db.StaffGetPassengers(page, actual_flight_num);
+                flights = db.GetFlights();
+                CheckedIn = db.GetCheckedInNumber(actual_flight_num);
+                capacity = db.GetAirplaneCapacity(actual_flight_num);
+                num_passengers = db.GetPassengersNumber(actual_flight_num);
+                f = db.GetFlightDetails(actual_flight_num);
+                return Page();
+
             }
-            page = PageNumber;
-            if (page==0) page = 1;
-            
-            dt = db.StaffGetPassengers(page, actual_flight_num);
-            flights = db.GetFlights();
-            CheckedIn = db.GetCheckedInNumber(actual_flight_num);
-            capacity=db.GetAirplaneCapacity(actual_flight_num);
-            num_passengers = db.GetPassengersNumber(actual_flight_num);
-            f=db.GetFlightDetails(actual_flight_num);
-            return Page();
+            else
+            {
+				return RedirectToPage("../index");
+			}
+ 
            
         }
 
@@ -66,6 +72,13 @@ namespace Airline_Reservation_System.Pages.Staff
             db.CheckIn(email, actual_flight_num);
 
             return RedirectToPage();
+        }
+        public IActionResult OnPostLogOut()
+        {
+            HttpContext.Session.Remove("email");
+            HttpContext.Session.Remove("role");
+            HttpContext.Session.Remove("password");
+            return RedirectToPage("../signin");
         }
 
     }

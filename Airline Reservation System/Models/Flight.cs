@@ -14,8 +14,10 @@
         public string Co_Pilot { get; set; }
         public string Pilot { get; set; }
         public List<string> flight_att { get; set; }
+        public int flight_id { get; set; }
+        public double Duration { get; set; }
 
-
+      
 
 
 

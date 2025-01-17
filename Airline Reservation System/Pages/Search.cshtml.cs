@@ -1,3 +1,4 @@
+using System.Data;
 using System.Text.Json;
 using Airline_Reservation_System.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ namespace Airline_Reservation_System.Pages
     {
         public DB db { get; set; }
         [BindProperty]
-        public List<string> airports { get; set; }
+        public DataTable airports { get; set; }
         [BindProperty]
         public int no_psngrs { get; set; }
         [BindProperty]
@@ -20,9 +21,9 @@ namespace Airline_Reservation_System.Pages
         public SearchModel(DB db)
         {   
             this.db = db;
-            airports = new List<string>();
+            airports = new DataTable();
             flight = new Flight();
-
+            
 
         }
         public void OnGet()
@@ -36,7 +37,14 @@ namespace Airline_Reservation_System.Pages
         {
             string jsonData = JsonSerializer.Serialize(flight);
 
-            return RedirectToPage("/Reservation", new { jsonflight = jsonData , _class= Class });
+            return RedirectToPage("/Reservation", new { jsonflight = jsonData , _class= Class , num = no_psngrs });
+        }
+        public IActionResult OnPostLogOut()
+        {
+            HttpContext.Session.Remove("email");
+            HttpContext.Session.Remove("role");
+            HttpContext.Session.Remove("password");
+            return RedirectToPage("index");
         }
     }
 }

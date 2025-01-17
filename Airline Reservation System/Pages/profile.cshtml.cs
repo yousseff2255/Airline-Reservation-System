@@ -6,7 +6,6 @@ using Airline_Reservation_System.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.IdentityModel.Tokens;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Airline_Reservation_System.Pages
 {
@@ -47,26 +46,10 @@ namespace Airline_Reservation_System.Pages
         {
 
             //for every getProfileInfo(go get the email and pass the username to it     
-            dt = db.GetProfileInfo("ahmed.ali@email.com");
+            dt = db.GetProfileInfo(HttpContext.Session.GetString("email"));
 
 
             passportInfo = (string)dt.Rows[0]["passport_info"];
-
-
-
-            passportNo = passportInfo.Split(',')[0];
-            passportNo = passportNo.Split(':')[1];
-
-            Country = passportInfo.Split(',')[1];
-            Country = Country.Split(':')[1];
-
-            Issued = passportInfo.Split(',')[2];
-            Issued = Issued.Split(":")[1];
-
-            Expires = passportInfo.Split(',')[3];
-            Expires = Expires.Split(":")[1];
-
-
 
 
 
@@ -75,10 +58,10 @@ namespace Airline_Reservation_System.Pages
         {
             //check that the old password = that from the session 
             //check that the new password and confirmedNewpassword are equal 
-            if (NewPassword is null || OldPassword is null || ConfirmNewPassword is null) { return Page(); }
+            if (NewPassword is null || OldPassword is null || ConfirmNewPassword is null) { return RedirectToPage(); }
             if (NewPassword == ConfirmNewPassword && OldPassword == Convert.ToString(HttpContext.Session.GetString("password")))
             {
-                db.updatePassword(NewPassword, Convert.ToString(HttpContext.Session.GetString("Username")));
+                db.updatePassword(NewPassword, Convert.ToString(HttpContext.Session.GetString("email")));
                 HttpContext.Session.SetString("password", NewPassword);
             }
             else
@@ -86,7 +69,7 @@ namespace Airline_Reservation_System.Pages
                 Console.WriteLine("Incorrect");
             }
 
-            return Page();
+            return RedirectToPage();
         }
         public IActionResult OnpostModifyPhoneNUmber()
         {
@@ -94,21 +77,21 @@ namespace Airline_Reservation_System.Pages
             // Console.WriteLine((string)dt.Rows[0]["phoneNumber"]);
             // db.updatephoneNumber(Inputphonenumber, (string)dt.Rows[0]["phoneNumber"], (string)dt.Rows[0]["email"]); 
 
-            dt = db.GetProfileInfo("ahmed.ali@email.com");
+            dt = db.GetProfileInfo(HttpContext.Session.GetString("email"));
             if (dt == null || dt.Rows.Count == 0)
             {
                 Console.WriteLine("DataTable is null or empty.");
-                return Page();
+                return RedirectToPage();
             }
             buttonPressed++;
             buttonPressed = Convert.ToInt32(TempData["buttonPressed"] ?? "0") + 1;
             TempData["buttonPressed"] = buttonPressed;
 
-            return Page();
+            return RedirectToPage();
         }
         public IActionResult OnPostSavePhoneNumber()
         {
-            dt = db.GetProfileInfo("ahmed.ali@email.com");
+            dt = db.GetProfileInfo(HttpContext.Session.GetString("email"));
 
             db.updatephoneNumber(Inputphonenumber, Convert.ToString(dt.Rows[0]["email"]));
             return RedirectToPage();
@@ -116,23 +99,30 @@ namespace Airline_Reservation_System.Pages
         public IActionResult OnpostModifyAddress()
         {
             //we have to modify the address in the passport also or remove the country from the passport info 
-            dt = db.GetProfileInfo("ahmed.ali@email.com");
+            dt = db.GetProfileInfo(HttpContext.Session.GetString("email"));
             if (dt == null || dt.Rows.Count == 0)
             {
                 Console.WriteLine("DataTable is null or empty.");
-                return Page();
+                return RedirectToPage();
             }
             buttonPressedmodifyaddress++;
             buttonPressedmodifyaddress = Convert.ToInt32(TempData["buttonPressedmodifyaddress"] ?? "0") + 1;
             TempData["buttonPressedmodifyaddress"] = buttonPressedmodifyaddress;
-            return Page();
+            return RedirectToPage();
         }
 
         public IActionResult OnpostSaveAddress()
         {
-            dt = db.GetProfileInfo("ahmed.ali@email.com");
+            dt = db.GetProfileInfo(HttpContext.Session.GetString("email"));
             db.updateAddress(Inputaddress_info, (string)dt.Rows[0]["email"]);
-            return Page();
+            return RedirectToPage();
+        }
+        public IActionResult OnPostLogOut()
+        {
+            HttpContext.Session.Remove("email");
+            HttpContext.Session.Remove("role");
+            HttpContext.Session.Remove("password");
+            return RedirectToPage("index");
         }
     }
 }

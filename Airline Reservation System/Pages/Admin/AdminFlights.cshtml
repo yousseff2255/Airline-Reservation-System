@@ -1,12 +1,13 @@
 ﻿@page
-@model Airline_Reservation_System.Pages.Staff.FlightsModel
+@model Airline_Reservation_System.Pages.Admin.AdminFlightsModel
 @{
     ViewData["name"] = "sidebar";
-    ViewData["Title"] = "Staff Flights ";
+    ViewData["Title"] = "Flights";
     ViewData["Nav"] = HttpContext.Session.GetString("role").ToString();
     ViewData["Logged"] = Convert.ToString(HttpContext.Session.GetString("email"));
-    ViewData["Active"] = "Flights";
+    ViewData["Active"] = "adminflight";
 }
+
 
 
 
@@ -81,7 +82,7 @@
                 <div class="card-body">
                     <div class="d-md-flex gap-4 align-items-center">
                         <div class="d-none d-md-flex">All Flights</div>
-@*                         <div class="d-md-flex gap-4 align-items-center">
+                        <div class="d-md-flex gap-4 align-items-center">
                             <form class="mb-3 mb-md-0">
                                 <div class="row g-3">
                             <div class="col-md-6">
@@ -92,17 +93,17 @@
                                             <option value="Finished">Finished</option>
                                         </select>
                                     </div>
-                                   @ <div class="col-md-6">
+                                   @*  <div class="col-md-6">
                                         <div style="display: flex; align-items: stretch; width: 100%;">
                                             <input type="text" class="form-control" id="searchInput" placeholder="Search" style="height: auto; box-sizing: border-box; width:400px">
                                             <button class="btn btn-outline-light w-25 ms-2">
                                                 <i class="bi bi-search"></i>
                                             </button>
                                         </div>
-                                    </div> 
+                                    </div> *@
                                 </div>
                             </form>
-                        </div> *@
+                        </div>
                     </div>
                 </div>
             </div>
@@ -151,12 +152,12 @@
                                     data-bs-toggle="modal" data-bs-target="#editModal">
                                 Edit
                             </button>
-                          @*   <form method="post" asp-page-handler="ViewFlight" style="display: inline;">
+                            <form method="post" asp-page-handler="ViewFlight" style="display: inline;">
                                 <input type="hidden" name="flightId" value="@Model.dt.Rows[i][0]" />
                                 <button type="submit" class="btn btn-outline-info">
                                     View
                                 </button>
-                            </form> *@
+                            </form>
                         </td>
                               
                             </tr>

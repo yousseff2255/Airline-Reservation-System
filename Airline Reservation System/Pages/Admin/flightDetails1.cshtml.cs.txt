@@ -45,40 +45,30 @@ namespace Airline_Reservation_System.Pages.Admin
 
         static List<int> member_id { get; set; } = new List<int>();
 
-        public DataTable prices { get; set; } = new DataTable();
+       public DataTable prices { get; set; } = new DataTable();
         public int[] seats_num { get; set; } = new int[3];
-        public IActionResult OnGet(int id)
+        public void OnGet(int id)
         {
-            if (HttpContext.Session.GetString("role").ToLower() == "admin")
+            
+            HttpContext.Session.SetInt32("id", id);
+            crew = db.Crew(id);
+            get_details = db.Flight_details(id);
+            page = 0;
+
+            dt = db.StaffGetPassengers(1, id);
+            flights = db.GetFlights();
+            CheckedIn = db.GetCheckedInNumber(id);
+            capacity = db.GetAirplaneCapacity(id);
+            num_passengers = db.GetPassengersNumber(id);
+            f = db.GetFlightDetails(id);
+           DataTable seats_num_table = new DataTable();
+            seats_num_table=db.seats_in_flight(id);
+            for(int i = 0; i < seats_num_table.Rows.Count; i++)
             {
-
-                HttpContext.Session.SetInt32("id", id);
-                crew = db.Crew(id);
-                get_details = db.Flight_details(id);
-                page = 0;
-
-                dt = db.StaffGetPassengers(1, id);
-                flights = db.GetFlights();
-                CheckedIn = db.GetCheckedInNumber(id);
-                capacity = db.GetAirplaneCapacity(id);
-                num_passengers = db.GetPassengersNumber(id);
-                f = db.GetFlightDetails(id);
-                DataTable seats_num_table = new DataTable();
-                seats_num_table = db.seats_in_flight(id);
-                for (int i = 0; i < seats_num_table.Rows.Count; i++)
-                {
-                    seats_num[i] = (int)seats_num_table.Rows[i][1];
-                }
-
-                prices = db.show_price(id);
-
-                return Page();
-
+                seats_num[i] = (int)seats_num_table.Rows[i][1];
             }
-            else
-            {
-				return RedirectToPage("../index");
-			}
+
+            prices = db.show_price(id);
 
         }
 
@@ -86,7 +76,7 @@ namespace Airline_Reservation_System.Pages.Admin
         {
             id = (int)HttpContext.Session.GetInt32("id");
             get_details = db.Flight_details(id);
-            getcrew = db.getCrew(get_details.Rows[0][1].ToString().Replace("12:00:00 AM", ""), "pilot");
+            getcrew = db.getCrew(get_details.Rows[0][1].ToString().Replace("12:00:00 AM", ""),"pilot");
             DataTable dt = new DataTable();
             dt = db.getCrew(get_details.Rows[0][1].ToString().Replace("12:00:00 AM", ""), "co-pilot");
             var crewNames = new List<string>();
@@ -94,10 +84,10 @@ namespace Airline_Reservation_System.Pages.Admin
             for (int i = 0; i < getcrew.Rows.Count; i++)
             {
                 crewNames.Add(getcrew.Rows[i][0].ToString() + " " + getcrew.Rows[i][1].ToString());
-                conames.Add(dt.Rows[i][0].ToString() + " " + dt.Rows[i][1].ToString());
+                conames.Add(dt.Rows[i][0].ToString()+" " + dt.Rows[i][1].ToString());
             }
 
-            return new JsonResult(new { crewNames, conames });
+            return new JsonResult(new { crewNames,conames });
         }
 
         public JsonResult OnGetCabinCrew()
@@ -110,11 +100,11 @@ namespace Airline_Reservation_System.Pages.Admin
             Console.WriteLine(dt.Rows[0][0]);
             for (int i = 0; i < dt.Rows.Count; i++)
             {
-                Names.Add(dt.Rows[i][0].ToString() + " " + dt.Rows[i][1].ToString());
-
+             Names.Add(dt.Rows[i][0].ToString() + " " + dt.Rows[i][1].ToString());
+                
             }
 
-            return new JsonResult(new { Names });
+            return new JsonResult(new { Names});
         }
 
         public class FlightDetailsModel
@@ -139,23 +129,23 @@ namespace Airline_Reservation_System.Pages.Admin
         }
 
         [ValidateAntiForgeryToken]
-        public JsonResult OnPostFun([FromBody] FlightDetailsModel data)
-        {
+            public JsonResult OnPostFun([FromBody] FlightDetailsModel data)
+            {
             id = (int)HttpContext.Session.GetInt32("id");
             if (data != null)
-            {
-                Console.WriteLine($"Pilot: {data.Pilot}, Co-pilot: {data.CoPilot}");
-                db.edit_flight(id, data.Pilot, "Pilot");
-                db.edit_flight(id, data.CoPilot, "Co-Pilot");
+                {
+                    Console.WriteLine($"Pilot: {data.Pilot}, Co-pilot: {data.CoPilot}");
+                   db.edit_flight(id, data.Pilot, "Pilot");
+                   db.edit_flight(id, data.CoPilot, "Co-Pilot");
             }
-            else
-            {
-                Console.WriteLine("Received no data");
-            }
+                else
+                {
+                    Console.WriteLine("Received no data");
+                }
 
-            // Return a response back to the frontend
-            return new JsonResult(new { result = "Handler executed successfully!" });
-        }
+                // Return a response back to the frontend
+                return new JsonResult(new { result = "Handler executed successfully!" });
+            }
 
         public JsonResult OnPostUpdateprice([FromBody] Price data)
         {
@@ -166,7 +156,7 @@ namespace Airline_Reservation_System.Pages.Admin
                 db.update_price(data.economy, "Economy", id);
                 db.update_price(data.firstclass, "First Class", id);
                 db.update_price(data.Business, "Business", id);
-            }
+            }   
             else
             {
                 Console.WriteLine("Received no data");
@@ -182,8 +172,8 @@ namespace Airline_Reservation_System.Pages.Admin
             id = (int)HttpContext.Session.GetInt32("id");
 
 
-
-
+            
+         
             if (data != null)
             {
                 crew = db.Crew(id);
@@ -214,13 +204,6 @@ namespace Airline_Reservation_System.Pages.Admin
             id = (int)HttpContext.Session.GetInt32("id");
             db.delete_flight(id);
             return RedirectToPage("admin/dashboard");
-        }
-        public IActionResult OnPostLogOut()
-        {
-            HttpContext.Session.Remove("email");
-            HttpContext.Session.Remove("role");
-            HttpContext.Session.Remove("password");
-            return RedirectToPage("../signin");
         }
 
     }

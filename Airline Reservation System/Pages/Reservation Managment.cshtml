@@ -2,103 +2,163 @@
 @model Airline_Reservation_System.Pages.Index1Model
 @{
     ViewData["Title"] = "Reservation Managment";
-
+    ViewData["name"] = "navbar";
+    ViewData["Logged"] = Convert.ToString(HttpContext.Session.GetString("email"));
 }
 
 
-    <style>
-        .table-wrapper {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+<style>
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+
+    .modal-content {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 500px;
+        z-index: 1001;
+    }
+
+    .star-rating {
+        color: #ccc;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+        .star-rating .bi-star-fill.active {
+            color: #ffd700;
         }
-        
-        .header {
-            margin-bottom: 24px;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 16px;
-        }
-        
-        .header h1 {
-            font-size: 24px;
-            color: #2c3e50;
-            margin-bottom: 8px;
-        }
-        
-        .search-sort-wrapper {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            gap: 16px;
-        }
-        
-        .search-bar {
-            flex: 1;
-        }
-        
-        .search-bar input {
-            width: 100%;
-            padding: 8px 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-        
-        .search-bar input:focus {
-            border-color: #0d6efd;
-            box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25);
-        }
-        
-        .sort-dropdown select {
-            padding: 8px 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: white;
-            min-width: 200px;
-        }
-        
-        .table {
-            margin-bottom: 24px;
-        }
-        
-        .table th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            color: #495057;
-        }
-        
-        .table td {
-            vertical-align: middle;
-        }
-        
-        .pagination {
-            justify-content: center;
-            gap: 4px;
-        }
-        
-        .page-link {
-            padding: 8px 16px;
-            border-radius: 4px;
-        }
-        
-        .page-item.active .page-link {
-            background-color: #0d6efd;
-            border-color: #0d6efd;
-        }
-        
-        .btn-done {
-            background-color: #28a745;
-            color: white;
-        }
-        
-       
-    </style>
-<nav class="  navbar navbar-expand-sm navbar-toggleable-sm navbar-dark mx-5 p-4 border-bottom  box-shadow mb-3 bg-purple" style="font-size:larger;border-radius:15px; ">
+
+    .flight-details-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .flight-details-item {
+        padding: 10px;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+    }
+
+    .detail-label {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .close-button {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        cursor: pointer;
+        font-size: 20px;
+    }
+
+    .table-wrapper {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+        margin-bottom: 24px;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 16px;
+    }
+
+    .header h1 {
+        font-size: 24px;
+        color: #2c3e50;
+        margin-bottom: 8px;
+    }
+
+    .search-sort-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        gap: 16px;
+    }
+
+    .search-bar {
+        flex: 1;
+    }
+
+    .search-bar input {
+        width: 100%;
+        padding: 8px 16px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        outline: none;
+        transition: border-color 0.3s;
+    }
+
+    .search-bar input:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25);
+    }
+
+    .sort-dropdown select {
+        padding: 8px 16px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: white;
+        min-width: 200px;
+    }
+
+    .table {
+        margin-bottom: 24px;
+    }
+
+    .table th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        color: #495057;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .pagination {
+        justify-content: center;
+        gap: 4px;
+    }
+
+    .page-link {
+        padding: 8px 16px;
+        border-radius: 4px;
+    }
+
+    .page-item.active .page-link {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+
+    .btn-done {
+        background-color: #28a745;
+        color: white;
+    }
+
+
+</style>
 
     <a class="navbar-brand" asp-area="" asp-page="/Index">ExoSky</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -130,109 +190,305 @@
 </nav>
 
 
-    <div class="container-md py-5">
-        <div class="table-wrapper">
-            <!-- Header Section -->
-        
-                <h1>Your Past Flights</h1>
-                <p class="text-muted mb-0">Number of Flights: <strong>22</strong></p>
-      
+<div class="container-md py-5">
+    <div class="table-wrapper">
+        <!-- Header Section -->
 
-            <!-- Search and Sort Section -->
-            <div class="search-sort-wrapper">
-                <div class="search-bar">
-                    <input type="text" placeholder="Search flights..." aria-label="Search"
-                           class="form-control">
-                </div>
-                <div class="sort-dropdown">
-                    <select class="form-select">
-                        <option value="newest" selected>Sort by: Newest</option>
-                        <option value="oldest">Sort by: Oldest</option>
-                    </select>
-                </div>
+        <h1>Your Past Flights</h1>
+        <p class="text-muted mb-0">Number of Flights: <strong>22</strong></p>
+
+
+        <!-- Search and Sort Section -->
+        <div class="search-sort-wrapper">
+            <div class="search-bar">
+                <input type="text" placeholder="Search flights..." aria-label="Search"
+                       class="form-control">
             </div>
+            <div class="sort-dropdown">
+                <select class="form-select">
+                    <option value="newest" selected>Sort by: Newest</option>
+                    <option value="oldest">Sort by: Oldest</option>
+                </select>
+            </div>
+        </div>
 
-            <!-- Table Section -->
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Flight Number</th>
-                            <th>Departure Airport</th>
-                            <th>Destination</th>
-                            <th>Seat Number</th>
-                            <th>Flight Date</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
+        <!-- Table Section -->
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Flight Number</th>
+                        <th>Departure Airport</th>
+                        <th>Destination</th>
+                        <th>Seat Number</th>
+                        <th>Flight Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                @for (int i = 0; i < Model.MyReservations.Rows.Count; i++)
+                {
                     <tbody>
                         <tr>
-                            <td><strong>MK 779</strong></td>
-                            <td>Cairo Airport</td>
-                            <td>Jeddah Airport</td>
-                            <td>22</td>
-                            <td>22 December 2024</td>
-                            <td><button class="btn btn-danger btn-sm">Cancel</button></td>
-                        </tr>
-                        <tr>
-                            <td><strong>JG 444</strong></td>
-                            <td>Borg El-Arab Airport</td>
-                            <td>Abu Dhabi Airport</td>
-                            <td>13</td>
-                            <td>22 November 2024</td>
-                            <td><button class="btn btn-danger btn-sm">Cancel</button></td>
-                        </tr>
-                        <tr>
-                            <td><strong>BOE 203</strong></td>
-                            <td>Aswan Airport</td>
-                            <td>San Francisco Airport</td>
-                            <td>44</td>
-                            <td>22 March 2024</td>
-                            <td><button class="btn btn-success btn-sm">Done</button></td>
-                        </tr>
-                        <tr>
-                            <td><strong>FOD 303</strong></td>
-                            <td>Luxor Airport</td>
-                            <td>Berlin Airport</td>
-                            <td>121</td>
-                            <td>22 April 2024</td>
-                            <td><button class="btn btn-success btn-sm">Done</button></td>
-                        </tr>
-                        <tr>
-                            <td><strong>DMG 225</strong></td>
-                            <td>Cairo Airport</td>
-                            <td>Tokyo Airport</td>
-                            <td>32</td>
-                            <td>22 May 2020</td>
-                            <td><button class="btn btn-success btn-sm">Done</button></td>
+                            <td><strong>@Model.MyReservations.Rows[i][0]</strong></td>
+                            <td>@Model.MyReservations.Rows[i][1]</td>
+                            <td>@Model.MyReservations.Rows[i][2]</td>
+                            <td>@Model.MyReservations.Rows[i][3]</td>
+                            <td>@Model.MyReservations.Rows[i][4]</td>
+                            <td class="text-end">
+                                <div class="d-flex">
+                                    <div class="dropdown ms-auto">
+                                        <a href="#" data-bs-toggle="dropdown"
+                                           class="btn btn-floating"
+                                           aria-haspopup="true" aria-expanded="false">
+                                            <i class="bi bi-three-dots"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a href="#" class="dropdown-item"
+                                               onclick="showFlightDetails('@Model.MyReservations.Rows[i][0]',
+                                                        '@Model.MyReservations.Rows[i][1]',
+                                                        '@Model.MyReservations.Rows[i][2]',
+                                                        '@Model.MyReservations.Rows[i][3]',
+                                                        '@Model.MyReservations.Rows[i][4]',
+                                                        '@Model.MyReservations.Rows[i][5]')">
+                                                Show Details
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
-                </table>
-            </div>
+                }
+            </table>
+        </div>
 
-            <!-- Pagination -->
-            <nav aria-label="Page navigation">
-                <ul class="pagination mb-0">
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                    <li class="page-item"><a class="page-link" href="#">5</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+        <!-- Pagination -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination mb-0">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">4</a></li>
+                <li class="page-item"><a class="page-link" href="#">5</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="flightDetailsModal" class="modal-overlay">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h3 class="mb-4">Flight Details</h3>
+
+        <div class="flight-details-grid">
+            <div class="flight-details-item">
+                <div class="detail-label">Flight Number</div>
+                <div id="modalFlightNumber"></div>
+            </div>
+            <div class="flight-details-item">
+                <div class="detail-label">Departure</div>
+                <div id="modalDeparture"></div>
+            </div>
+            <div class="flight-details-item">
+                <div class="detail-label">Arrival</div>
+                <div id="modalArrival"></div>
+            </div>
+            <div class="flight-details-item">
+                <div class="detail-label">Seat</div>
+                <div id="modalSeat"></div>
+            </div>
+            <div class="flight-details-item">
+                <div class="detail-label">Date</div>
+                <div id="modalDate"></div>
+            </div>
+            <div class="flight-details-item">
+                <div class="detail-label">Status</div>
+                <div id="modalStatus"></div>
+            </div>
+        </div>
+
+        <!-- Review Section -->
+        <div id="reviewSection" style="display: none;">
+            <form id="reviewForm" method="post" asp-page-handler="Review">
+                <input type="hidden" id="FlightIdInput" name="FlightId" />
+                <input type="hidden" id="RatingInput" name="Rating" />
+                <input type="hidden" id="ReviewTextInput" name="ReviewText" />
+
+                <h4 class="mb-3">Leave a Review</h4>
+                <div class="mb-3">
+                    <div class="star-rating">
+                        <i class="bi bi-star-fill" data-rating="1"></i>
+                        <i class="bi bi-star-fill" data-rating="2"></i>
+                        <i class="bi bi-star-fill" data-rating="3"></i>
+                        <i class="bi bi-star-fill" data-rating="4"></i>
+                        <i class="bi bi-star-fill" data-rating="5"></i>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <textarea class="form-control" id="reviewText" rows="3" placeholder="Share your experience..."></textarea>
+                </div>
+                <button type="button" class="btn btn-primary w-100" onclick="submitReview()">Submit Review</button>
+            </form>
+        </div>
+
+        <!-- Cancel Section -->
+        <div id="cancelSection" style="display: none;">
+            <form id="cancelForm" method="post" asp-page-handler="Cancel">
+                <input type="hidden" id="FlightIdInput1" name="FlightId1" />
+                <input type="hidden" id="SeatInput" name="seat" />
+          
+               
+                <button type="button" class="btn btn-danger w-100" onclick="cancelFlight()">Cancel Flight</button>
+            </form>
         </div>
     </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> 
 
- 
+<script>
+    let currentFlightDetails = {
+        flightId: null,
+        seat: null
+    };
+
+    function showFlightDetails(flightNumber, departure, arrival, seat, date, status) {
+        // Store flight details immediately when showing modal
+        currentFlightDetails = {
+            flightId: flightNumber,
+            seat: seat
+        };
+
+        // Update modal content
+        document.getElementById('modalFlightNumber').textContent = flightNumber;
+        document.getElementById('modalDeparture').textContent = departure;
+        document.getElementById('modalArrival').textContent = arrival;
+        document.getElementById('modalDate').textContent = date;
+        document.getElementById('modalStatus').textContent = status;
+        document.getElementById('modalSeat').textContent = seat;
+
+        // Set form input values
+        document.getElementById('FlightIdInput').value = flightNumber;
+        document.getElementById('SeatInput').value = seat;
+
+        // Show/hide sections based on status
+        const reviewSection = document.getElementById('reviewSection');
+        const cancelSection = document.getElementById('cancelSection');
+
+        if (status === 'Finished') {
+            reviewSection.style.display = 'block';
+            cancelSection.style.display = 'none';
+        } else if (status === 'Scheduled') {
+            reviewSection.style.display = 'none';
+            cancelSection.style.display = 'block';
+        } else {
+            reviewSection.style.display = 'none';
+            cancelSection.style.display = 'none';
+        }
+
+        // Show the modal
+        document.getElementById('flightDetailsModal').style.display = 'block';
+    }
+
+    function cancelFlight() {
+        // Double-check that we have the values before submission
+        const flightIdInput = document.getElementById('FlightIdInput1');
+        const seatInput = document.getElementById('SeatInput');
+
+        // Use stored values as fallback
+        if (!flightIdInput.value && currentFlightDetails.flightId) {
+            flightIdInput.value = currentFlightDetails.flightId;
+        }
+
+        if (!seatInput.value && currentFlightDetails.seat) {
+            seatInput.value = currentFlightDetails.seat;
+        }
+
+        console.log(flightIdInput.value)
+        // Validate before submission
+        if (!flightIdInput.value) {
+            console.error('Flight ID is missing');
+            alert('Error: Flight ID is missing. Please try again.');
+            return;
+        }
+
+        // Log values for debugging
+        console.log('Submitting cancellation with:', {
+            flightId: flightIdInput.value,
+            seat: seatInput.value
+        });
+
+        // Confirm and submit
+        if (confirm('Are you sure you want to cancel this flight?')) {
+            document.getElementById('cancelForm').submit();
+        }
+    }
+
+    // Handle star rating
+    let currentRating = 0;
+    document.querySelectorAll('.star-rating i').forEach(star => {
+        star.addEventListener('click', (e) => {
+            const rating = e.target.dataset.rating;
+            currentRating = rating;
+
+            // Update hidden input for rating
+            document.getElementById('RatingInput').value = rating;
+
+            // Update stars visual
+            document.querySelectorAll('.star-rating i').forEach(s => {
+                s.classList.toggle('active', s.dataset.rating <= rating);
+            });
+        });
+    });
+
+    // Handle review submission
+    function submitReview() {
+        const reviewText = document.getElementById('reviewText').value;
+
+        if (currentRating === 0) {
+            alert('Please select a rating');
+            return;
+        }
+
+        // Set the review text in hidden input
+        document.getElementById('ReviewTextInput').value = reviewText;
+
+        // Submit the review form
+        document.getElementById('reviewForm').submit();
+    }
+
+    // Handle flight cancellation
+   
 
 
+
+    // Close modal
+    function closeModal() {
+        document.getElementById('flightDetailsModal').style.display = 'none';
+        currentFlightId = null;
+        currentRating = 0;
+        document.getElementById('reviewText').value = '';
+        document.querySelectorAll('.star-rating i').forEach(s => s.classList.remove('active'));
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('flightDetailsModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('flightDetailsModal')) {
+            closeModal();
+        }
+    });
+
+    // Close modal when clicking the close button
+    document.querySelector('.close-button').addEventListener('click', closeModal);
+</script>

@@ -4,10 +4,15 @@
 @model Airline_Reservation_System.Pages.Admin.FlightDetails1Model
 @{
     ViewData["name"] = "sidebar";
+    ViewData["Title"] = "Flight Details";
+    ViewData["Nav"] = HttpContext.Session.GetString("role").ToString();
+    ViewData["Logged"] = Convert.ToString(HttpContext.Session.GetString("email"));
 }
 
 <script>
     const getcrew = @Html.Raw(Json.Serialize(Model.getc));
+    const channel = @Html.Raw(Json.Serialize(Model.seats_num));
+    const labels = ['Business', 'Economy', 'First Class'];
     
 </script>
 
@@ -41,24 +46,24 @@
                 <div class="card-body">
                     <div class="mb-5 d-flex align-items-center justify-content-between">
                         <span>Flight No : <a href="#">#5355619</a></span>
-                        <span class="badge bg-success">Completed</span>
+                            <span class="badge bg-success">@Model.get_details.Rows[0][6]</span>
                     </div>
                     <div class="row mb-5 g-4">
                         <div class="col-md-3 col-sm-6">
                             <p class="fw-bold">Depature Date</p>
-                            16/06/2021 at 04:23 PM
+                                @Model.get_details.Rows[0][1].ToString().Replace("00:00:00", "") at @Model.get_details.Rows[0][2] PM
                         </div>
                         <div class="col-md-3 col-sm-6">
                             <p class="fw-bold">Aircraft</p>
-                            Airbus
+                                @Model.get_details.Rows[0][5]
                         </div>
                         <div class="col-md-3 col-sm-6">
                             <p class="fw-bold">From</p>
-                            cairo
+                                @Model.get_details.Rows[0][3].ToString()
                         </div>
                         <div class="col-md-3 col-sm-6">
                             <p class="fw-bold">To</p>
-                            Paris
+                                @Model.get_details.Rows[0][4].ToString()
                         </div>
                     </div>
                     <div class="row g-4">
@@ -67,20 +72,40 @@
                                 <div class="card-body d-flex flex-column gap-3">
                                     <div class="d-flex justify-content-between">
                                         <h5 class="mb-0">Flight Crew</h5>
-                                           
-                                        @* <a href="#" id="">Edit</a>
-                                            <a href="#" id="" style="display:none">save</a> *@
+
+                                            <a href="#" id="editLink">Edit</a>
+                                            <a href="#" id="saveLink" style="display:none">save</a> 
                                             
                                     </div>
                                         @{
+                                            if(Model.crew.Rows.Count!=0){
                                             for (int i = 0; i < Model.crew.Rows.Count; i++)
+                                            {               
+                                                            if(@Model.crew.Rows[i][2].ToString().ToLower() =="co-pilot"){
+                                                                            <div class="editable">
+                                                                            CoPilot: @Model.crew.Rows[i][0] @Model.crew.Rows[i][1]
+                                                                            </div>
+                                                                    
+                                            }
+                                                else if (@Model.crew.Rows[i][2].ToString().ToLower() == "pilot")
+                                                {
+                                                                    <div class="editable">
+                                                                        Pilot: @Model.crew.Rows[i][0] @Model.crew.Rows[i][1]
+                                                        </div>
+
+                                                    }
+
+                                                }
+                                            }
+                                            else
                                             {
-                                                    <div class="editable">
-                                                        Name: @Model.crew.Rows[i][0] @Model.crew.Rows[i][1]
-                                                    </div>
-                                                    <div>
-                                                        Role: @Model.crew.Rows[i][2]
-                                                    </div>
+                                                <div class="editable">
+                                                    CoPilot: Not defined
+                                                </div>
+                                                <div class="editable">
+                                                    Pilot: Not defined
+                                                </div>
+                                                
                                             }
                                         }
                                         @* <div class="editable">Name: John Smith</div> *@
@@ -99,143 +124,213 @@
                             <div class="card">
                                 <div class="card-body d-flex flex-column gap-3">
                                     <div class="d-flex justify-content-between">
-                                        <h5 class="mb-0">Cabin Crew</h5>
-                                        <a href="#">Edit</a>
-                                    </div>
-                                    <div>Name: Sarah Brown</div>
-                                    <div>Role: Flight Attendant</div>
-                                    <div>Name: Michael Lee</div>
-                                    <div>
-                                        Role: Flight Attendant
-                                    </div>
+                                        <h5 class="mb-0">Flight Attendant</h5>
+                                            <a href="#" id="cabinedit">Edit</a>
+                                            <a href="#" id="cabinsave" style="display:none">save</a>
+                                        </div>
+                                        @{if(Model.crew.Rows.Count !=0){
+                                        for (int i = 0; i < Model.crew.Rows.Count; i++)
+                                        {
+                                            if (@Model.crew.Rows[i][2].ToString().ToLower() == "flight attendant")
+                                            {
+                                                <div class="Attendatedit">
+                                            Name: @Model.crew.Rows[i][0] @Model.crew.Rows[i][1]
+                                        </div>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <div class="Attendatedit">
+                                                    Name: Not defined
+                                                </div>
+                                                <div class="Attendatedit">
+                                                    Name: Not defined
+                                                </div>
+                                            }
+                                        }
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card widget">
-                <h5 class="card-header">Passanger</h5>
-                <div class="card-body">
-                    <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
-                        <table class="table table-custom mb-0">
-                            <thead>
-                                <tr>
-                                    <th>Photo</th>
-                                    <th>Name</th>
-                                    <th>seat number</th>
-                                    <th>class</th>
-                                    <th>status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <a href="#">
-                                            <img src="../images/products/3.jpg" class="rounded" width="60" alt="...">
-                                        </a>
-                                    </td>
-                                    <td>John Doe</td>
-                                    <td>1</td>
-                                    <td>Econonmy</td>
-                                    <td>Checked In
-                                    <td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a href="#">
-                                            <img src="../images/products/3.jpg" class="rounded" width="60" alt="...">
-                                        </a>
-                                    </td>
-                                    <td>John Doe</td>
-                                    <td>1</td>
-                                    <td>Econonmy</td>
-                                    <td>Checked In
-                                    <td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a href="#">
-                                            <img src="../images/products/3.jpg" class="rounded" width="60" alt="...">
-                                        </a>
-                                    </td>
-                                    <td>John Doe</td>
-                                    <td>1</td>
-                                    <td>Econonmy</td>
-                                    <td>Checked In
-                                    <td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-12 mt-4 mt-lg-0">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h6 class="card-title mb-4">Prices</h6>
-                    <div class="row justify-content-center mb-3">
-                        <div class="col-4 text-end">Economy :</div>
-                        <div class="col-4">$520,96</div>
-                    </div>
-                    <div class="row justify-content-center mb-3">
-                        <div class="col-4 text-end">vip :</div>
-                        <div class="col-4">$1.520,96</div>
-                    </div>
-                    <div class="row justify-content-center mb-3">
-                        <div class="col-4 text-end">First class :</div>
-                        <div class="col-4">$1.273,77</div>
-                    </div>
-
-                </div>
-            </div>
-
-             @* <div class="card">
-            <div class="card-body">
-                        <div class="card-body">
+                <div class="card">
+                    <div class="card-body">
+                        @if (Model.seats_num[0] != 0 || Model.seats_num[1] != 0 || Model.seats_num[2]!=0){
                             <div id="sales-channels"></div>
                             <div class="row text-center mt-4">
                                 <div class="col-4">
-                                    <div class="display-7">4%</div>
-                                    <div class="text-success my-2 small">
-                                        <i class="bi bi-arrow-up me-1 small"></i>30.50%
-                                    </div>
+                                    <div class="display-7">@Model.seats_num[0]</div>
+
                                     <div class="d-flex align-items-center justify-content-center">
                                         <i class="bi bi-circle-fill text-orange me-2 small"></i>
-                                        <span class="text-muted">Travel agent</span>
+                                        <span class="text-muted">Business</span>
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div class="display-7">30%</div>
-                                    <div class="text-danger my-2 small">
-                                        <i class="bi bi-arrow-down me-1 small"></i>15.20%
-                                    </div>
+                                    <div class="display-7">@Model.seats_num[1]</div>
+
                                     <div class="d-flex align-items-center justify-content-center">
                                         <i class="bi bi-circle-fill text-cyan me-2 small"></i>
-                                        <span class="text-muted">Direct Website</span>
+                                        <span class="text-muted">Economy</span>
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div class="display-7">22%</div>
-                                    <div class="text-success my-2 small">
-                                        <i class="bi bi-arrow-up me-1 small"></i>1.80%
-                                    </div>
+                                    <div class="display-7">@Model.seats_num[2]</div>
+
                                     <div class="d-flex align-items-center justify-content-center">
                                         <i class="bi bi-circle-fill text-indigo me-2 small"></i>
-                                        <span class="text-muted">Email</span>
+                                        <span class="text-muted">First Class</span>
                                     </div>
                                 </div>
                             </div>
-                            
+                        }
+                        else
+                        {
+                            <h4>No seats is reserved</h4>
+                        }
+
+
+                    </div>
+                </div>
+                
+        </div>
+        <div class="col-lg-4 col-md-12 mt-4 mt-lg-0">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <h6 class="card-title mb-4">Prices</h6>
+                                <a href="#" id="editPricesLink">Edit</a>
+                            </div>
+                            <div class="row justify-content-center mb-3" data-price-type="economy">
+                                <div class="col-4 text-end">Economy :</div>
+                                <div class="col-4 price-value">$@Model.prices.Rows[1][1]</div>
+                            </div>
+                        <div class="row justify-content-center mb-3" data-price-type="Business">
+                            <div class="col-4 text-end">Business :</div>
+                            <div class="col-4 price-value">$@Model.prices.Rows[0][1]</div>
+                            </div>
+                            <div class="row justify-content-center mb-3" data-price-type="firstclass">
+                                <div class="col-4 text-end">First class :</div>
+                                <div class="col-4 price-value">$@Model.prices.Rows[2][1]</div>
+                            </div>
                         </div>
+                    </div>
+
+
+                <!-- Button trigger modal -->
+                <button  type="button" class="btn btn-danger col-12" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Delete
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="fs-5" id="exampleModalLabel">Delete confirmation</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <form method="post">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
-            </div> *@
-                <button class="btn btn-primary col-4 mt-3" id="editLink"  >Edit</button>
-                <button class="btn btn-primary col-4 mt-3" id="saveLink" ">Save</button>
+                 
+               
         </div>
            
     </div>
+        <div class="card widget">
+            <div class="card-body">
+            @if(Model.dt.Rows.Count!=0){
+            <h5 class="card-header">Passanger</h5>
+            <div class="table-responsive" style="max-height: 300px; overflow-y: auto; max-width:fit-content;">
+                <table class="table table-custom table-lg mb-0" id="orders">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Passenger Name</th>
+                            <th>Seat Number</th>
+                            <th>Phone Number</th>
+                            <th>Email</th>
+                            <th>Class</th>
+                            <th>Status</th>
+                            <th class="text-end"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            for (int i = 0; i < @Model.dt.Rows.Count; i++)
+                            {
+                                                <tr>
+                                                    <td style="display:flex; justify-content:center;">
+                                                        <div class="avatar avatar-info m-4 ">
+                                                            <span class="avatar-text rounded-circle">@Model.dt.Rows[i][0].ToString()[0]</span>
+                                                        </div>
+                                                    </td>
+                                                    <td>@Model.dt.Rows[i][0]</td>
+                                                    <td>@Model.dt.Rows[i][1]</td>
+                                                    <td>@Model.dt.Rows[i][2]</td>
+                                                    <td>@Model.dt.Rows[i][3]</td>
+                                                    <td>@Model.dt.Rows[i][4]</td>
+
+                                                    <td>
+                                                        <button class="btn btn-success">
+                                                            @Model.dt.Rows[i][5]
+                                                        </button>
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <div class="d-flex">
+                                                            <div class="dropdown ms-auto">
+                                                                <a href="#" data-bs-toggle="dropdown"
+                                                                   class="btn btn-floating"
+                                                                   aria-haspopup="true" aria-expanded="false">
+                                                                    <i class="bi bi-three-dots"></i>
+                                                                </a>
+                                                                <div class="dropdown-menu dropdown-menu-end">
+                                                                    <a href="#" class="dropdown-item">Show Profile</a>
+                                                                    @if (Model.dt.Rows[i][5].ToString() != "Checked In")
+                                                    {
+                                                                        <form method="post" asp-page-handler="checkin" asp-route-email="@Model.dt.Rows[i][3]">
+                                                                            <input type="hidden" name="userId" value="@Model.dt.Rows[i][0]" />
+                                                                            <button type="submit" class="dropdown-item">Check In</button>
+                                                                        </form>
+                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                            }
+                        }
+                        
+
+
+
+
+
+
+                    </tbody>
+                </table>
+            </div>
+            }
+        else
+        {
+            <h4 class="h4 mt-3">There is no passangers</h4>
+        }
+        </div>
+        </div>
     
 </div>
 
@@ -243,10 +338,26 @@
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<!-- Include select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- Include jQuery (required for select2) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Include select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+
+
+
 <script>
     // Dropdown options for editing fields (will be populated by backend data)
     let dropdownOptions = {
-        Name: [], // Placeholder for crew names fetched dynamically
+        Pilot: [], // Placeholder for crew names fetched dynamically
+        CoPilot: [],
     };
 
     // Function to fetch data from the backend when "Edit" is clicked
@@ -257,12 +368,13 @@
         $.ajax({
             url: '/Admin/FlightDetails1?handler=Crew', // Razor Page handler URL for GET
             type: 'GET',
-            dataType : 'json',
+            dataType: 'json',
             success: function (response) {
-                
+
                 console.log(response);
                 // Assuming crew names come as a JSON array from the backend
-                dropdownOptions.Name = response.crewNames;
+                dropdownOptions.Pilot = response.crewNames;
+                dropdownOptions.CoPilot = response.conames;
 
                 editableFields.forEach(function (field) {
                     const text = field.textContent.trim(); // Get current content
@@ -275,6 +387,8 @@
 
                         // Build a dropdown <select> element
                         const selectElement = document.createElement("select");
+                        selectElement.classList.add("form-select", "searchable-dropdown"); // Bootstrap form-select and class for select2
+
                         options.forEach((option) => {
                             const optionElement = document.createElement("option");
                             optionElement.value = option;
@@ -293,6 +407,13 @@
                         field.appendChild(selectElement);
                     }
                 });
+
+                // Initialize select2 on all searchable dropdowns
+                setTimeout(() => {
+                    $('.searchable-dropdown').select2({
+                        width: '100%', // Ensure dropdown spans the width of the parent container
+                    });
+                }, 0);
 
                 // Toggle visibility of Edit and Save links
                 document.getElementById("editLink").style.display = "none";
@@ -360,11 +481,198 @@
         saveChanges();
     });
 </script>
+<script>
+    // Dropdown options for editing fields (will be populated by backend data)
+    let dropdownOptions2 = {
+        Name: [], // Placeholder for crew names fetched dynamically
+    };
+
+    // Function to fetch data from the backend when "Edit" is clicked
+    function enableEditing1() {
+        const editableFields = document.querySelectorAll(".Attendatedit");
+
+        // Fetch crew names dynamically via GET request
+        $.ajax({
+            url: '/Admin/FlightDetails1?handler=CabinCrew', // Razor Page handler URL for GET
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+
+                console.log(response);
+                // Assuming crew names come as a JSON array from the backend
+                dropdownOptions2.Name = response.names;
+
+                editableFields.forEach(function (field) {
+                    const text = field.textContent.trim(); // Get current content
+                    const [label, value] = text.split(":").map((part) => part.trim()); // Split into label and value
+                    let options = dropdownOptions2[label]; // Get predefined options based on label
+
+                    if (options) {
+                        // Move the current value to the first position in the options array
+                        options = [value, ...options.filter((option) => option !== value)];
+                        
+                        // Build a dropdown <select> element
+                        const selectElement = document.createElement("select");
+                        selectElement.classList.add("form-select", "searchable-dropdown"); // Bootstrap form-select and class for select2
+
+                        options.forEach((option) => {
+                            const optionElement = document.createElement("option");
+                            optionElement.value = option;
+                            optionElement.textContent = option;
+
+                            // Preserve the current value as selected
+                            if (option === value) {
+                                optionElement.selected = true;
+                            }
+
+                            selectElement.appendChild(optionElement);
+                        });
+
+                        // Replace the field's content with the dropdown
+                        field.innerHTML = `${label}: `;
+                        field.appendChild(selectElement);
+                    }
+                });
+
+                // Initialize select2 on all searchable dropdowns
+                setTimeout(() => {
+                    $('.searchable-dropdown').select2({
+                        width: '100%', // Ensure dropdown spans the width of the parent container
+                    });
+                }, 0);
+
+                // Toggle visibility of Edit and Save links
+                document.getElementById("cabinedit").style.display = "none";
+                document.getElementById("cabinsave").style.display = "inline-block";
+            },
+            error: function (error) {
+                console.error("Error fetching crew data:", error);
+                alert("An error occurred while fetching data.");
+            },
+        });
+    }
+
+    // Function to save changes (turns dropdowns back into static text and sends data to the backend)
+    function saveChanges1() {
+        const editableFields = document.querySelectorAll(".Attendatedit");
+
+        // Prepare data to send to the backend
+        const requestData = {};
+        editableFields.forEach(function (field) {
+            const label = field.textContent.split(":")[0].trim(); // Extract label
+            const selectElement = field.querySelector("select");
+            if (selectElement) {
+                const selectedValue = selectElement.value; // Get selected value
+                field.textContent = `${label}: ${selectedValue}`; // Replace with static text
+                console.log(selectedValue);
+                // Add the selected value to the request data
+                if (requestData[label.toLowerCase()]) {
+                    requestData["ana"] = selectedValue;
+                }
+                else {
+                    requestData[label.toLowerCase()] = selectedValue;
+                }
+            }
+        });
+
+        // Get the CSRF token from the hidden input field
+        const token = $('input[name="__RequestVerificationToken"]').val();
+
+        // Send the data to the backend via POST request
+        $.ajax({
+            url: '/Admin/FlightDetails1?handler=Att', // Razor Page handler URL for POST
+            type: 'POST',
+            headers: {
+                'RequestVerificationToken': token, // Include CSRF token in the request header
+            },
+            contentType: 'application/json', // Send data as JSON
+            data: JSON.stringify(requestData), // Send the data as JSON
+            success: function (response) {
+                alert("Changes saved successfully: " + response.result);
+            },
+            error: function (error) {
+                console.error("Error saving data:", error);
+                alert("An error occurred while saving.");
+            },
+        });
+
+        // Toggle visibility of Save and Edit links
+        document.getElementById("cabinedit").style.display = "inline-block";
+        document.getElementById("cabinsave").style.display = "none";
+    }
+
+    // Attach click events to Edit and Save links
+    document.getElementById("cabinedit").addEventListener("click", function (event) {
+        event.preventDefault();
+        enableEditing1();
+    });
+
+    document.getElementById("cabinsave").addEventListener("click", function (event) {
+        event.preventDefault();
+        saveChanges1();
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        // Handle the "Edit" link click
+        $("#editPricesLink").click(function (e) {
+            e.preventDefault();
+            const isEditing = $(this).text() === "Save";
+
+            if (isEditing) {
+                // Save the updated prices
+                const updatedPrices = {};
+                $(".price-value").each(function () {
+                    const row = $(this).closest(".row");
+                    const priceType = row.data("price-type");
+                    const inputValue = $(this).find("input").val();
+                    updatedPrices[priceType] = inputValue;
+
+                    // Replace the input with the new price text
+                    $(this).text(`$${inputValue}`);
+                });
+
+                // Send updated prices to the server
+                const csrfToken = $('input[name="__RequestVerificationToken"]').val(); // If CSRF is used
+                $.ajax({
+                    url: "/Admin/FlightDetails1?handler=Updateprice", // Update with your actual endpoint
+                    type: "POST",
+                    headers: {
+                        "RequestVerificationToken": csrfToken, // Include CSRF token if required
+                    },
+                    contentType: "application/json",
+                    data: JSON.stringify(updatedPrices),
+                    success: function (response) {
+                        alert("Prices updated successfully!");
+                    },
+                    error: function (error) {
+                        console.error("Error saving prices:", error);
+                        alert("Failed to save prices.");
+                    },
+                });
+
+                // Change button text back to "Edit"
+                $(this).text("Edit");
+            } else {
+                // Enable editing: convert prices to input fields
+                $(".price-value").each(function () {
+                    const currentValue = $(this).text().replace("$", "").replace(",", "").trim();
+                    $(this).html(`<input type="number" class="form-control" style="width: 130px;" value="${currentValue}" step="1" />`);
+                });
+
+                // Change button text to "Save"
+                $(this).text("Save");
+            }
+        });
+    });
+
+</script>
+
 
 
 <!-- ./ layout-wrapper -->
 <!-- JQuery -->
-<script src="../libs/jquery-3.7.1.min.js"></script>
+
 
 <!-- Nicescroll -->
 <script src="../libs/nicescroll.js"></script>

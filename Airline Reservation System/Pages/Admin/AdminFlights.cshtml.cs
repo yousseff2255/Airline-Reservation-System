@@ -3,9 +3,9 @@ using Airline_Reservation_System.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Airline_Reservation_System.Pages.Staff
+namespace Airline_Reservation_System.Pages.Admin
 {
-    public class FlightsModel : PageModel
+    public class AdminFlightsModel : PageModel
     {
         public int num_flights { get; set; }
         public int num_passengers { get; set; }
@@ -14,7 +14,7 @@ namespace Airline_Reservation_System.Pages.Staff
         public int page { get; set; }
         public DataTable dt { get; set; }
 
-        public FlightsModel(DB db)
+        public AdminFlightsModel(DB db)
         {
             this.db = db;
             dt = new DataTable();
@@ -22,23 +22,22 @@ namespace Airline_Reservation_System.Pages.Staff
         }
         public IActionResult OnGet(int PageNumber)
         {
-            if (HttpContext.Session.GetString("role").ToLower() == "staff")
+            if (Convert.ToString(HttpContext.Session.GetString("role")) == "admin")
             {
                 page = PageNumber;
                 if (PageNumber == 0) PageNumber = 1;
-                dt = db.StaffGetFlights(PageNumber);
+                dt = db.AdminGetFlights(PageNumber);
                 FlightIDs = db.GetFlights();
                 num_flights = db.GetFlightsNumber();
                 num_passengers = db.GetPassengersNumber();
 
                 return Page();
-
             }
             else
             {
                 return RedirectToPage("../index");
             }
-      
+
 
         }
         public IActionResult OnPostUpdateFlightStatus(int flightNumber, string status)
@@ -47,21 +46,21 @@ namespace Airline_Reservation_System.Pages.Staff
             return new JsonResult(new { success = true });
         }
 
-        public  IActionResult OnPostViewFlight(string flightId)
+        public IActionResult OnPostViewFlight(string flightId)
         {
-       
+
 
             return RedirectToPage("../Admin/flightDetails1", new { id = flightId });
 
-          
+
         }
         public IActionResult OnPostLogOut()
         {
             HttpContext.Session.Remove("email");
             HttpContext.Session.Remove("role");
             HttpContext.Session.Remove("password");
-            return RedirectToPage("../signin");
-        }
+			return RedirectToPage("../index");
+		}
 
 
     }

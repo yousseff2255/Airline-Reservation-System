@@ -15450,3 +15450,71 @@ blockquote * {
   background: #00aff0;
   color: white;
 }
+
+
+.navv {
+    background-color: #A855F7;
+    padding: 1rem;
+}
+
+.containerr {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logoo {
+    color: white;
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin-right: 2rem;
+}
+
+.nav-linkss {
+    display: flex;
+    gap: 1.5rem;
+}
+
+    .nav-linkss a {
+        color: white;
+        text-decoration: none;
+    }
+
+        .nav-linkss a:hover {
+            color: #E9D5FF;
+        }
+
+.auth-buttonss {
+    display: flex;
+    gap: 1rem;
+}
+
+.btnn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-sign-inn {
+    background-color: white;
+    color: #A855F7;
+    width: 120px;
+}
+
+    .btn-sign-inn:hover {
+        background-color: #F3E8FF;
+    }
+
+.btn-log-outt {
+    background-color: #9333EA;
+    color: white;
+    width: 120px;
+}
+
+    .btn-log-outt:hover {
+        background-color: #7E22CE;
+    }
+    

@@ -37,5 +37,12 @@ namespace Airline_Reservation_System.Pages
 		{
 			return RedirectToPage("/search");
 		}
-	}
+        public IActionResult OnPostLogOut()
+        {
+            HttpContext.Session.Remove("email");
+            HttpContext.Session.Remove("role");
+            HttpContext.Session.Remove("password");
+            return RedirectToPage("index");
+        }
+    }
 }

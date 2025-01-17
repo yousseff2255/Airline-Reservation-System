@@ -1,18 +1,24 @@
 ﻿using System.Data;
 using System.Data.SqlTypes;
 using Microsoft.Data.SqlClient;
+using Microsoft.ML;
+using MyMLApp;
+using Tensorflow;
 using Tensorflow.Keras.Layers;
+using static MyMLApp.SentimentModel;
 
 namespace Airline_Reservation_System.Models
 {
     public class DB
     {
-         string connectionString = "Data Source=LOCALHOST\\SQLEXPRESS;Initial Catalog = Airline System; Integrated Security = True; Trust Server Certificate=True";
+        string connectionString = "Data Source=LOCALHOST\\SQLEXPRESS;Initial Catalog = AirlineSystem; Integrated Security = True; Trust Server Certificate=True";
         public SqlConnection connection { get; set; }
 
+        // Inject Prediction Engine into the constructor
         public DB()
         {
-            connection = new SqlConnection(connectionString);
+            
+             connection = new SqlConnection(connectionString);
         }
 
         #region Youssef
@@ -67,6 +73,35 @@ namespace Airline_Reservation_System.Models
 
             return dt;
         }
+        public DataTable AdminGetFlights(int page)
+        {
+            DataTable dt = new DataTable();
+
+            string stored_proc = "get_all_flights";
+            SqlCommand cmd = new SqlCommand(stored_proc, connection);
+
+            try
+            {
+                connection.Open();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@page", page));
+                SqlDataReader sdr = cmd.ExecuteReader();
+                dt.Load(sdr);
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return dt;
+        }
+
 
         public List<int> GetFlights()
         {
@@ -149,7 +184,7 @@ namespace Airline_Reservation_System.Models
         public List<string> GetModels()
         {
             List<string> models = new List<string>();
-            string Query = "select model from AirCraft ";
+            string Query = "select distinct model from AirCraft ";
 
             SqlCommand cmd = new SqlCommand(Query, connection);
 
@@ -178,10 +213,10 @@ namespace Airline_Reservation_System.Models
             return models;
         }
 
-        public List<string> GetAirports()
+        public DataTable GetAirports()
         {
-            List<string> airports = new List<string>();
-            string Query = "select AirPort_name from AirPort ";
+            DataTable airports = new DataTable();
+            string Query = "select AirPort_name , abbreviation  from AirPort ";
 
             SqlCommand cmd = new SqlCommand(Query, connection);
 
@@ -189,11 +224,7 @@ namespace Airline_Reservation_System.Models
             {
                 connection.Open();
                 SqlDataReader sdr = cmd.ExecuteReader();
-                while (sdr.Read())
-                {
-
-                    airports.Add(sdr.GetString(0));
-                }
+                airports.Load(sdr);
 
             }
             catch (Exception e)
@@ -361,7 +392,6 @@ namespace Airline_Reservation_System.Models
                 connection.Open();
                 cmd.Parameters.Add(new SqlParameter("@DeptDate", f.LeavDate));
                 cmd.Parameters.Add(new SqlParameter("@ArrDate", f.ArrDate));
-                cmd.Parameters.Add(new SqlParameter("@status", f.Status));
                 cmd.Parameters.Add(new SqlParameter("@ToAirport", f.ToAirport));
                 cmd.Parameters.Add(new SqlParameter("@FromAirport", f.FromAirport));
                 cmd.Parameters.Add(new SqlParameter("@AircraftModel", f.AircraftModel));
@@ -420,17 +450,18 @@ namespace Airline_Reservation_System.Models
             string proc = "GetReviews";
             SqlCommand cmd = new SqlCommand(proc, connection);
             cmd.CommandType = CommandType.StoredProcedure;
+
             try
             {
                 connection.Open();
                 SqlDataReader sdr = cmd.ExecuteReader();
                 dt.Load(sdr);
 
-
+                // Filter out bad comments using ML Model
+                dt = FilterBadComments(dt);
             }
             catch (Exception e)
             {
-
                 Console.WriteLine(e);
             }
             finally
@@ -440,19 +471,48 @@ namespace Airline_Reservation_System.Models
             return dt;
         }
 
+        private DataTable FilterBadComments(DataTable dt)
+        {
+            // Create a new DataTable to store filtered results
+            DataTable filteredDt = dt.Clone();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                string comment = row["comment"].ToString(); 
+
+                // Use the generated prediction engine
+                var input = new ModelInput { Col0 = comment }; 
+                var result = SentimentModel.Predict(input);   
+
+                // Add only positive comments
+                if (result.PredictedLabel == 1) 
+                {
+                    filteredDt.ImportRow(row);
+                }
+            }
+
+            return filteredDt;
+        }
+
+
         #endregion
 
 
         #region Amr
-        public void Book(int flight_id, int psngr_id, DateTime t, int AC_id, int seat_id)
+        public void Book(int flight_id, int psngr_id,int num_seats , string Class)
         {
-            string query = $"exec Book\r\n  @psngr_id = {psngr_id},\r\n  @seat_id = {seat_id},\r\n  @AC_id = {AC_id}, \r\n  @t = {t},\r\n  @flight_id = {flight_id};";
-            SqlCommand cmd = new SqlCommand(query, connection);
+            string proc = "Book";
+            SqlCommand cmd = new SqlCommand(proc, connection);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@psngr_id", psngr_id));
+            cmd.Parameters.Add(new SqlParameter("@flight_id", flight_id));
+            cmd.Parameters.Add(new SqlParameter("@class", Class));
 
+            cmd.Parameters.Add(new SqlParameter("@n", num_seats));
             try
             {
                 connection.Open();
-                cmd.ExecuteReader();
+                cmd.ExecuteNonQuery();
 
             }
             catch (Exception err)
@@ -463,10 +523,13 @@ namespace Airline_Reservation_System.Models
         }
 
 
-        public DataTable Search(Flight f, string Class)
+        public (List<Flight> flights, decimal price, int avaSeats) Search(Flight f, string Class, int num)
         {
-            DataTable search = new DataTable();
+            List<Flight> flights = new List<Flight>();
             string proc = "SEARCH";
+            Flight f_ = new Flight();
+            int ava_seats = 0;
+            decimal price = 0;
 
             SqlCommand cmd = new SqlCommand(proc, connection);
             cmd.CommandType = CommandType.StoredProcedure;
@@ -474,37 +537,81 @@ namespace Airline_Reservation_System.Models
             cmd.Parameters.Add(new SqlParameter("@arr_airport", f.ToAirport));
             cmd.Parameters.Add(new SqlParameter("@departure_time", f.LeavDate));
             cmd.Parameters.Add(new SqlParameter("@class", Class));
-            cmd.Parameters.Add(new SqlParameter("@N", f.num_passengers));
-
-
+            cmd.Parameters.Add(new SqlParameter("@N", num));
 
             try
             {
                 connection.Open();
                 SqlDataReader sdr = cmd.ExecuteReader();
-                search.Load(sdr);
+                while (sdr.Read()) // To handle multiple rows
+                {
+                    f_ = new Flight
+                    {
+                        FromAirport = (string)sdr["From_Airport"],
+                        ToAirport = (string)sdr["AirPort_name"],
+                        flight_id = (int)sdr["flight_ID"],
+                        LeavDate = (DateTime)sdr["depart_datetime"],
+                        ArrDate = (DateTime)sdr["arrival_datetime"]
+                    };
 
+                    // Calculate duration after properties are initialized
+                    f_.Duration = (f_.ArrDate - f_.LeavDate).TotalHours;
+
+
+                    ava_seats = (int)sdr["Number of avaiable seats"];
+                    price = (decimal)sdr["Price"];
+                    flights.Add(f_);
+                }
             }
             catch (Exception err)
             {
-                Console.WriteLine(err);
+                Console.WriteLine(err.Message);
             }
-            finally { connection.Close(); }
+            finally
+            {
+                connection.Close();
+            }
 
-            return search;
+            // Return multiple values as a tuple
+            return (flights, price, ava_seats);
         }
 
 
-        public DataTable GetPastFlights(int psngr_id)
+
+        //public DataTable GetPastFlights(int psngr_id)
+        //{
+        //    DataTable PastFlights = new DataTable();
+        //    string Query = $"GetPastFlights {psngr_id}";
+        //    SqlCommand cmd = new SqlCommand(Query, connection);
+
+        //    try
+        //    {
+        //        connection.Open();
+        //        PastFlights.Load(cmd.ExecuteReader());
+
+        //    }
+        //    catch (Exception err)
+        //    {
+        //        Console.WriteLine(err);
+        //    }
+        //    finally { connection.Close(); }
+
+        //    return PastFlights;
+        //}
+
+        public DataTable GetMyReservations(int psngr_id)
         {
-            DataTable PastFlights = new DataTable();
-            string Query = $"GetPastFlights {psngr_id}";
-            SqlCommand cmd = new SqlCommand(Query, connection);
+            DataTable MyReservations = new DataTable();
+            string proc = "GetPassReservations";
+
+            SqlCommand cmd = new SqlCommand(proc, connection);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@pass_id", psngr_id));
 
             try
             {
                 connection.Open();
-                PastFlights.Load(cmd.ExecuteReader());
+                MyReservations.Load(cmd.ExecuteReader());
 
             }
             catch (Exception err)
@@ -513,31 +620,9 @@ namespace Airline_Reservation_System.Models
             }
             finally { connection.Close(); }
 
-            return PastFlights;
+            return MyReservations;
         }
 
-
-        public DataTable ReadTable(string TableName)
-        {
-            DataTable dataTable = new DataTable();
-            string Query = $"select * from {TableName}";
-            SqlCommand cmd = new SqlCommand(Query, connection);
-
-            try
-            {
-                connection.Open();
-                dataTable.Load(cmd.ExecuteReader());
-
-            }
-            catch (Exception err)
-            {
-                Console.WriteLine(err);
-            }
-            finally { connection.Close(); }
-
-
-            return dataTable;
-        }
 
 
         public void AddPassenger(Passenger p)
@@ -558,14 +643,99 @@ namespace Airline_Reservation_System.Models
                 connection.Close();
              }
         }
+
+        public int GetPassengerID(string email)
+        {
+            int pass_id=0;
+            string query = $"SelecT pid from passenger where email = '{email}'";
+            SqlCommand cmd = new SqlCommand(query,connection);
+            try {
+                connection.Open();
+                pass_id=(int)cmd.ExecuteScalar();
+            }
+            catch(Exception err) {
+                Console.WriteLine(err); 
+            }
+            finally 
+            { connection.Close(); }
+
+            return pass_id;
+        }
+
+        public void AddReview(int pass_id ,string reviewText , int flightId,int rating)
+        {
+            string Query = $"insert into Feedback values ({pass_id},{flightId},{rating},'{reviewText}')";
+            SqlCommand cmd = new SqlCommand(Query , connection);
+            try
+            {
+                connection.Open();
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception err) {
+                Console.WriteLine (err);
+            }
+            finally
+            {
+                connection.Close ();
+            }
+        }
+
+        public void DeleteReservation(int flight_id , int seat , int pass_id)
+        {
+            string proc = "DeleteReservation";
+            SqlCommand cmd = new SqlCommand(proc,connection);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@flight_id", flight_id));
+            cmd.Parameters.Add(new SqlParameter("@seat_id", seat));
+            cmd.Parameters.Add(new SqlParameter("@passenger_id", pass_id));
+            try
+            {
+                connection.Open();
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception err) {
+                Console.WriteLine(err);
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+        }
         #endregion
 
 
 
         #region Essam
+        public void CreateUser(string email, string password, string role)
+        {
+            string query = "Insert into Users (email , password, role) Values (@email , @password ,@role)";
 
+            try
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("email", email);
+                    cmd.Parameters.AddWithValue("password", password);
 
-        public int CheckSignIN(string username, string password)
+                    cmd.Parameters.AddWithValue("role", role);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+            public int CheckSignIN(string username, string password)
         {
             int successful = 0;
 
@@ -856,11 +1026,11 @@ namespace Airline_Reservation_System.Models
             return Flighttable;
         }
 
-        public DataTable Crew()
+        public DataTable Crew(int id)
         {
             DataTable dt = new DataTable();
 
-            string query = "select Fname,Lname,role from crew_member join assigned_to on crew_member.member_Id=assigned_to.member_id join flight on assigned_to.flight_id=flight.flight_ID where flight.flight_ID=30";
+            string query = $"select Fname,Lname,role,assigned_to.member_id from crew_member join assigned_to on crew_member.member_Id=assigned_to.member_id join flight on assigned_to.flight_id=flight.flight_ID where flight.flight_ID={id}";
             SqlCommand cmd = new SqlCommand(query, connection);
 
             try
@@ -882,11 +1052,11 @@ namespace Airline_Reservation_System.Models
 
 
         }
-        public DataTable getCrew()
+        public DataTable getCrew(string date, string role)
         {
             DataTable dt = new DataTable();
 
-            string query = "select Fname,Lname,role from crew_member join assigned_to on crew_member.member_Id=assigned_to.member_id join flight on assigned_to.flight_id=flight.flight_ID";
+            string query = $"select distinct c.Fname,c.Lname ,c.member_id,role\r\nfrom crew_member c left join assigned_to a on c.member_Id=a.member_id\r\nwhere (c.member_Id not in (\r\n\r\nselect member_id from flight f join assigned_to on assigned_to.flight_id=f.flight_ID\r\n WHERE '{date}'  BETWEEN DATEADD(day, -1, f.depart_datetime) AND DATEADD(day, 1, f.arrival_datetime)\r\n \r\n )\r\n\r\n or flight_id is null) and role = '{role}'";
             SqlCommand cmd = new SqlCommand(query, connection);
 
             try
@@ -962,7 +1132,182 @@ namespace Airline_Reservation_System.Models
             return l;
 
 
-        } 
+        }
+
+
+        public List<decimal> summary()
+        {
+            List<decimal> summ = new List<decimal>();
+
+            string querry = "select count(*) from flight\r\nwhere convert(date,depart_datetime) = CONVERT(date,getdate())";
+            string querry1 = "select isnull(sum(Price),0) from Prices join flight on flight.flight_ID= Prices.flight_ID  join reservation on reservation.flight_id=flight.flight_ID  join AirCraftsSeats on AirCraftsSeats.seat_id=reservation.seat_id and AirCraftsSeats.AirCraft_id=reservation.AirCraft_ID and AirCraftsSeats.class=Prices.class\r\nwhere convert(date,flight.depart_datetime)=CONVERT(date,getdate())";
+            string querry2 = "select count(*) from reservation , flight \r\nwhere reservation.flight_id=flight.flight_ID and convert(date,flight.depart_datetime)=convert(date,getdate())";
+            SqlCommand cmd;
+            try
+            {
+                connection.Open();
+                cmd = new SqlCommand(querry, connection);
+                summ.Add((int)cmd.ExecuteScalar());
+
+                cmd.CommandText = querry1;
+
+
+                summ.Add((decimal)cmd.ExecuteScalar());
+
+                cmd.CommandText = querry2;
+
+                summ.Add((int)cmd.ExecuteScalar());
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return summ;
+
+        }
+
+        public DataTable Flight_details(int ID)
+        {
+            DataTable dt = new DataTable();
+            string querry = $"select flight_id,convert(date,depart_datetime),convert(time,depart_datetime),F.AirPort_name,T.AirPort_name ,AirCraft.Model,flight.status\r\nfrom flight \r\njoin AirPort F on F.AirPort_ID=flight.From_Airport_ID \r\njoin AirPort T on T.AirPort_ID=To_Airport_ID\r\njoin AirCraft on AirCraft.AirCraft_ID=flight.AirCraft_ID\r\nwhere flight.flight_ID={ID}";
+            SqlCommand cmd = new SqlCommand(querry, connection);
+            try
+            {
+                connection.Open();
+                dt.Load(cmd.ExecuteReader());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return dt;
+        }
+
+        public void edit_flight(int id, string name, string role)
+        {
+            string querry = $"\twith D as(\r\n\tselect assigned_to.member_id from crew_member join assigned_to on crew_member.member_Id=assigned_to.member_id\r\n\twhere (role='{role}') and flight_Id={id}\r\n\t),\r\n\ta as(\r\n\tselect member_id from crew_member\r\n\twhere (role='{role}') and (Fname + ' ' + Lname = '{name}')\r\n\t)\r\n\t\r\n\tupdate assigned_to \r\n\tset member_id= (select member_id from a)\r\n\twhere flight_id={id} and member_id = (select member_id from D)";
+            SqlCommand cmd = new SqlCommand(querry, connection);
+            try
+            {
+                connection.Open();
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+
+
+        }
+
+        public void edit_flight_attendant(int id, string name, string role, int member_id)
+        {
+            string querry = $"with a as(\r\n\tselect member_id from crew_member\r\n\twhere (role='{role}') and ((Fname + ' ' + Lname) = '{name}')\r\n\t)\r\n\t\r\n\tupdate assigned_to \r\n\tset member_id= (select member_id from a)\r\n\twhere flight_id={id} and member_id = {member_id}";
+            SqlCommand cmd = new SqlCommand(querry, connection);
+            try
+            {
+                connection.Open();
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+        }
+
+        public DataTable seats_in_flight(int id)
+        {
+            DataTable dt = new DataTable();
+            string proc = "seats_in_flight";
+            SqlCommand cmd = new SqlCommand(proc, connection);
+            try
+            {
+                connection.Open();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@id", id));
+                SqlDataReader sdr = cmd.ExecuteReader();
+                dt.Load(sdr);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally { connection.Close(); }
+            return dt;
+        }
+
+        public void delete_flight(int id)
+        {
+            string querry = $"delete flight\r\nwhere flight_ID ={id}";
+            SqlCommand cmd = new SqlCommand(querry, connection);
+            try
+            {
+                connection.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally { connection.Close(); }
+        }
+
+        public void update_price(string price, string clas, int id)
+        {
+            string querry = $"UPDATE Prices\r\nSET\r\n Price = {price}\r\nWHERE \r\n Flight_Id ={id} AND\r\n  Class = '{clas}';";
+            SqlCommand cmd = new SqlCommand(querry, connection);
+            try
+            {
+                connection.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally { connection.Close(); }
+        }
+
+        public DataTable show_price(int id)
+        {
+            string querry = $"select class,price from prices\r\n   where flight_id={id}\r\n   order by class";
+            SqlCommand cmd = new SqlCommand(querry, connection);
+            DataTable dt = new DataTable();
+            try
+            {
+                connection.Open();
+                dt.Load(cmd.ExecuteReader());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally { connection.Close(); }
+            return dt;
+        }
         #endregion
     }
 } 

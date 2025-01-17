@@ -15,9 +15,9 @@ namespace Airline_Reservation_System.Pages.Admin
     public class DashboardModel : PageModel
     {
         private readonly DB db;
+        
 
-
-        public DashboardModel(DB db)
+        public DashboardModel(DB db) 
         {
             this.db = db;
         }
@@ -62,7 +62,7 @@ namespace Airline_Reservation_System.Pages.Admin
                         .SetMarginTop(20)
                         .SetMarginBottom(5));
 
-
+                   
                     document.Add(new Paragraph($"1. Total Flights: {Report["Total_flights"]}")
                         .SetFontSize(12));
                     document.Add(new Paragraph($"2. Flights Booked Today: {Report["Today's_flights"]}")
@@ -105,9 +105,9 @@ namespace Airline_Reservation_System.Pages.Admin
                 Console.WriteLine($"Error generating report: {ex.Message}");
                 return BadRequest("An error occurred while generating the report.");
             }
+       
 
-
-        }
+    }
 
 
         private byte[] GenerateReport()
@@ -138,32 +138,32 @@ namespace Airline_Reservation_System.Pages.Admin
 
         public DataTable flight_days_table { get; set; }
 
-        public DataTable Rev { get; set; }
+        public DataTable Rev {  get; set; }
         public int[] status { get; set; } = new int[3];
 
         public int[] flight_days { get; set; } = new int[7];
         public int[] Tickets { get; set; } = new int[12];
         public int[] Flights { get; set; } = new int[12];
-        public string[] Reviews { get; set; } = new string[3];
+        public string[] Reviews { get;set; } = new string[3];
 
         public List<decimal> Summary { get; set; } = new List<decimal>();
         public decimal total_revenues { get; set; }
 
-        static Dictionary<string, decimal> Report { get; set; } = new Dictionary<string, decimal>();
+        static Dictionary <string, decimal> Report {  get; set; } = new Dictionary<string, decimal>();
         public IActionResult OnGet(int year)
         {
-
-            if (HttpContext.Session.GetString("role") != "admin")
-            {
-                return RedirectToPage("../Index");
-            }
+            
+            //if (HttpContext.Session.GetString("role") == "passanger" || string.IsNullOrEmpty(HttpContext.Session.GetString("role")))
+            //{
+            //    return RedirectToPage("/Index");
+            //}
             Console.WriteLine(year);
-            if (year == 0) { year = 2025; }
+           if (year == 0) { year = 2024; }
 
-
+             
             donut = db.Admin_pie_chart(year);
 
-
+            
             for (int i = 0; i < 3; i++)
             {
                 try
@@ -176,11 +176,11 @@ namespace Airline_Reservation_System.Pages.Admin
                 }
             }
 
-            Rev = db.GetReviews();
-            Ticket_table = db.Admin_line_chart(year);
+            //Rev = db.GetReviews();
+            Ticket_table= db.Admin_line_chart(year);
             Flight_table = db.Admin_line_chart1(year);
             flight_days_table = db.total_flights_day(year);
-            total_revenues = db.total_revenue_year(year);
+            total_revenues=db.total_revenue_year(year);
             Summary = db.summary();
             for (int i = 0; i < 12; i++)
             {
@@ -188,14 +188,14 @@ namespace Airline_Reservation_System.Pages.Admin
 
                 Tickets[i] = (((int)Ticket_table.Rows[i][1]));
                 Flights[i] = (((int)Flight_table.Rows[i][1]));
-
+                
 
 
             }
 
             for (int i = 0; i < 7; i++)
             {
-                flight_days[i] = (((int)flight_days_table.Rows[i][1]));
+                flight_days[i]= (((int)flight_days_table.Rows[i][1]));
 
             }
             if (!Report.ContainsKey("Total_flights"))
@@ -248,16 +248,6 @@ namespace Airline_Reservation_System.Pages.Admin
 
             return new JsonResult(new { ticket, flight, total_tickets, total_flights, day, don });
         }
-
-
-        public IActionResult OnPostLogOut()
-        {
-            HttpContext.Session.Remove("email");
-            HttpContext.Session.Remove("role");
-            HttpContext.Session.Remove("password");
-            return RedirectToPage("../signin");
-        }
-
     }
 
 }
