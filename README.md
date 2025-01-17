@@ -86,7 +86,7 @@ Ensure the following workloads are installed in Visual Studio:
 
 ## Project Structure
 
-- **Models**: Contains entity models for the database (e.g., `Flight`, `User`, `Review`).
+- **Models**: Contains entity models for the database (e.g., `Flight`, `User` , `Passenger`).
 - **Pages**: Razor Pages for the frontend, including pages for users, admins, and staff.
 - **Services**: Includes services for ADO.NET operations, ML.NET integration, and email handling.
 - **Database**: Contains the database schema and sample data files.
