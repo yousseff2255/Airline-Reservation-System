@@ -51,8 +51,8 @@ Ensure the following workloads are installed in Visual Studio:
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/yousseff2255/ExoSky-Airlines.git
-   cd ExoSky-Airlines
+   git clone https://github.com/yousseff2255/Airline-Reservation-System.git
+
    ```
 
 2. **Database Setup**
