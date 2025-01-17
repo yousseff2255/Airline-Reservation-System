@@ -63,12 +63,12 @@ Ensure the following workloads are installed in Visual Studio:
 
 3. **Configure Connection String**
 
-   - Open the `appsettings.json` file in the project.
+   - Open the `DB.cs` file in the Models folder.
    - Update the connection string to match your SQL Server instance:
+
      ```json
-     "ConnectionStrings": {
-       "DefaultConnection": "Server=YOUR_SERVER_NAME;Database=ExoSkyAirlines;Trusted_Connection=True;"
-     }
+     string connectionString = "Data Source=LOCALHOST\\SQLEXPRESS;Initial Catalog = AirlineSystem; Integrated Security = True; Trust Server Certificate=True";
+
      ```
 
 4. **Install Dependencies**
