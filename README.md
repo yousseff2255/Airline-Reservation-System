@@ -1,20 +1,24 @@
-
 # ExoSky Airlines
 
 ## Purpose
+
 ExoSky Airlines is a user-friendly airline ticket reservation system designed to explore web development using the .NET framework, specifically Razor Pages. The project offers features like flight and user management, booking, and sentiment analysis of user reviews using ML.NET.
 
 ---
 
 ## Features
+
 - **Admin Features**:
+
   - Add, update, and monitor flights and their crew.
   - Manage staff and admin accounts.
 
 - **Staff Features**:
+
   - Update users' check-in status.
 
 - **User Features**:
+
   - Search for flights and make reservations.
   - Cancel booked flights.
   - Submit reviews on their experience.
@@ -27,13 +31,16 @@ ExoSky Airlines is a user-friendly airline ticket reservation system designed to
 ---
 
 ## Prerequisites
+
 To run the project, you will need:
+
 - **Operating System**: Windows 10 or later.
 - **.NET SDK**: Version 7.0 or higher (compatible with Razor Pages).
 - **SQL Server**: SQL Server 2022 (other versions may work).
 - **Visual Studio**: Version 2022 (Community, Professional, or Enterprise).
 
 Ensure the following workloads are installed in Visual Studio:
+
 - **ASP.NET and web development**.
 - **.NET desktop development** (optional, but recommended for full compatibility).
 
@@ -42,17 +49,20 @@ Ensure the following workloads are installed in Visual Studio:
 ## Setup Instructions
 
 1. **Clone the Repository**
+
    ```bash
-   git clone https://github.com/your-username/ExoSky-Airlines.git
+   git clone https://github.com/yousseff2255/ExoSky-Airlines.git
    cd ExoSky-Airlines
    ```
 
 2. **Database Setup**
+
    - Open SQL Server Management Studio (SSMS).
    - Restore the database schema provided in the project files.
    - Load the sample data script to populate initial records.
 
 3. **Configure Connection String**
+
    - Open the `appsettings.json` file in the project.
    - Update the connection string to match your SQL Server instance:
      ```json
@@ -63,6 +73,7 @@ Ensure the following workloads are installed in Visual Studio:
 
 4. **Install Dependencies**
    Restore NuGet packages for third-party libraries:
+
    ```bash
    dotnet restore
    ```
@@ -90,10 +101,12 @@ Ensure the following workloads are installed in Visual Studio:
 ## Usage Instructions
 
 - **Admin**:
+
   - Login with an admin account.
   - Access the admin dashboard to manage flights, staff, and bookings.
 
 - **Staff**:
+
   - View flight details and update check-in statuses.
 
 - **User**:
