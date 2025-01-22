@@ -1,15 +1,16 @@
 ﻿@page
 @model Airline_Reservation_System.Pages.profileModel
 @{
-        ViewData["Title"] = "Profile";
-        ViewData["name"] = "navbar";
+    ViewData["Title"] = "Profile";
+    ViewData["name"] = "navbar";
     ViewData["Logged"] = Convert.ToString(HttpContext.Session.GetString("email"));
+    ViewData["user"] = Convert.ToString(HttpContext.Session.GetString("role"));
 }
 <link rel="stylesheet" href="/css/site.css">
 
 
 
-<div class="layout-wrapper">
+<div class="layout-wrapper ms-4">
     <!-- header -->
     <div class="header" style="position:relative;">
         <div class="menu-toggle-btn">
@@ -75,30 +76,41 @@
                                         <div class="mb-3">
                                             <form method="post">
                                                 <label class="form-label" asp-for="Inputphonenumber">Phone</label>
-                                                @if (Convert.ToInt32(TempData["buttonPressed"] ?? 0) % 2 == 0)
+                                                @if (Convert.ToInt32(TempData["buttonPressed"] ?? 0) % 2 == 0 && HttpContext.Session.GetString("role")=="passenger")
                                                 {
                                                     <input type="text" class="form-control" value="@Model.dt.Rows[0]["PhoneNumber"]" readonly />
                                                     <button asp-page-handler="ModifyPhoneNumber" class="btn btn-primary">Modify</button>
                                                 }
-                                                else
+                                                else if (Convert.ToInt32(TempData["buttonPressed"] ?? 0) % 2 != 0 && HttpContext.Session.GetString("role") == "passenger")
                                                 {
                                                     <input type="text" asp-for="Inputphonenumber" class="form-control" value="@Model.dt.Rows[0]["PhoneNumber"]" />
                                                     <button asp-page-handler="SavePhoneNumber" class="btn btn-primary">Save</button>
                                                 }
+                                                else
+                                                {
+                                                    <input type="text" class="form-control" value="@Model.dt.Rows[0]["PhoneNumber"]" readonly />
+
+                                                }
+
                                             </form>
                                         </div>
                                         <form method="post">
                                             <div class="mb-3">
                                                 <label class="form-label" asp-for="Inputaddress_info">Address Line</label>
-                                                @if (Convert.ToInt32(TempData["buttonPressedmodifyaddress"] ?? 0) % 2 == 0)
+                                                @if (Convert.ToInt32(TempData["buttonPressedmodifyaddress"] ?? 0) % 2 == 0 && HttpContext.Session.GetString("role") == "passenger")
                                                 {
                                                     <input type="text" class="form-control" value="@Model.dt.Rows[0]["Address_info"]" readonly />
                                                     <button asp-page-handler="ModifyAddress" class="btn btn-primary">Modify</button>
                                                 }
-                                                else
+                                                else if (Convert.ToInt32(TempData["buttonPressedmodifyaddress"] ?? 0) % 2 != 0 && HttpContext.Session.GetString("role") == "passenger")
                                                 {
                                                     <input type="text" class="form-control" asp-for="Inputaddress_info" value="@Model.dt.Rows[0]["Address_info"]" />
                                                     <button asp-page-handler="SaveAddress" class="btn btn-primary">Save</button>
+                                                }
+                                                else
+                                                {
+                                                    <input type="text" class="form-control" asp-for="Inputaddress_info" value="@Model.dt.Rows[0]["Address_info"]" readonly />
+
                                                 }
                                             </div>
                                         </form>
@@ -166,12 +178,15 @@
                                     <i class="bi bi-person me-2"></i> Profile
                                 </a>
                             </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="password-tab" data-bs-toggle="tab" href="#password" role="tab"
-                                   aria-controls="password" aria-selected="false">
-                                    <i class="bi bi-lock me-2"></i> Password
-                                </a>
-                            </li>
+                            @if(HttpContext.Session.GetString("role") == "passenger"){
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="password-tab" data-bs-toggle="tab" href="#password" role="tab"
+                                       aria-controls="password" aria-selected="false">
+                                        <i class="bi bi-lock me-2"></i> Password
+                                    </a>
+                                </li>
+                            }
+                 
                         </ul>
                     </div>
                 </div>

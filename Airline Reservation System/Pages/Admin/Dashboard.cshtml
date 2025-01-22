@@ -328,7 +328,7 @@
                     </div>
                     <h4 class="mb-3">Ticket Sold</h4>
                     <div class="d-flex mb-3">
-                        <div class="display-7">$@Model.total_revenues</div>
+                        <div class="display-7">$@((int)@Model.total_revenues)</div>
                         <div class="ms-auto" id="total-sales"></div>
                     </div>
                     <div class="text-danger">
@@ -427,7 +427,8 @@
         </div>
         </div> *@
         <div class="col-lg-12 col-md-6">
-            <div class="card h-100 bg-purple">
+            <div class="card h-100 bg-purple" style="margin-left: 100px;
+    margin-right: 100px;">
                 <div class="card-body text-center">
                     <div class="text-white-50">
                         <div class="bi bi-airplane display-6 mb-3"></div>
@@ -521,8 +522,8 @@
                                 <div class="display-5">
                                     <i class="bi bi-bar-chart text-info"></i>
                                 </div>
-                                <h5 class="my-3">Reported</h5>
-                                <div class="text-muted">50 Support New Cases</div>
+                                <h5 class="my-3">Reviews</h5>
+                                <div class="text-muted">5</div>
                                 <div class="progress mt-3" style="height: 5px">
                                     <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
                                          aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>

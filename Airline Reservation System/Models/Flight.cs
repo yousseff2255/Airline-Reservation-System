@@ -16,8 +16,9 @@
         public List<string> flight_att { get; set; }
         public int flight_id { get; set; }
         public double Duration { get; set; }
+        public string ABB { get; set; }
 
-      
+
 
 
 

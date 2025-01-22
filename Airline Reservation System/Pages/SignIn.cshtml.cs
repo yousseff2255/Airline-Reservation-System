@@ -61,7 +61,7 @@ namespace DatabaseProject.Pages
 				}
 
 
-				return RedirectToPage("/Profile");
+				return RedirectToPage("/Index");
 
             }
             else

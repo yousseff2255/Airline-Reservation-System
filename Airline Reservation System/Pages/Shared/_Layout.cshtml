@@ -59,87 +59,25 @@
  
 </head>
 <body >
-  @*  <header>
-        <div class="m-7">
-            <nav class="  navbar navbar-expand-sm navbar-toggleable-sm navbar-dark mx-5 p-4 border-bottom  box-shadow mb-3 bg-purple" style="font-size:larger;border-radius:15px; " >
-           
-                <a class="navbar-brand" asp-area="" asp-page="/Index">ExoSky</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1 ">
-                        <li class="nav-item" >
-                            <a class="nav-link text-light" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-page="/SignUp">Signup</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-page="/Signin">Sign in</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-page="/Profile">Profile</a>
-                        </li>
-                           <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-page="/staff/flights">flights</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-page="/staff/flightdetails">Flight Details</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-page="/admin/Dashboard">DDashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-page="/Admin/createflight">Create Flight</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-page="/search">Search</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-page="/reservation managment">Res_managemt</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-page="/reservation">Reservation</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-page="/admin/flightdetails1">flightdetails</a>
-                        </li>
-                    </ul>
-                </div>
-          
-             </nav>
-        </div>
-    </header> *@
-    @if (Convert.ToString(ViewData["name"]) == "sidebar")
+ 
+    @if (Convert.ToString(ViewData["name"]) == "sidebar" || Convert.ToString(ViewData["user"]) == "admin" || Convert.ToString(ViewData["user"]) == "staff")   //Admin or Staff
     {
-
 
 
         <!-- ./ sidebars -->
         <div class="menu">
             <div class="menu-header">
-                <a href="../index" class="menu-header-logo">
-                    <img src="../logo.svg" alt="logo">
-                    <span>Airline</span>
+                <a href="" class="menu-header-logo">
+                    <img src="../images/ExoSky Logo.png" alt="logo">
+                    <span>ExoSky</span>
                 </a>
                 <a href="#" class="btn btn-sm menu-close-btn">
                     <i class="bi bi-x"></i>
                 </a>
             </div>
             <div class="menu-body">
-                <div class="dropdown">
-                    @*  <a href="#" class="d-flex align-items-center" data-bs-toggle="dropdown">
-                        <div class="avatar me-3">
-                            <img src="../images/user/man_avatar5.jpg"
-                            class="rounded-circle" alt="image">
-                        </div>
-                        <div>
-                            <div class="fw-bold">Timotheus Bendan</div>
-                            <small class="text-muted">Admin</small>
-                        </div>
-                    </a> *@
+                <div class="dropdown" style="background:none;">
+
                     <div class="dropdown-menu dropdown-menu-end">
                         <a href="#" class="dropdown-item d-flex align-items-center">
                             <i class="bi bi-person dropdown-item-icon"></i> Profile
@@ -162,34 +100,30 @@
                     @{
                         if (Convert.ToString( ViewData["Nav"]).ToLower() == "admin")
                         {
-                            <li>
-                                <a class="active" href="/admin/dashboard">
-                                    <span class="nav-link-icon">
-                                        <i class="bi bi-bar-chart"></i>
-                                    </span>
-                                    <span>Dashboard</span>
-                                </a>
-                            </li>
-                            // <li>
-                            //     <a href="/admin/Flightdetails1">
-                            //         <span class="nav-link-icon">
-                            //             <i class="bi bi-bar-chart"></i>
-                            //         </span>
-                            //         <span>Flight Details</span>
-                            //     </a>
-                            // </li>
+                        
+                            string IsActive(string path) => 
+                            Context.Request.Path.Equals(path, StringComparison.OrdinalIgnoreCase) ? "active" : "";
 
 
+                        <li>
+                            <a class="@IsActive("/admin/dashboard")" href="/admin/dashboard">
+                                <span class="nav-link-icon">
+                                    <i class="bi bi-bar-chart"></i>
+                                </span>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li>
+                                <a class="@IsActive("/admin/createflight")" href="/admin/CreateFlight">
+                                <span class="nav-link-icon">
+                                    <i class="bi bi-bar-chart"></i>
+                                </span>
+                                <span>Create Flight</span>
+                            </a>
+                        </li>
                             <li>
-                                <a href="/admin/CreateFlight">
-                                    <span class="nav-link-icon">
-                                        <i class="bi bi-bar-chart"></i>
-                                    </span>
-                                    <span>Create Flight</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/admin/adminflights">
+                                <a class="@IsActive("/admin/adminflights")" href="/admin/adminflights">
                                     <span class="nav-link-icon">
                                         <i class="bi bi-bar-chart"></i>
                                     </span>
@@ -197,23 +131,21 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="/admin/createuser">
+                                <a class="@IsActive("/admin/createuser")" href="/admin/createuser">
                                     <span class="nav-link-icon">
                                         <i class="bi bi-bar-chart"></i>
                                     </span>
-                                    <span> Create User </span>
+                                    <span>Create User</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="/staff/flightdetails">
+                                <a class="@IsActive("/staff/flightdetails")" href="/staff/flightdetails">
                                     <span class="nav-link-icon">
                                         <i class="bi bi-bar-chart"></i>
                                     </span>
-                                    <span> Passengers </span>
+                                    <span>Passengers</span>
                                 </a>
                             </li>
-
-
                         }
                         else
                         {
@@ -268,7 +200,7 @@
         </main>
         </div>
     }
-    else if(Convert.ToString(ViewData["name"]) == "navbar")
+    else if(Convert.ToString(ViewData["name"]) == "navbar" && Convert.ToString(ViewData["user"]) =="passenger")
     {
 
 
@@ -277,17 +209,28 @@
             <div class="containerr">
                 <div class="nav-linkss">
                     <a href="/"class="logoo">ExoSky</a>
-                    <a href="/">Home</a>
-                    <a href="/profile">Profile</a>
                     <a href="Search">Search</a>
+                    @{
+                        if (!string.IsNullOrEmpty(Convert.ToString(ViewData["Logged"])))
+                    {
+                    <a href="/profile">Profile</a>
+                            <a href="reservation managment">Past Flights</a>
+              
+                    }
+                    }
     
-                  @*   <a href="/reservation management">Your Flights</a> *@
+               
                 </div>
                 <div class="auth-buttonss">
                     @{
                         if (string.IsNullOrEmpty(Convert.ToString(ViewData["Logged"])) )
                         {
-                            <a href="signin" style="margin:auto;"  class="btnn btn-sign-inn ">Sign In</a>
+                            if (Convert.ToString(ViewData["Title"]) != "Sign In")
+                            {
+                                <a href="signin" style="margin:auto;" class="btnn btn-sign-inn ">Sign In</a>
+                            }
+                            
+                           
                         }
                         else
                         {
@@ -316,10 +259,12 @@
     <!-- content-footer -->
     <footer class="content-footer">
         <div>
-            Airline Reservation System © 2024
+            ExoSky Airlines © 2024
         </div>
         <div>
-            <nav class="nav gap-4">                <a href="#" class="nav-link">Get Help</a>
+            <nav class="nav gap-4">               
+                <a href="mailto:exoskyairlines@gmail.com">Get Help</a>
+
                 <a href="https://github.com/yousseff2255/Airline-Reservation-System" target="_blank">GitHub Repository</a>
             </nav>
         </div>

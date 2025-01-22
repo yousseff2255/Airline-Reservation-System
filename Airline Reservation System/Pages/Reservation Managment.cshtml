@@ -4,6 +4,8 @@
     ViewData["Title"] = "Reservation Managment";
     ViewData["name"] = "navbar";
     ViewData["Logged"] = Convert.ToString(HttpContext.Session.GetString("email"));
+    ViewData["user"] = Convert.ToString(HttpContext.Session.GetString("role"));
+
 }
 
 
@@ -160,34 +162,7 @@
 
 </style>
 
-    <a class="navbar-brand" asp-area="" asp-page="/Index">ExoSky</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-            aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-        <ul class="navbar-nav flex-grow-1 ">
-            <li class="nav-item">
-                <a class="nav-link text-light" asp-area="" asp-page="/Index">Home</a>
-            </li>
 
-            <li class="nav-item">
-                <a class="nav-link text-light" asp-area="" asp-page="/Profile">Profile</a>
-            </li>
-
-
-
-            <li class="nav-item">
-                <a class="nav-link text-light" asp-area="" asp-page="/search">Search</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-light" asp-area="" asp-page="/reservation managment">Your Flights</a>
-            </li>
-
-        </ul>
-    </div>
-
-</nav>
 
 
 <div class="container-md py-5">
@@ -195,13 +170,13 @@
         <!-- Header Section -->
 
         <h1>Your Past Flights</h1>
-        <p class="text-muted mb-0">Number of Flights: <strong>22</strong></p>
+   
 
 
         <!-- Search and Sort Section -->
         <div class="search-sort-wrapper">
             <div class="search-bar">
-                <input type="text" placeholder="Search flights..." aria-label="Search"
+                <input type="text" placeholder="search..." aria-label="Search"
                        class="form-control">
             </div>
             <div class="sort-dropdown">
@@ -231,8 +206,8 @@
                     <tbody>
                         <tr>
                             <td><strong>@Model.MyReservations.Rows[i][0]</strong></td>
-                            <td>@Model.MyReservations.Rows[i][1]</td>
-                            <td>@Model.MyReservations.Rows[i][2]</td>
+                            <td>@Model.MyReservations.Rows[i][1].ToString().Replace("International Airport" , "")</td>
+                            <td>@Model.MyReservations.Rows[i][2].ToString().Replace("International Airport", "")</td>
                             <td>@Model.MyReservations.Rows[i][3]</td>
                             <td>@Model.MyReservations.Rows[i][4]</td>
                             <td class="text-end">
@@ -263,26 +238,8 @@
             </table>
         </div>
 
-        <!-- Pagination -->
-        <nav aria-label="Page navigation">
-            <ul class="pagination mb-0">
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+      
+       
     </div>
 </div>
 
@@ -491,4 +448,91 @@
 
     // Close modal when clicking the close button
     document.querySelector('.close-button').addEventListener('click', closeModal);
+
+
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    // Get DOM elements
+    const searchInput = document.querySelector('.search-bar input');
+    const sortSelect = document.querySelector('.sort-dropdown select');
+    const tableBody = document.querySelector('.table tbody');
+
+    // Function to get all rows as an array for easier manipulation
+    function getTableRows() {
+        return Array.from(document.querySelectorAll('.table tbody tr'));
+    }
+
+    // Function to handle search
+    function handleSearch(searchTerm) {
+        const rows = getTableRows();
+
+        rows.forEach(row => {
+            // Get flight number from first column
+            const flightNumber = row.querySelector('td:first-child strong').textContent.toLowerCase();
+            const Departure = row.querySelector('td:nth-child(2) ').textContent.toLowerCase();
+            const Destination = row.querySelector('td:nth-child(3) ').textContent.toLowerCase();
+
+
+            // Show/hide row based on search term
+            if ( flightNumber.includes(searchTerm.toLowerCase()) || Departure.includes(searchTerm.toLowerCase()) || Destination.includes(searchTerm.toLowerCase()) ) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    // Function to parse date string in various formats
+    function parseDate(dateStr) {
+   
+
+        // Try parsing in the format dd/MM/yyyy HH:mm:ss
+        const dateTimeRegex = /^(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})$/;
+
+        const match = dateTimeRegex.exec(dateStr);
+        if (match) {
+            const [_, day, month, year, hours, minutes, seconds] = match.map(Number);
+            return new Date(year, month - 1, day, hours, minutes, seconds);
+        }
+
+        // If invalid, log an error and return null
+        console.error(`Invalid date format: ${dateStr}`);
+        return null;
+    }
+
+    // // Function to handle sorting
+    function handleSort(sortOrder) {
+        const rows = getTableRows();
+
+        // Sort rows based on date (5th column)
+        rows.sort((a, b) => {
+            const date1 = parseDate(a.querySelector('td:nth-child(5)').textContent.trim());
+            const date2 = parseDate(b.querySelector('td:nth-child(5)').textContent.trim());
+
+
+            return sortOrder === 'newest'
+                ? date2 - date1  // For newest first
+                : date1 - date2; // For oldest first
+        });
+
+        // Remove existing rows
+        rows.forEach(row => row.remove());
+
+        // Add sorted rows back to table
+        rows.forEach(row => tableBody.appendChild(row));
+    }
+
+    // // Add event listeners
+    searchInput.addEventListener('input', (e) => {
+        handleSearch(e.target.value);
+    });
+
+    sortSelect.addEventListener('change', (e) => {
+        handleSort(e.target.value);
+    });
+
+    // // Default sort 
+    handleSort('newest');
+    /////////////////////////////////////////////////////////////////////////////////////
+
 </script>

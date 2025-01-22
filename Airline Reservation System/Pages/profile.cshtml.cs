@@ -42,14 +42,34 @@ namespace Airline_Reservation_System.Pages
 
             this.db = db;
         }
-        public void OnGet()
+        public IActionResult OnGet(string pass_email = "")
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("email")))
+            {
+                return RedirectToPage("Index");
+            }
+            else if (HttpContext.Session.GetString("role") == "staff" || HttpContext.Session.GetString("role") == "admin")
+            {
+                dt = db.GetProfileInfo(pass_email);
 
-            //for every getProfileInfo(go get the email and pass the username to it     
-            dt = db.GetProfileInfo(HttpContext.Session.GetString("email"));
+
+                passportInfo = (string)dt.Rows[0]["passport_info"];
+
+                return Page();
+            }
+            else
+            {
+                //for every getProfileInfo(go get the email and pass the username to it     
+                dt = db.GetProfileInfo(HttpContext.Session.GetString("email"));
 
 
-            passportInfo = (string)dt.Rows[0]["passport_info"];
+                passportInfo = (string)dt.Rows[0]["passport_info"];
+
+                return Page();
+            }
+
+
+    
 
 
 

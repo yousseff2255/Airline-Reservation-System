@@ -9,14 +9,15 @@ namespace Airline_Reservation_System.Pages.Admin
     
     public class CreateFlightModel : PageModel
     {
+  
         public DB db { get; set; }
         public DataTable airports { get; set; }
         public List<string> models { get; set; }
         [BindProperty]
         public Flight flight { get; set; }
         [BindProperty]
-        static bool b { get; set; } = true;
-        public bool bb { get; set; } = true;
+        static int b { get; set; } = 0;
+        public int bb { get; set; } = 0;
         public CreateFlightModel(DB db)
         {
             airports = new DataTable();
@@ -25,6 +26,7 @@ namespace Airline_Reservation_System.Pages.Admin
             this.db = db;
            
         }
+       
 
         public IActionResult OnGet()
         {
@@ -33,6 +35,8 @@ namespace Airline_Reservation_System.Pages.Admin
                 bb = b;
                 airports = db.GetAirports();
                 models = db.GetModels();
+
+         
                 return Page();
              
             }
@@ -53,12 +57,18 @@ namespace Airline_Reservation_System.Pages.Admin
         }
 
         public IActionResult OnPost() {
-            
-            b = db.AddFlight(flight);
+
+            if (db.AddFlight(flight))
+            {
+                b = 2;  // succeed
+            }
+            else
+            {
+                b = 1;  // failed
+            }
+            return RedirectToPage();    
            
-            if(b==true)
-                return RedirectToPage("Dashboard");
-            return RedirectToPage();
+        
         }
     }
 }

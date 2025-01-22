@@ -213,7 +213,7 @@ namespace Airline_Reservation_System.Pages.Admin
         {
             id = (int)HttpContext.Session.GetInt32("id");
             db.delete_flight(id);
-            return RedirectToPage("admin/dashboard");
+            return RedirectToPage("dashboard");
         }
         public IActionResult OnPostLogOut()
         {

@@ -33,14 +33,19 @@ namespace Airline_Reservation_System.Pages
 
         }
      
-        public void OnGet(int f_id , int n_seats , decimal booking_price , string Class)
+        public IActionResult OnGet(int f_id , int n_seats , decimal booking_price , string Class)
         {
-          
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("email")))
+            {
+                return RedirectToPage("Index");
+            }
+
             fligt_id = f_id;
             num_seats = n_seats;
             Booking_price = booking_price;
             Total_price = taxes + Booking_price;
             _class = Class;
+            return Page();
         }
         public IActionResult OnPost() {
           

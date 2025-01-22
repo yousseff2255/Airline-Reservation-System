@@ -31,7 +31,7 @@
 
 
 <!-- Header -->
-<div class="header d-flex flex-wrap justify-content-between align-items-center p-3" style="height: auto; background-color: #f8f9fa; border-radius: 10px;">
+<div class="header d-flex flex-wrap justify-content-between align-items-center p-3" style="position:relative ; height: auto; background-color: #f8f9fa; border-radius: 10px;">
 
     <!-- Flight Details Card -->
     <div class="card p-3 mx-2 shadow-sm" style="min-width: 300px;">
@@ -54,13 +54,13 @@
     </div>
 
     <!-- Checked-In Card -->
-@*     <div class="card p-3 mx-2 shadow-sm text-center" style="min-width: 200px;">
+    <div class="card p-3 mx-2 shadow-sm text-center" style="min-width: 200px;">
         <div class="card-body">
             <i class="bi bi-person-check-fill fs-2 text-primary mb-2"></i>
             <h6 class="text-muted">Checked In</h6>
             <p class="fs-3 fw-bold text-dark">@Model.CheckedIn</p>
         </div>
-    </div> *@
+    </div>
 
     <!-- Airplane Capacity Card -->
     <div class="card p-3 mx-2 shadow-sm text-center" style="min-width: 200px;">
@@ -100,21 +100,25 @@
                             <form class="mb-3 mb-md-0">
                                 <div class="row g-3">
                                     <div class="col-md-6">
-                                        <select class="form-select">
-                                            <option>Select </option>
-                                            <option value="N">Not Checked In</option>
-                                            <option value="C">Checked In</option>
+                                        <div class="select-status">
+                                    <select class="form-select">
+                                        <option>Select </option>
+                                        <option value="not checked in">Not Checked In</option>
+                                        <option value="checked in">Checked In</option>
 
-                                        </select>
-                                    </div>
-                                  @*   <div class="col-md-6">
-                                        <div style="display: flex; align-items: stretch; width: 100%;">
-                                            <input type="text" class="form-control" id="searchInput" placeholder="Search" style="height: auto; box-sizing: border-box; width:400px">
-                                            <button class="btn btn-outline-light w-25 ms-2">
-                                                <i class="bi bi-search"></i>
-                                            </button>
+
+                                    </select>
                                         </div>
-                                    </div> *@
+                                  
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="search-bar" style="display: flex; align-items: stretch; width: 100%;">
+                                            <input type="text" class="form-control" id="searchInput" placeholder="search..." style="height: auto; box-sizing: border-box; width:400px">
+                                  @*           <button class="btn btn-outline-light w-25 ms-2">
+                                                <i class="bi bi-search"></i>
+                                            </button> *@
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -142,45 +146,48 @@
                         @{
                             for (int i = 0; i < @Model.dt.Rows.Count; i++)
                             {
-                                <tr>
-                                    <td style="display:flex; justify-content:center;">
-                                        <div class="avatar avatar-info m-4 ">
-                                            <span class="avatar-text rounded-circle">@Model.dt.Rows[i][0].ToString()[0]</span>
-                                        </div>
-                                    </td>
-                                    <td>@Model.dt.Rows[i][0]</td>
-                                    <td>@Model.dt.Rows[i][1]</td>
-                                    <td>@Model.dt.Rows[i][2]</td>
-                                    <td>@Model.dt.Rows[i][3]</td>
-                                    <td>@Model.dt.Rows[i][4]</td>
+                                    <tr>
+                                        <td style="display:flex; justify-content:center;">
+                                            <div class="avatar avatar-info m-4 ">
+                                                <span class="avatar-text rounded-circle">@Model.dt.Rows[i][0].ToString()[0]</span>
+                                            </div>
+                                        </td>
+                                        <td>@Model.dt.Rows[i][0]</td>
+                                        <td>@Model.dt.Rows[i][1]</td>
+                                        <td>@Model.dt.Rows[i][2]</td>
+                                        <td>@Model.dt.Rows[i][3]</td>
+                                        <td>@Model.dt.Rows[i][4]</td>
 
-                                    <td>
-                                        <button class="btn btn-success">
-                                            @Model.dt.Rows[i][5]
-                                        </button>
-                                    </td>
-                                    <td class="text-end">
-                                        <div class="d-flex">
-                                            <div class="dropdown ms-auto">
-                                                <a href="#" data-bs-toggle="dropdown"
-                                                   class="btn btn-floating"
-                                                   aria-haspopup="true" aria-expanded="false">
-                                                    <i class="bi bi-three-dots"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a href="#" class="dropdown-item">Show Profile</a>
-                                                    @if (Model.dt.Rows[i][5].ToString() != "Checked In")
+                                        <td>
+                                            <button class="btn btn-success">
+                                                @Model.dt.Rows[i][5]
+                                            </button>
+                                        </td>
+                                        <td class="text-end">
+                                            <div class="d-flex">
+                                                <div class="dropdown ms-auto">
+                                                    <a href="#" data-bs-toggle="dropdown"
+                                                       class="btn btn-floating"
+                                                       aria-haspopup="true" aria-expanded="false">
+                                                        <i class="bi bi-three-dots"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-end">
+                                            <form method="post" asp-page-handler="showprofile" asp-route-email="@Model.dt.Rows[i][3]">
+                                                <input type="hidden" name="userId" value="@Model.dt.Rows[i][0]" />
+                                                <button type="submit" class="dropdown-item">Show Profile</button>
+                                            </form>
+                                                        @if (Model.dt.Rows[i][5].ToString().ToLower() != "checked in")
                                                     {
-                                                        <form method="post" asp-page-handler="checkin" asp-route-email="@Model.dt.Rows[i][3]">
-                                                            <input type="hidden" name="userId" value="@Model.dt.Rows[i][0]" />
-                                                            <button type="submit" class="dropdown-item">Check In</button>
-                                                        </form>
+                                                            <form method="post" asp-page-handler="checkin" asp-route-email="@Model.dt.Rows[i][3]">
+                                                                <input type="hidden" name="userId" value="@Model.dt.Rows[i][0]" />
+                                                                <button type="submit" class="dropdown-item">Check In</button>
+                                                            </form>
                                                     }
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
                             }
                         }
 
@@ -230,5 +237,65 @@
 
  
     <!-- ./ layout-wrapper -->
+
+<script>
+// Get DOM elements
+const searchInput = document.querySelector('.search-bar input');
+const selected = document.querySelector('.select-status select')
+
+// Function to get all rows as an array for easier manipulation
+function getTableRows() {
+    return Array.from(document.querySelectorAll('.table tbody tr'));
+}
+
+// Function to handle search
+function handleSearch(searchTerm) {
+    const rows = getTableRows();
+
+    rows.forEach(row => {
+        // Get flight number from first column
+        const name = row.querySelector('td:nth-child(2) ').textContent.toLowerCase();
+
+
+        // Show/hide row based on search term
+        if (name.includes(searchTerm.toLowerCase())) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+function selectpassengers(sel_status){
+        const rows = getTableRows();
+    rows.forEach(row => {
+        const status = row.querySelector('td:nth-child(7) ').textContent.toLowerCase();
+            console.log(sel_status.toLowerCase())
+            console.log(status.toLowerCase())
+
+        // Show/hide row based on search term
+            if (sel_status.toLowerCase() == status.toLowerCase().trim()) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+ 
+
+  
+  
+
+// // Add event listeners
+searchInput.addEventListener('input', (e) => {
+    handleSearch(e.target.value);
+});
+    selected.addEventListener('change', (e) => {
+        selectpassengers(e.target.value);
+});
+
+
+</script>
 
 

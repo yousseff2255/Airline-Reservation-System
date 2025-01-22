@@ -4,6 +4,8 @@
 ViewData["Title"] = "Sign Up";
 ViewData["name"] = "navbar";
     ViewData["Logged"] = Convert.ToString(HttpContext.Session.GetString("email"));
+    ViewData["user"] = Convert.ToString(HttpContext.Session.GetString("role"));
+
 }
 
 

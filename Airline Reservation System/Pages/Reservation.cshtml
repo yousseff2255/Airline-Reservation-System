@@ -4,6 +4,8 @@
     ViewData["Title"] = "Reservation";
     ViewData["name"] = "navbar";
     ViewData["Logged"] = Convert.ToString(HttpContext.Session.GetString("email"));
+    ViewData["user"] = Convert.ToString(HttpContext.Session.GetString("role"));
+
 }
 
 
@@ -106,16 +108,16 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="text-center">
                                     <h5 class="mb-0"> @Model.flights[i].LeavDate.TimeOfDay</h5>
-                                    <small class="text-muted">JFK</small>
-                                </div>
+@*                                     <small class="text-muted">JFK</small>
+ *@                                </div>
                                 <div class="text-center">
                                     <h5 class="mb-0">Duration</h5>
                                     <small class="text-muted">@Model.flights[i].Duration Hours</small>
                                 </div>
                                 <div class="text-center">
                                     <h5 class="mb-0">@Model.flights[i].ArrDate.TimeOfDay</h5>
-                                    <small class="text-muted">LHR</small>
-                                </div>
+@*                                     <small class="text-muted">LHR</small>
+ *@                                </div>
                             </div>
                         </div>
 

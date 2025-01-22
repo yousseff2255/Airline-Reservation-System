@@ -85,12 +85,12 @@
                         <div class="d-md-flex gap-4 align-items-center">
                             <form class="mb-3 mb-md-0">
                                 <div class="row g-3">
-                            <div class="col-md-6">
-                                        <select class="form-select" id="statusFilter">
-                                            <option value="">All Flights</option>
-                                    <option value="Scheduled">Scheduled</option>
-                                            <option value="Delayed">Delayed</option>
-                                            <option value="Finished">Finished</option>
+                                    <div class="col-md-6">
+                                        <select style="width: auto;" class="form-select" id="statusFilter">
+                                                <option value="" disabled selected>All Flights</option>
+                                                <option value="Scheduled">Scheduled</option>
+                                                <option value="Delayed">Delayed</option>
+                                                <option value="Finished">Finished</option>
                                         </select>
                                     </div>
                                    @*  <div class="col-md-6">
@@ -266,7 +266,7 @@
                                 console.log('AJAX Success:', response);
 
                                 if (response.success) {
-                                    alert("Flight status updated successfully!");
+                                    console.log("Flight status updated successfully!");
                                     // Reload the page to reflect changes
                                     location.reload();
                                 } else {
@@ -361,9 +361,9 @@
 
        
 
-         @{
+@{
          
-           <nav class="mt-4" aria-label="Page navigation example">
+<nav class="mt-4" aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
         <!-- Previous Button -->
                     <li class="page-item @(Model.page == 1 ? "disabled" : "")">

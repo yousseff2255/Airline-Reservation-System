@@ -33,7 +33,7 @@ namespace Airline_Reservation_System.Pages
             
         }
 
-        public IActionResult OnPost()
+        public IActionResult OnPostSearch()
         {
             string jsonData = JsonSerializer.Serialize(flight);
 

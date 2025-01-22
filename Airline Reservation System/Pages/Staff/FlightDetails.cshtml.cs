@@ -73,6 +73,12 @@ namespace Airline_Reservation_System.Pages.Staff
 
             return RedirectToPage();
         }
+        public IActionResult OnPostShowProfile(string email)
+        {
+
+
+            return RedirectToPage("../profile" , new {pass_email = email});
+        }
         public IActionResult OnPostLogOut()
         {
             HttpContext.Session.Remove("email");

@@ -19,11 +19,16 @@ namespace Airline_Reservation_System.Pages
             DataTable MyReservations = new DataTable();
         }
         public DataTable MyReservations { get; set; }
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("email")))
+            {
+                return RedirectToPage("Index");
+            }
+        
             passenger_id = db.GetPassengerID(HttpContext.Session.GetString("email"));
-            //passenger_id = db.GetPassengerID("sabramov1@jigsy.com");
             MyReservations = db.GetMyReservations(passenger_id);
+            return Page();
         }
 
         public IActionResult OnPostReview(int flightId, int rating, string reviewText)

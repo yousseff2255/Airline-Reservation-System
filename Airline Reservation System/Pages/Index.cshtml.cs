@@ -23,9 +23,22 @@ namespace Airline_Reservation_System.Pages
 
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            ReviewsTable = db.GetReviews();
+            if (HttpContext.Session.GetString("role") == "admin")
+            {
+                return RedirectToPage("admin/dashboard");
+            }
+            else if (HttpContext.Session.GetString("role") == "staff")
+            {
+                return RedirectToPage("staff/flights");
+            }
+            else
+            {
+                ReviewsTable = db.GetReviews();
+                return Page();
+
+            }
 
         }
 
@@ -42,7 +55,7 @@ namespace Airline_Reservation_System.Pages
             HttpContext.Session.Remove("email");
             HttpContext.Session.Remove("role");
             HttpContext.Session.Remove("password");
-            return RedirectToPage("index");
+            return RedirectToPage("signin");
         }
     }
 }

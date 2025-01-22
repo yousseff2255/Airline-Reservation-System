@@ -81,28 +81,28 @@
                 <div class="card-body">
                     <div class="d-md-flex gap-4 align-items-center">
                         <div class="d-none d-md-flex">All Flights</div>
-@*                         <div class="d-md-flex gap-4 align-items-center">
+                        <div class="d-md-flex gap-4 align-items-center">
                             <form class="mb-3 mb-md-0">
                                 <div class="row g-3">
                             <div class="col-md-6">
-                                        <select class="form-select" id="statusFilter">
+                                        <select style="width:auto;"class="form-select" id="statusFilter">
                                             <option value="">All Flights</option>
                                     <option value="Scheduled">Scheduled</option>
                                             <option value="Delayed">Delayed</option>
                                             <option value="Finished">Finished</option>
                                         </select>
                                     </div>
-                                   @ <div class="col-md-6">
+                                   @*  <div class="col-md-6">
                                         <div style="display: flex; align-items: stretch; width: 100%;">
                                             <input type="text" class="form-control" id="searchInput" placeholder="Search" style="height: auto; box-sizing: border-box; width:400px">
                                             <button class="btn btn-outline-light w-25 ms-2">
                                                 <i class="bi bi-search"></i>
                                             </button>
                                         </div>
-                                    </div> 
+                                    </div>  *@
                                 </div>
                             </form>
-                        </div> *@
+                        </div>
                     </div>
                 </div>
             </div>
@@ -265,7 +265,7 @@
                                 console.log('AJAX Success:', response);
 
                                 if (response.success) {
-                                    alert("Flight status updated successfully!");
+                                    console.log("Flight status updated successfully!");
                                     // Reload the page to reflect changes
                                     location.reload();
                                 } else {
@@ -352,6 +352,9 @@
                         // $('#resultsCount').text(`Showing ${visibleRows} of ${totalRows} flights`);
                     }
                 });
+
+
+
          </script>
 
 
